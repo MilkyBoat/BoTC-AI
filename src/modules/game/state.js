@@ -33,11 +33,23 @@ class State {
   }
   markExecuted(seat) {
     const p = this.getPlayer(seat)
-    if (p) p.alive = false
+    if (p) {
+      p.alive = false
+      p.death = p.death || {}
+      p.death.phase = 'day'
+      p.death.reason = 'execution'
+      p.death.index = typeof this.currentDayIndex === 'number' ? this.currentDayIndex : undefined
+    }
   }
   kill(seat) {
     const p = this.getPlayer(seat)
-    if (p) p.alive = false
+    if (p) {
+      p.alive = false
+      p.death = p.death || {}
+      p.death.phase = 'night'
+      p.death.reason = p.death.reason || 'night_action'
+      p.death.index = typeof this.currentNightIndex === 'number' ? this.currentNightIndex : undefined
+    }
   }
   isAlive(seat) {
     const p = this.getPlayer(seat)
@@ -65,6 +77,15 @@ class State {
       players: this.players.map(p => ({ ...p })),
       tokens: Array.from(this.tokens.entries()).map(([k, v]) => [k, Array.from(v)])
     }
+  }
+  seatsByRole(roleName) {
+    const name = String(roleName)
+    const seats = []
+    for (const p of this.players) {
+      if (!p.alive) continue
+      if (p.realRole === name || p.knownRole === name) seats.push(p.seat)
+    }
+    return seats
   }
 }
 

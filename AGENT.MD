@@ -7,7 +7,7 @@
 
 ## 目录结构
 - `src/modules/agent/llmAgent.js`：LLM 调用与提示词（分配与技能执行）
-- `src/modules/agent/roleAllocator.js`：角色分配接口（封装 LLM 分配）
+- `src/modules/game/roleManager.js`：角色管理模块，包含角色分配接口和玩家洗牌功能
 - `src/modules/game/state.js`：对局状态（玩家、身份、token、存活）
 - `src/modules/game/scriptLoader.js`：剧本加载与解析（候选角色与夜序）
 - `src/modules/game/rules.js`：分配入口与胜利检查（占位）

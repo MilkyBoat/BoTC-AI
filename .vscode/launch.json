@@ -1,33 +1,39 @@
 {
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Launch: Main",
-      "program": "${workspaceFolder}/src/main.js",
-      "cwd": "${workspaceFolder}",
-      "envFile": "${workspaceFolder}/.env",
-      "console": "integratedTerminal",
-      "skipFiles": ["<node_internals>/**"]
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Launch: Main (DEBUG=1)",
-      "program": "${workspaceFolder}/src/main.js",
-      "cwd": "${workspaceFolder}",
-      "envFile": "${workspaceFolder}/.env",
-      "env": { "DEBUG": "1" },
-      "console": "integratedTerminal",
-      "skipFiles": ["<node_internals>/**"]
-    },
-    {
-      "type": "node",
-      "request": "attach",
-      "name": "Attach to Node",
-      "processId": "${command:PickProcess}",
-      "cwd": "${workspaceFolder}"
-    }
-  ]
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch: Main",
+            "program": "${workspaceFolder}/src/main.js",
+            "cwd": "${workspaceFolder}",
+            "envFile": "${workspaceFolder}/.env",
+            "console": "integratedTerminal",
+            "skipFiles": [
+                "<node_internals>/**"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch: Main (DEBUG=1)",
+            "program": "${workspaceFolder}/src/main.js",
+            "cwd": "${workspaceFolder}",
+            "envFile": "${workspaceFolder}/.env",
+            "env": {
+                "DEBUG": "1"
+            },
+            "console": "integratedTerminal",
+            "skipFiles": [
+                "<node_internals>/**"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "attach",
+            "name": "Attach to Node",
+            "processId": "${command:PickProcess}",
+            "cwd": "${workspaceFolder}"
+        }
+    ]
 }

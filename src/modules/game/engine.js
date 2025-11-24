@@ -30,31 +30,42 @@ class GameEngine {
   }
   async runFirstNight() {
     this.nightCounter = 1
-    process.stdout.write(`夜晚 ${this.nightCounter} 开始\n${this.renderStateTable()}\n`)
-    await this.storyteller.startNight()
+    await this.storyteller.startNight(this.nightCounter)
     for (const role of this.script.nightOrder.firstNight) {
       if (Number(role.firstNight) === 0) { continue }
-      await this.runRoleConversation('firstNight', role)
-      if (this.ended) return
+      const seats = this.state.seatsByRole(role.name)
+      for (const seat of seats) {
+        await this.runRoleConversation('firstNight', role, seat)
+        if (this.ended) return
+      }
     }
     process.stdout.write(`夜晚 ${this.nightCounter} 结束\n${this.renderStateTable()}\n`)
   }
   async runOtherNight() {
     this.nightCounter += 1
-    process.stdout.write(`夜晚 ${this.nightCounter} 开始\n${this.renderStateTable()}\n`)
-    await this.storyteller.startNight()
+    await this.storyteller.startNight(this.nightCounter)
     for (const role of this.script.nightOrder.otherNight) {
       if (Number(role.otherNight) === 0) { continue }
-      await this.runRoleConversation('otherNight', role)
-      if (this.ended) return
+      const seats = this.state.seatsByRole(role.name)
+      for (const seat of seats) {
+        await this.runRoleConversation('otherNight', role, seat)
+        if (this.ended) return
+      }
     }
     process.stdout.write(`夜晚 ${this.nightCounter} 结束\n${this.renderStateTable()}\n`)
   }
   async runDay() {
-    process.stdout.write(`白天 开始\n${this.renderStateTable()}\n`)
-    await this.storyteller.startDay()
+    this.dayCounter = (this.dayCounter || 0) + 1
+    await this.storyteller.startDay(this.dayCounter)
     await this.storyteller.awaitResponse()
-    process.stdout.write(`白天 结束\n${this.renderStateTable()}\n`)
+    // 白天结束后进行一次胜利判定（仅允许 gameover 或 end_role）
+    const msgs = this.llm.buildDayCheckMessages({ stateSnapshot: this.state.snapshot(), script: this.rawScriptData })
+    const ops = await this.llm.invokeRoleOps(msgs)
+    if (ops && ops.length) {
+      this.printOps(ops)
+      const r = await this.storyteller.applyOps(ops)
+      if (r && r.ended) { this.ended = true; return }
+    }
   }
   async loop(maxCycles = 20) {
     let cycles = 0
@@ -66,13 +77,17 @@ class GameEngine {
       cycles++
     }
   }
-  async runRoleConversation(phase, role) {
-    const baseMsgs = this.llm.buildRoleMessages({ phase, role, stateSnapshot: this.state.snapshot(), script: this.rawScriptData })
+  async runRoleConversation(phase, role, targetSeat) {
+    const timeLabel = phase === 'firstNight' || phase === 'otherNight' ? `第${this.nightCounter}个夜晚` : `第${this.dayCounter || 0}个白天`
+    const baseMsgs = this.llm.buildRoleMessages({ phase, role, stateSnapshot: this.state.snapshot(), script: this.rawScriptData, targetSeat, timeLabel })
     const msgs = baseMsgs.slice()
     const maxSteps = 10
     for (let step = 0; step < maxSteps; step++) {
       const ops = await this.llm.invokeRoleOps(msgs)
-      if (!ops || ops.length === 0) break
+      if (!ops || ops.length === 0) {
+        msgs.push({ role: 'user', content: '你没有做出任何决策。如果认为无需与当前玩家发生任何交互，请在 ops 中调用 end_role 以结束当前角色；否则请给出合适的 ops(prompt_player/send_to_player/broadcast/add_token/remove_token)。' })
+        continue
+      }
       this.printOps(ops)
       msgs.push({ role: 'assistant', content: JSON.stringify({ ops }) })
       const r = await this.storyteller.applyOps(ops)

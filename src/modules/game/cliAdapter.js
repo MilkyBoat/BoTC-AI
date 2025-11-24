@@ -1,32 +1,29 @@
 const readline = require('readline')
 
-function createCliAdapter() {
+function question(promptText) {
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
-  let handler = null
-  function askSeat() {
-    rl.question('座位号> ', s => {
-      const seat = parseInt(s, 10)
-      if (!seat) return askSeat()
-      rl.question('文本> ', t => {
-        if (handler) handler(seat, t)
-        askSeat()
-      })
-    })
-  }
-  askSeat()
+  return new Promise(resolve => rl.question(promptText, answer => { rl.close(); resolve(answer) }))
+}
+
+function createCliAdapter() {
   function send(toSeat, payload) {
     if (typeof toSeat === 'number') process.stdout.write(`[发送给${toSeat}] ${JSON.stringify(payload)}\n`)
   }
   function broadcast(payload) {
     process.stdout.write(`[广播] ${JSON.stringify(payload)}\n`)
   }
-  function receive(cb) {
-    handler = cb
+  async function questionForSeat(seat, promptText) {
+    process.stdout.write(`询问座位${seat}: ${promptText}\n`)
+    const text = await question('文本> ')
+    return { seat, text }
   }
-  function close() {
-    rl.close()
+  async function questionAny(promptText) {
+    process.stdout.write(`${promptText}\n`)
+    const text = await question('文本> ')
+    return { seat: null, text }
   }
-  return { send, broadcast, receive, close }
+  function close() {}
+  return { send, broadcast, questionForSeat, questionAny, close }
 }
 
 module.exports = { createCliAdapter }

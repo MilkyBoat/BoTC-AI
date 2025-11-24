@@ -1,7 +1,6 @@
-const fs = require('fs')
 require('dotenv').config()
 const path = require('path')
-const { prompt } = require('./modules/utils/prompt')
+const { prompt } = require('./modules/utils/console')
 const { createCliAdapter } = require('./modules/game/cliAdapter')
 const { State } = require('./modules/game/state')
 const { listScripts, loadScript } = require('./modules/game/scriptLoader')
@@ -63,16 +62,15 @@ async function main() {
     return `${p.seat}\t${p.knownRole || ''}\t${p.realRole || ''}\t${tokens}`
   })
   process.stdout.write(['座位\t可见身份\t真实身份\tTokens', ...rows].join('\n') + '\n')
-  const ok = await prompt('请输入 ok 继续: ')
-  if ((ok || '').trim().toLowerCase() !== 'ok') { process.stdout.write('未确认，退出\n'); process.exit(1) }
-  process.stdout.write('进入对话。输入将以座位号和文本为一组。\n')
+  const ok = await prompt('请输入 go 继续: ')
+  if ((ok || '').trim().toLowerCase() !== 'go') { process.stdout.write('未确认，退出\n'); process.exit(1) }
+  process.stdout.write('进入对话。\n')
+
   const io = createCliAdapter()
   const storyteller = createStoryteller({ interaction: io, state, script })
   const llm = createLlmAgent({})
   const engine = new GameEngine({ scriptData: script, storyteller, llmAgent: llm, state })
-  io.receive(async (seat, text) => {
-    await storyteller.onPlayerMessage(seat, text)
-  })
+  // 交互由说书人在需要时触发命令行读取
   process.stdout.write('首夜行动顺序已加载，待完成角色分配后开始。\n')
   await engine.loop()
 }

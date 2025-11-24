@@ -27,4 +27,20 @@ function parseScript(data) {
   return { roles, nightOrder: { firstNight, otherNight }, meta }
 }
 
-module.exports = { listScripts, loadScript, parseScript }
+function renderScript(raw) {
+  try {
+    const entries = Array.isArray(raw) ? raw : []
+    const roles = entries.filter(x => x && x.id && x.team && x.id !== '_meta')
+    const lines = []
+    lines.push('# 剧本完整角色摘要(包含不在场角色)')
+    for (const r of roles) {
+      lines.push(`- 名称: ${r.name} | 阵营: ${r.team}`)
+      if (r.ability) lines.push(`  能力: ${r.ability}`)
+    }
+    return lines.join('\n')
+  } catch {
+    return ''
+  }
+}
+
+module.exports = { listScripts, loadScript, parseScript, renderScript }

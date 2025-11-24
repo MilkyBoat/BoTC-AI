@@ -1,3 +1,11 @@
+const { createLlmAgent } = require('../agent/llmAgent')
+
+async function allocateRoles({ playerCount, scriptData, customRules }) {
+  const llm = createLlmAgent({})
+  const res = await llm.decideAllocation({ playerCount, script: scriptData, customRules })
+  return res
+}
+
 function shuffleTokenMap(obj) {
   if (!obj || !Array.isArray(obj.players) || obj.players.length === 0) return obj
   const arr = obj.players.slice()
@@ -14,4 +22,4 @@ function shuffleTokenMap(obj) {
   return obj
 }
 
-module.exports = { shuffleTokenMap }
+module.exports = { allocateRoles, shuffleTokenMap }

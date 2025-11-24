@@ -2,10 +2,15 @@ const { OpenAI } = require('openai')
 
 class ChatArk {
   constructor({ model, apiKey, baseURL, temperature = 0, extraBody = {} } = {}) {
-    this.model = model
+    this.model = model || process.env.MODEL
+    this.apiKey = apiKey || process.env.API_KEY
+    this.baseURL = baseURL || process.env.BASE_URL
     this.temperature = temperature
-    this.extraBody = extraBody
-    this.client = new OpenAI({ apiKey, baseURL })
+    // 设置默认的extraBody值，包含response_format
+    const defaultExtraBody = { response_format: { type: 'json_object' } }
+    // 合并默认值和外部传入的值，外部传入的值优先级更高
+    this.extraBody = { ...defaultExtraBody, ...extraBody }
+    this.client = new OpenAI({ apiKey: this.apiKey, baseURL: this.baseURL })
   }
   async invoke(messages) {
     const body = {
