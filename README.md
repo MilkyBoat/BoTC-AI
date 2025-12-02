@@ -91,7 +91,11 @@ DEBUG=1 node src/main.js
 在 `game_script/` 目录下创建新的剧本JSON文件，推荐查阅[钟楼博物馆](https://space.bilibili.com/44902471)
 
 ### 扩展知识
-虽然目前没有引入RAG机制，但是在未来这是必要的，知识可以存放在 `knowledge/` 目录下的markdown文件中。参考[钟楼百科](https://clocktower-wiki.gstonegames.com/index.php?title=%E9%A6%96%E9%A1%B5)
+如果需要使用 RAG 能力，请先拉取官方 Wiki 数据至本地知识库：
+```
+node scripts/spider.js
+```
+该命令会将页面内容转换为 Markdown 并存放到 `knowledge/` 目录下。参考[钟楼百科](https://clocktower-wiki.gstonegames.com/index.php?title=首页)
 
 ### 自定义AI行为
 可以通过修改 `src/modules/agent/` 目录下的文件来调整AI代理的行为和提示词设计。
