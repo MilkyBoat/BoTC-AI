@@ -57,16 +57,69 @@ class GameEngine {
   async runDay() {
     this.dayCounter = (this.dayCounter || 0) + 1
     await this.storyteller.startDay(this.dayCounter)
-    await this.storyteller.awaitResponse()
-    // 白天结束后进行一次胜利判定（仅允许 gameover 或 end_role）
-    const msgs = this.llm.buildDayCheckMessages({ stateSnapshot: this.state.snapshot(), script: this.rawScriptData })
-    const ops = await this.llm.invokeRoleOps(msgs)
-    if (ops && ops.length) {
-      this.printOps(ops)
-      const r = await this.storyteller.applyOps(ops)
-      if (r && r.ended) { this.ended = true; return }
+    // 1) 白天开始后先进行一次胜利判定（如有结束则直接返回）
+    {
+      const msgs = this.llm.buildDayCheckMessages({ stateSnapshot: this.state.snapshot(), script: this.rawScriptData })
+      const ops = await this.llm.invokeRoleOps(msgs)
+      process.stdout.write(`白天检查（阶段开始）完成，开始应用工具调用\n`)
+      if (ops && ops.length) {
+        this.printOps(ops)
+        const r = await this.storyteller.applyOps(ops)
+        if (r && r.ended) { this.ended = true; return }
+      }
+    }
+    // 2) 私聊阶段（占位），3) 可多次接收聊天，4) 系统事件标明私聊结束
+    if (typeof this.storyteller.startPrivateChat === 'function') {
+      this.storyteller.startPrivateChat()
+      while (true) {
+        const chatResp = await this.storyteller.awaitResponse()
+        const t = String(chatResp && chatResp.text || '').trim().toLowerCase()
+        if (t === '/end') { break }
+        // 再次进入私聊，继续接收下一条聊天
+        this.storyteller.startPrivateChat()
+      }
+    }
+    // 5) 提名环节：只允许 execute 或 none，非法则循环重试
+    if (typeof this.storyteller.promptExecution === 'function') {
+      while (true) {
+        this.storyteller.promptExecution()
+        const resp = await this.storyteller.awaitResponse()
+        const ok = this._handleDayExecutionResponse(resp)
+        if (ok) break
+      }
+    }
+    // 6) 处决后再次胜利判定
+    {
+      const msgs = this.llm.buildDayCheckMessages({ stateSnapshot: this.state.snapshot(), script: this.rawScriptData })
+      const ops = await this.llm.invokeRoleOps(msgs)
+      process.stdout.write(`白天检查（处决后）完成，开始应用工具调用\n`)
+      if (ops && ops.length) {
+        this.printOps(ops)
+        const r = await this.storyteller.applyOps(ops)
+        if (r && r.ended) { this.ended = true; return }
+      }
     }
   }
+
+  _handleDayExecutionResponse(resp) {
+    if (!resp || !resp.context || resp.context.type !== 'execution') { process.stdout.write('提示: 输入 "execute 座位号" 或 "none"\n'); return false }
+    const t = String(resp.text || '').trim().toLowerCase()
+    if (t === 'none' || t === 'skip') {
+      process.stdout.write('广播: 白天无人处决\n')
+      return true
+    }
+    if (t.startsWith('execute ')) {
+      const num = parseInt(t.split(/\s+/)[1], 10)
+      if (num && this.state.getPlayer(num)) {
+        this.state.markExecuted(num)
+        process.stdout.write(`广播: 白天处决座位 ${num}\n`)
+        return true
+      } else { process.stdout.write('提示: 输入 "execute 座位号" 或 "none"\n'); return false }
+    }
+    process.stdout.write('提示: 输入 "execute 座位号" 或 "none"\n')
+    return false
+  }
+
   async loop(maxCycles = 20) {
     let cycles = 0
     await this.runFirstNight()
