@@ -22,7 +22,7 @@ class NewReActAgent {
     while (!this.ended && steps < maxSteps) {
       // 调用 LLM，打印工具调用摘要
       const tools = await this.llm.deriveTools(this.messages)
-      record('info', '工具调用:')
+      record('tool', '工具调用:')
       for (const tool of tools) { record('tool', `- ${tool.type} ${JSON.stringify(tool.payload || {})}`) }
       // 先将本轮 tools 摘要追加为 assistant 内容，供下一轮 LLM 参考
       {
