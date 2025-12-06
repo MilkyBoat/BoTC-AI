@@ -4,12 +4,12 @@
 // - 循环执行直到 game_over
 require('dotenv').config()
 const path = require('path')
-const { NewSingleAgentState, renderStateTable } = require('./state')
-const { Interaction } = require('./interaction')
-const { NewSingleAgent } = require('./agent')
-const { createLLM } = require('./llm')
-const { listScripts, loadScript } = require('../game/scriptLoader')
-const { record } = require('./collector')
+const { NewSingleAgentState, renderStateTable } = require('./modules/game/state')
+const { Interaction } = require('./modules/game/interaction')
+const { NewSingleAgent } = require('./modules/agent/agent')
+const { createStoryTellerAgent } = require('./modules/agent/storyteller')
+const { listScripts, loadScript } = require('./modules/game/scriptLoader')
+const { record } = require('./modules/common/collector')
 
 async function run() {
   // Debug 演示：固定 8 人配置（与旧版一致）
@@ -36,7 +36,7 @@ async function run() {
       if (scripts && scripts.length) scriptData = await loadScript(scripts[0])
     }
   } catch {}
-  const llm = createLLM()
+  const llm = createStoryTellerAgent()
   const agent = new NewSingleAgent({ llm, state, interaction, script: scriptData })
   // 打印当前状态表
   record('info', renderStateTable(state))

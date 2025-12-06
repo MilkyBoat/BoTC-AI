@@ -1,6 +1,7 @@
 
 const { renderScript, parseScript } = require('../game/scriptLoader')
 const { ChatArk } = require('./ark')
+const { record } = require('../common/collector')
 
 /**
  * allocate -> start -> storyTellerAgent -> (night) -> roleAgent 
@@ -20,7 +21,8 @@ const { ChatArk } = require('./ark')
 
 function createStoryTellerAgent({ } = {}) {
 
-    function buildPrompt({state, time, script}) {
+    // 初始化 system/user 提示
+    function buildInitialMessages({ stateText, time, script }) {
         const sys = `# 角色
 血染钟楼(blood on the clocktower/BotC)AI说书人
 
@@ -98,13 +100,36 @@ function createStoryTellerAgent({ } = {}) {
 - set_character: 改变角色，处理舞蛇人、麻脸巫婆等特殊角色的技能，他们可以改变玩家的角色和/或阵营。
 - game_over: 任何时候你发现触发了游戏结束条件，都可以用它立刻结束游戏，工具会帮你告知所有玩家大家的真实身份。
 `
-        const user = `当前全场状态: ${JSON.stringify(state)}
-    当前时间: ${time}`
+        const user = `当前全场状态:\n${stateText}\n当前时间: ${time}`
         const msgs = [{ role: 'system', content: sys }, { role: 'user', content: user }]
         if (script) msgs.push({ role: 'user', content: renderScript(script) })
         return msgs
     }
 
+    async function invokeOps(messages) {
+        const chat = new ChatArk({
+            apiKey: process.env.OPENAI_API_KEY || process.env.API_KEY,
+            baseURL: process.env.OPENAI_BASE_URL || process.env.BASE_URL,
+            model: process.env.OPENAI_MODEL || process.env.MODEL,
+        })
+        record('info', 'LLM思考中...')
+        const r = await chat.invoke(messages)
+        record('info', 'LLM思考完成。')
+        try {
+            const dbg = typeof r.content === 'string' ? r.content : JSON.stringify(r.content)
+            record('debug', `LLM原始返回: ${dbg}`)
+        } catch {}
+        const txt = typeof r.content === 'string' ? r.content : JSON.stringify(r.content)
+        try {
+            const o = JSON.parse(txt)
+            if (Array.isArray(o)) return o
+            if (o && Array.isArray(o.ops)) return o.ops
+            return []
+        } catch {
+            return []
+        }
+    }
+    return { buildInitialMessages, invokeOps }
 }
 
 module.exports = { createStoryTellerAgent }

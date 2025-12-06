@@ -1,4 +1,4 @@
-const { record } = require('./collector')
+const { record } = require('../common/collector')
 
 // 工具执行器：将 LLM 产出的 ops 应用到状态与交互
 // 交互型工具（ask）在此处直接阻塞读取输入，无需 paused 概念
@@ -52,7 +52,7 @@ async function applyOps({ state, interaction, ops }) {
       const token = String(pl.token || '')
       state.addToken(seat, token)
       results.push({ type: 'add_token', seat, token })
-      const { renderStateTable } = require('./state')
+      const { renderStateTable } = require('../game/state')
       messages.push({ role: 'assistant', content: JSON.stringify({ event: 'state_snapshot', text: renderStateTable(state) }) })
       continue
     }
@@ -61,7 +61,7 @@ async function applyOps({ state, interaction, ops }) {
       const token = String(pl.token || '')
       state.removeToken(seat, token)
       results.push({ type: 'remove_token', seat, token })
-      const { renderStateTable } = require('./state')
+      const { renderStateTable } = require('../game/state')
       messages.push({ role: 'assistant', content: JSON.stringify({ event: 'state_snapshot', text: renderStateTable(state) }) })
       continue
     }

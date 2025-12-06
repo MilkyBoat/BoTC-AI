@@ -1,6 +1,6 @@
-const { record } = require('./collector')
+const { record } = require('../common/collector')
 const { applyOps } = require('./tools')
-const { renderStateTable } = require('./state')
+const { renderStateTable } = require('../game/state')
 
 // 单一 Prompt 的 Agent：
 // - 初始化一次 system/user 提示
