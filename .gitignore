@@ -40,8 +40,7 @@ Thumbs.db
 .env.production.local
 
 # Logs
-logs
-log/
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*

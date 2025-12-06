@@ -21,7 +21,7 @@ function sessionName() {
 
 function ensureSession() {
   if (inited) return
-  const baseDir = path.resolve(process.cwd(), 'log')
+  const baseDir = path.resolve(process.cwd(), 'logs')
   try { fs.mkdirSync(baseDir, { recursive: true }) } catch {}
   const name = sessionName()
   sessionDir = path.join(baseDir, name)
