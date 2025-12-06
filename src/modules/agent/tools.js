@@ -16,7 +16,8 @@ async function applyTools({ state, interaction, tools }) {
   // 状态快照辅助：在状态变更后记录当前状态表
   function snapshot() {
     const { renderStateTable } = require('../game/state')
-    messages.push({ role: 'assistant', content: JSON.stringify({ event: 'state_snapshot', text: renderStateTable(state) }) })
+    record('state', renderStateTable(state))
+    messages.push({ role: 'user', content: `event: state_snapshot, text: ${renderStateTable(state)}` })
   }
   // 工具接口约定：每个处理器接收 payload，内部通过闭包写入 results/userResponses/messages
   const handlers = {
@@ -28,14 +29,17 @@ async function applyTools({ state, interaction, tools }) {
         const r = await interaction.questionForSeat(seat, msg)
         record('response', `座位${r.seat} -> ${r.text}`)
         userResponses.push(r)
-        messages.push({ role: 'user', content: JSON.stringify({ event: 'player_response', seat: r.seat, text: r.text }) })
+        messages.push({ role: 'user', content: `event: player_response, seat: ${r.seat}, text: ${r.text}` })
       } else {
         while (true) {
           const r = await interaction.questionAny(msg)
+          // TODO: 这里限制了用户主动说话时，必须有个真实的发起用户（即形如 1 xxx）。
+          // 但实际上投票时，没有真正的信息输入人
+          // 所以理论上，可以用seat=0来表示对说书人输入的公共信息
           if (r.seat && r.seat > 0 && String(r.text || '').trim().length > 0) {
             record('response', `座位${r.seat} -> ${r.text}`)
             userResponses.push(r)
-            messages.push({ role: 'user', content: JSON.stringify({ event: 'player_response', seat: r.seat, text: r.text }) })
+            messages.push({ role: 'user', content: `event: player_response, seat: ${r.seat}, text: ${r.text}` })
             break
           }
           record('info', '提示: 请输入 "座位号 内容"')
@@ -49,12 +53,14 @@ async function applyTools({ state, interaction, tools }) {
       const msg = String(pl.message || '')
       interaction.send(seat, msg)
       results.push({ type: 'tell', seat, message: msg })
+      messages.push({ role: 'user', content: `event: tell, text: ${msg}` })
     },
     // 广播：向全体玩家发送信息
     broadcast: async pl => {
       const msg = String(pl.message || pl.value || '')
       interaction.broadcast(msg)
       results.push({ type: 'broadcast', message: msg })
+      messages.push({ role: 'user', content: `event: broadcast, text: ${msg}` })
     },
     // 添加标记：为座位添加 token，并记录快照
     add_token: async pl => {

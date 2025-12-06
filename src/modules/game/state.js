@@ -107,7 +107,11 @@ function renderStateTable(state) {
     return `${p.seat}\t${p.alive ? '存活' : '死亡'}\t${p.knownRole || ''}\t${p.realRole || ''}\t${tokens}`
   })
   const header = '座位\t状态\t可见身份\t真实身份\tTokens'
-  return '\n' + [header, ...rows].join('\n')
+  const gset = state && state.tokenMap ? state.tokenMap.get(0) : null
+  const lines = []
+  if (gset && gset.size) lines.push(`全局: ${Array.from(gset).join(', ')}`)
+  lines.push(header)
+  return '\n' + [...lines, ...rows].join('\n')
 }
 
 module.exports = { NewSingleAgentState, renderStateTable }

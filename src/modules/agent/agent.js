@@ -6,7 +6,7 @@ const { renderStateTable } = require('../game/state')
 
 // 单一 Prompt 的 Agent：
 // - 初始化一次 system/user 提示
-// - 循环：LLM→tools→applyTools→追加 messages（当前 role=assistant）
+// - 循环：LLM→tools→applyTools→追加 messages（当前 role=user）
 // - ask 在工具层同步读取输入并返回消息；状态变更会返回快照消息；直到 game_over 结束
 class NewReActAgent {
   constructor({ llm, state, interaction, script }) {
@@ -25,15 +25,15 @@ class NewReActAgent {
       record('info', '工具调用:')
       for (const tool of tools) { record('tool', `- ${tool.type} ${JSON.stringify(tool.payload || {})}`) }
       // 先将本轮 tools 摘要追加为 assistant 内容，供下一轮 LLM 参考
-      // {
-      //   const m = { role: 'assistant', content: JSON.stringify({ tools }) }
-      //   this.messages.push(m)
-      //   record('llm', `role: ${m.role}, content: ${m.content}`)
-      // }
+      {
+        const m = { role: 'assistant', content: JSON.stringify({ tools }) }
+        this.messages.push(m)
+        record('llm', `role: ${m.role}, content: ${m.content}`)
+      }
       // 应用工具，并追加工具层返回的 messages（玩家回应/状态快照等）
       const r = await applyTools({ state: this.state, interaction: this.interaction, tools })
       if (r.messages && r.messages.length) {
-        for (const m of r.messages) { this.messages.push(m); record('llm', `role: ${m.role}, content: ${m.content}`) }
+        for (const m of r.messages) { this.messages.push(m); record('llm', `追加LLM消息: role: ${m.role}, content: ${m.content}`) }
       }
       if (r.ended) { this.ended = true; break }
       steps++

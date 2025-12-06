@@ -39,7 +39,7 @@ async function run() {
   const llm = createStoryTellerAgent()
   const agent = new NewReActAgent({ llm, state, interaction, script: scriptData })
   // 打印当前状态表
-  record('info', renderStateTable(state))
+  record('state', renderStateTable(state))
   record('info', '开始循环，单一prompt驱动')
   await agent.loop(100)
 }
