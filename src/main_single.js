@@ -6,7 +6,7 @@ require('dotenv').config()
 const path = require('path')
 const { NewSingleAgentState, renderStateTable } = require('./modules/game/state')
 const { Interaction } = require('./modules/game/interaction')
-const { NewSingleAgent } = require('./modules/agent/agent')
+const { NewReActAgent } = require('./modules/agent/agent')
 const { createStoryTellerAgent } = require('./modules/agent/storyteller')
 const { listScripts, loadScript } = require('./modules/game/scriptLoader')
 const { record } = require('./modules/common/collector')
@@ -37,7 +37,7 @@ async function run() {
     }
   } catch {}
   const llm = createStoryTellerAgent()
-  const agent = new NewSingleAgent({ llm, state, interaction, script: scriptData })
+  const agent = new NewReActAgent({ llm, state, interaction, script: scriptData })
   // 打印当前状态表
   record('info', renderStateTable(state))
   record('info', '开始循环，单一prompt驱动')

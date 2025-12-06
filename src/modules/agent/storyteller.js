@@ -1,27 +1,19 @@
 
-const { renderScript, parseScript } = require('../game/scriptLoader')
+// 说书人 LLM 适配器：负责
+// - 构建系统与用户消息（buildInitialMessages）
+// - 根据消息推导工具列表（deriveTools）
+// 术语约定：统一使用 tools（数组）/ tool（单个）
+const { renderScript } = require('../game/scriptLoader')
+const { parseToolsFromLLM } = require('../utils/toolkit')
 const { ChatArk } = require('./ark')
 const { record } = require('../common/collector')
-
-/**
- * allocate -> start -> storyTellerAgent -> (night) -> roleAgent 
- * 
- * storyTellerAgent -> {
- * // entry : runRoleFinish/start
- *  input() 我是X号，我要询问/放技能/提名
- *  tools()  { // 魔典interface
- *    day/night
- *    kill
- *    ...
- *  }
- *  seqList() 夜间行动顺序表
- * }
- * 
- */
 
 function createStoryTellerAgent({ } = {}) {
 
     // 初始化 system/user 提示
+    // 输入: { stateText, time, script }
+    // 输出: messages 数组，包含 system 与 user 内容
+    // 设计: system 部分详细描述游戏规则与工具格式，user 部分提供当前状态
     function buildInitialMessages({ stateText, time, script }) {
         const sys = `# 角色
 血染钟楼(blood on the clocktower/BotC)AI说书人
@@ -106,7 +98,14 @@ function createStoryTellerAgent({ } = {}) {
         return msgs
     }
 
-    async function invokeOps(messages) {
+    // 根据输入消息推导工具列表
+    // 输入: messages 数组
+    // 输出: tools 数组（规范化前的原始 LLM 输出，可能是数组对象或携带字段）
+    // 解析规则:
+    // - 若返回为数组，直接视为 tools 列表
+    // - 若返回对象包含 tools 字段，优先使用 tools
+    // - 解析失败或不合法返回空数组
+    async function deriveTools(messages) {
         const chat = new ChatArk({
             apiKey: process.env.OPENAI_API_KEY || process.env.API_KEY,
             baseURL: process.env.OPENAI_BASE_URL || process.env.BASE_URL,
@@ -115,21 +114,14 @@ function createStoryTellerAgent({ } = {}) {
         record('info', 'LLM思考中...')
         const r = await chat.invoke(messages)
         record('info', 'LLM思考完成。')
+        // 调试：记录 LLM 原始返回，便于追踪解析问题
         try {
             const dbg = typeof r.content === 'string' ? r.content : JSON.stringify(r.content)
-            record('debug', `LLM原始返回: ${dbg}`)
+            record('llm', `LLM原始返回: ${dbg}`)
         } catch {}
-        const txt = typeof r.content === 'string' ? r.content : JSON.stringify(r.content)
-        try {
-            const o = JSON.parse(txt)
-            if (Array.isArray(o)) return o
-            if (o && Array.isArray(o.ops)) return o.ops
-            return []
-        } catch {
-            return []
-        }
+        return parseToolsFromLLM(r.content)
     }
-    return { buildInitialMessages, invokeOps }
+    return { buildInitialMessages, deriveTools }
 }
 
 module.exports = { createStoryTellerAgent }

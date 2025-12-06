@@ -1,17 +1,27 @@
 const { record } = require('../common/collector')
 
-// 工具执行器：将 LLM 产出的 ops 应用到状态与交互
+// 工具执行器说明：
+// - 输入: { state, interaction, tools }，其中 tools 为 { type, payload } 的列表
+// - 输出: { ended, results, userResponses, messages }
+// - 设计: 使用 handlers 映射按工具类型分发，降低条件分支耦合，便于扩展与测试
+
+// 工具执行器：将 LLM 产出的 tools 应用到状态与交互
 // 交互型工具（ask）在此处直接阻塞读取输入，无需 paused 概念
 // 返回：{ ended, results, userResponses }
-async function applyOps({ state, interaction, ops }) {
+async function applyTools({ state, interaction, tools }) {
   let ended = false
   const results = []
   const userResponses = []
   const messages = []
-  for (const op of (Array.isArray(ops) ? ops : [])) {
-    const t = op.type
-    const pl = op.payload || {}
-    if (t === 'ask') {
+  // 状态快照辅助：在状态变更后记录当前状态表
+  function snapshot() {
+    const { renderStateTable } = require('../game/state')
+    messages.push({ role: 'assistant', content: JSON.stringify({ event: 'state_snapshot', text: renderStateTable(state) }) })
+  }
+  // 工具接口约定：每个处理器接收 payload，内部通过闭包写入 results/userResponses/messages
+  const handlers = {
+    // 询问：seat=0 表示无特定座位，任意玩家回应
+    ask: async pl => {
       const seat = Number(pl.seat || 0)
       const msg = String(pl.message || '')
       if (seat > 0) {
@@ -32,67 +42,71 @@ async function applyOps({ state, interaction, ops }) {
         }
       }
       results.push({ type: 'ask', seat, message: msg })
-      continue
-    }
-    if (t === 'tell') {
+    },
+    // 私密告知：向指定座位发送信息
+    tell: async pl => {
       const seat = Number(pl.seat || 0)
       const msg = String(pl.message || '')
       interaction.send(seat, msg)
       results.push({ type: 'tell', seat, message: msg })
-      continue
-    }
-    if (t === 'broadcast') {
+    },
+    // 广播：向全体玩家发送信息
+    broadcast: async pl => {
       const msg = String(pl.message || pl.value || '')
       interaction.broadcast(msg)
       results.push({ type: 'broadcast', message: msg })
-      continue
-    }
-    if (t === 'add_token') {
+    },
+    // 添加标记：为座位添加 token，并记录快照
+    add_token: async pl => {
       const seat = Number(pl.seat || 0)
       const token = String(pl.token || '')
       state.addToken(seat, token)
       results.push({ type: 'add_token', seat, token })
-      const { renderStateTable } = require('../game/state')
-      messages.push({ role: 'assistant', content: JSON.stringify({ event: 'state_snapshot', text: renderStateTable(state) }) })
-      continue
-    }
-    if (t === 'remove_token') {
+      snapshot()
+    },
+    // 移除标记：清除座位 token，并记录快照
+    remove_token: async pl => {
       const seat = Number(pl.seat || 0)
       const token = String(pl.token || '')
       state.removeToken(seat, token)
       results.push({ type: 'remove_token', seat, token })
-      const { renderStateTable } = require('../game/state')
-      messages.push({ role: 'assistant', content: JSON.stringify({ event: 'state_snapshot', text: renderStateTable(state) }) })
-      continue
-    }
-    if (t === 'mark_death') {
+      snapshot()
+    },
+    // 生死标记：根据 status 进行死亡或生还广播
+    mark_death: async pl => {
       const seat = Number(pl.seat || 0)
       const st = String(pl.status || '').toLowerCase()
-      if (st === 'death') state.kill(seat)
+      if (st === 'death') { state.kill(seat) }
       interaction.broadcast(`公告: 座位${seat} ${st === 'death' ? '死亡' : '生还'}`)
       results.push({ type: 'mark_death', seat, status: st })
-      continue
-    }
-    if (t === 'set_character') {
+    },
+    // 修改角色：更新 known/real 认知
+    set_character: async pl => {
       const seat = Number(pl.seat || 0)
-      if (pl.new_real) state.setRealRole(seat, pl.new_real)
-      if (pl.new_known) state.setKnownRole(seat, pl.new_known)
+      if (pl.new_real) { state.setRealRole(seat, pl.new_real) }
+      if (pl.new_known) { state.setKnownRole(seat, pl.new_known) }
       results.push({ type: 'set_character', seat, new_known: pl.new_known || '', new_real: pl.new_real || '' })
-      continue
-    }
-    if (t === 'game_over') {
+    },
+    // 游戏结束：广播胜利方与原因，设置 ended
+    game_over: async pl => {
       ended = true
       const msg = pl && pl.reason ? `游戏结束: ${pl.reason}` : '游戏结束'
       interaction.broadcast(msg)
       results.push({ type: 'game_over', winner: pl && pl.winner, reason: pl && pl.reason })
-      continue
-    }
-    if (t === 'end_role') {
+    },
+    // 结束当前角色/阶段
+    end_role: async pl => {
       results.push({ type: 'end_role' })
-      continue
     }
+  }
+  // 主循环：分发执行工具，忽略未定义类型
+  for (const tool of (Array.isArray(tools) ? tools : [])) {
+    const t = tool.type
+    const pl = tool.payload || {}
+    const h = handlers[t]
+    if (typeof h === 'function') { await h(pl) }
   }
   return { ended, results, userResponses, messages }
 }
 
-module.exports = { applyOps }
+module.exports = { applyTools }
