@@ -6,7 +6,7 @@ const buffer = []
 let inited = false
 let wsAll = null
 let wsLLM = null
-let wsUser = null
+let wsGame = null
 let sessionDir = null
 let wsState = null
 
@@ -28,7 +28,7 @@ function ensureSession() {
   try { fs.mkdirSync(sessionDir, { recursive: true }) } catch {}
   wsAll = fs.createWriteStream(path.join(sessionDir, 'all.log'), { flags: 'a' })
   wsLLM = fs.createWriteStream(path.join(sessionDir, 'llm.log'), { flags: 'a' })
-  wsUser = fs.createWriteStream(path.join(sessionDir, 'user.log'), { flags: 'a' })
+  wsGame = fs.createWriteStream(path.join(sessionDir, 'game.log'), { flags: 'a' })
   wsState = fs.createWriteStream(path.join(sessionDir, 'state.log'), { flags: 'a' })
   process.stdout.write(`[log] session=${name} dir=${sessionDir} provider=${dayjs ? 'dayjs' : 'date'}\n`)
   inited = true
@@ -36,8 +36,9 @@ function ensureSession() {
 
 function writeLine(type, line) {
   try { wsAll && wsAll.write(line) } catch {}
-  if (type === 'llm') { try { wsLLM && wsLLM.write(line) } catch {} } else { try { wsUser && wsUser.write(line) } catch {} }
+  if (type === 'llm') { try { wsLLM && wsLLM.write(line) } catch {} }
   if (type === 'state') { try { wsState && wsState.write(line) } catch {} }
+  if (type !== 'llm' && type !== 'tool' && type !== 'script') { try { wsGame && wsGame.write(line) } catch {} }
 }
 
 function record(type, obj) {
@@ -48,7 +49,9 @@ function record(type, obj) {
   const fileLine = `[${ts}] [${type}] ${text}\n`
   const stdLine = `[${type}] ${text}\n`
   writeLine(type, fileLine)
-  process.stdout.write(stdLine)
+  if (type !== 'llm' && type !== 'tool' && type !== 'script') {
+    process.stdout.write(stdLine)
+  }
 }
 
 function getBuffer() {
