@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const { record } = require('../common/record')
+const { prompt } = require('../utils/console')
 
 const SCRIPTS_DIR = path.resolve(process.cwd(), 'game_script')
 
@@ -56,3 +57,37 @@ function renderScript(raw) {
 }
 
 module.exports = { listScripts, loadScript, parseScript, renderScript }
+
+async function selectAndLoadScript({ debug }) {
+  try {
+    if (debug) {
+      const p = path.resolve(process.cwd(), 'game_script/#暗流涌动.json')
+      const rel = path.relative(process.cwd(), p)
+      record('debug', `使用固定剧本: ${rel}`)
+      return await loadScript(p)
+    } else {
+      const scripts = await listScripts()
+      if (scripts.length === 0) {
+        record('error', '未在 ./game_script 发现剧本，请提供标准格式的示例json后重试')
+        return null
+      }
+      const list = scripts.map((f, i) => `${i + 1}. ${f}`).join('\n')
+      record('info', `可用剧本:\n${list}`)
+      const idxInput = await prompt('请选择剧本编号: ')
+      const idx = parseInt(idxInput, 10)
+      if (!idx || idx < 1 || idx > scripts.length) {
+        record('error', '选择无效')
+        return null
+      }
+      const scriptFile = scripts[idx - 1]
+      const s = await loadScript(scriptFile)
+      record('info', `已选择剧本: ${scriptFile}`)
+      return s
+    }
+  } catch (e) {
+    record('error', `剧本加载失败: ${String(e && e.message || e)}`)
+    return null
+  }
+}
+
+module.exports.selectAndLoadScript = selectAndLoadScript

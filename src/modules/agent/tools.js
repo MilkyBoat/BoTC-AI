@@ -62,22 +62,6 @@ async function applyTools({ state, interaction, tools }) {
       results.push({ type: 'broadcast', message: msg })
       messages.push({ role: 'user', content: `event: broadcast, text: ${msg}` })
     },
-    // 添加标记：为座位添加 token，并记录快照
-    add_token: async pl => {
-      const seat = Number(pl.seat || 0)
-      const token = String(pl.token || '')
-      state.addToken(seat, token)
-      results.push({ type: 'add_token', seat, token })
-      snapshot()
-    },
-    // 移除标记：清除座位 token，并记录快照
-    remove_token: async pl => {
-      const seat = Number(pl.seat || 0)
-      const token = String(pl.token || '')
-      state.removeToken(seat, token)
-      results.push({ type: 'remove_token', seat, token })
-      snapshot()
-    },
     // 替换标记：将该座位的所有 token 替换为给定列表，并记录快照
     replace_token: async pl => {
       const seat = Number(pl.seat || 0)
@@ -107,10 +91,6 @@ async function applyTools({ state, interaction, tools }) {
       const msg = pl && pl.reason ? `游戏结束: ${pl.reason}` : '游戏结束'
       interaction.broadcast(msg)
       results.push({ type: 'game_over', winner: pl && pl.winner, reason: pl && pl.reason })
-    },
-    // 结束当前角色/阶段
-    end_role: async pl => {
-      results.push({ type: 'end_role' })
     }
   }
   // 主循环：分发执行工具，忽略未定义类型

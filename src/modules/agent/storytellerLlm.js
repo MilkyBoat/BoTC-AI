@@ -4,11 +4,11 @@
 // - 根据消息推导工具列表（deriveTools）
 // 术语约定：统一使用 tools（数组）/ tool（单个）
 const { renderScript } = require('../game/scriptLoader')
-const { parseToolsFromLLM } = require('../utils/toolkit')
+const { parseToolsFromLLM } = require('../utils/toolsUtils')
 const { ChatArk } = require('./ark')
 const { record } = require('../common/record')
 
-function createStoryTellerAgent({ } = {}) {
+function createStorytellerLlm({ } = {}) {
 
     // 初始化 system/user 提示
     // 输入: { stateText, time, script }
@@ -121,4 +121,4 @@ function createStoryTellerAgent({ } = {}) {
     return { buildInitialMessages, deriveTools }
 }
 
-module.exports = { createStoryTellerAgent }
+module.exports = { createStorytellerLlm }

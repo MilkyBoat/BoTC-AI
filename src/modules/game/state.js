@@ -16,21 +16,7 @@ class AgentState {
     const s = this.tokenMap.get(seat)
     return s ? Array.from(s) : []
   }
-  // 添加标记
-  addToken(seat, token) {
-    const s = this.tokenMap.get(seat) || new Set()
-    s.add(String(token))
-    this.tokenMap.set(seat, s)
-    const p = this.getPlayer(seat)
-    if (p) p.tokens = this.getTokens(seat)
-  }
-  // 移除标记
-  removeToken(seat, token) {
-    const s = this.tokenMap.get(seat)
-    if (s) s.delete(String(token))
-    const p = this.getPlayer(seat)
-    if (p) p.tokens = this.getTokens(seat)
-  }
+  
   // 替换所有标记
   replaceTokens(seat, tokens) {
     const list = Array.isArray(tokens) ? tokens.map(t => String(t)) : []
