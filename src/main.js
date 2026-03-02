@@ -1,3 +1,4 @@
+
 // 单文件入口：选择剧本 → 角色分配 → 初始化状态 → 启动 ReActAgent 循环
 // - 剧本选择与加载：selectAndLoadScript({ debug })
 // - 角色分配入口唯一：RoleAllocAgent.allocate
@@ -32,7 +33,6 @@ async function run() {
   const agent = new ReActAgent({ llm, state, interaction, script: scriptData })
   // 打印当前状态表
   record('state', renderStateTable(state))
-  record('info', '开始循环，单一prompt驱动')
   await agent.loop(20)
 }
 

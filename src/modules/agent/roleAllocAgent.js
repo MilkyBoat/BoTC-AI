@@ -1,4 +1,5 @@
-const { ROLE_RATIO } = require('../common/const')
+
+const { ROLE_RATIO, DEBUG_PANEL } = require('../common/const')
 const { ChatArk } = require('./ark')
 const { shuffleTokenMap } = require('../utils/roleUtils')
 const { record } = require('../common/record')
@@ -67,16 +68,7 @@ ${adjustLines}
   async allocate({ playerCount, script, customRules } = {}) {
     if (process.env.DEBUG === '1') {
       record('info', '角色分配：使用固定角色分配')
-      return { players: [
-        { seat: 1, knownRole: '红唇女郎', realRole: '红唇女郎', tokens: [] },
-        { seat: 2, knownRole: '洗衣妇', realRole: '洗衣妇', tokens: [] },
-        { seat: 3, knownRole: '僧侣', realRole: '僧侣', tokens: [] },
-        { seat: 4, knownRole: '小恶魔', realRole: '小恶魔', tokens: [] },
-        { seat: 5, knownRole: '镇长', realRole: '镇长', tokens: [] },
-        { seat: 6, knownRole: '厨师', realRole: '厨师', tokens: [] },
-        { seat: 7, knownRole: '士兵', realRole: '士兵', tokens: [] },
-        { seat: 8, knownRole: '图书管理员', realRole: '酒鬼', tokens: ['是酒鬼'] }
-      ] }
+      return DEBUG_PANEL
     }
     const msgs = this.buildMessages({ playerCount, script, customRules })
     record('info', '角色分配：LLM思考中...')
