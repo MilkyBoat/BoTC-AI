@@ -24,7 +24,7 @@ class AgentState {
     const p = this.getPlayer(seat)
     if (p) p.tokens = this.getTokens(seat)
   }
-  // 标记死亡
+  // 夜间击杀
   kill(seat) {
     const p = this.getPlayer(seat)
     if (p) {
@@ -40,6 +40,15 @@ class AgentState {
       p.alive = false
       p.death = p.death || {}
       p.death.phase = 'day'
+    }
+  }  
+  // 标记复活
+  revive(seat) {
+    const p = this.getPlayer(seat)
+    if (p) {
+      p.alive = true
+      p.executed = false
+      p.death = {}
     }
   }
   isAlive(seat) {
@@ -88,15 +97,15 @@ class AgentState {
 }
 
 function renderStateTable(state) {
-  const rows = state.players.map(p => {
-    const tokens = state.getTokens(p.seat).join(', ')
-    return `${p.seat}\t${p.alive ? '存活' : '死亡'}\t${p.knownRole || ''}\t${p.realRole || ''}\t${tokens}`
-  })
   const header = '座位\t状态\t可见身份\t真实身份\tTokens'
   const gset = state && state.tokenMap ? state.tokenMap.get(0) : null
   const lines = []
   if (gset && gset.size) lines.push(`全局: ${Array.from(gset).join(', ')}`)
   lines.push(header)
+  const rows = state.players.map(p => {
+    const tokens = state.getTokens(p.seat).join(', ')
+    return `${p.seat}\t${p.alive ? '存活' : '死亡'}\t${p.knownRole || ''}\t${p.realRole || ''}\t${tokens}`
+  })
   return '\n' + [...lines, ...rows].join('\n')
 }
 

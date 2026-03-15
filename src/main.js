@@ -18,7 +18,10 @@ async function run() {
   let playerCount = 8
   const scriptData = await selectAndLoadScript({ debug })
   if (!scriptData) return
-  const customRules = await prompt('请输入分配风格或自定义规则(回车跳过): ')
+  let customRules = ""
+  if (!debug) {
+    customRules = await prompt('请输入分配风格或自定义规则(回车跳过): ')
+  }
   const allocator = new RoleAllocAgent()
   let allocation = null
   try {
@@ -33,7 +36,7 @@ async function run() {
   const agent = new ReActAgent({ llm, state, interaction, script: scriptData })
   // 打印当前状态表
   record('state', renderStateTable(state))
-  await agent.loop(20)
+  await agent.loop(50)
 }
 
 if (require.main === module) {
