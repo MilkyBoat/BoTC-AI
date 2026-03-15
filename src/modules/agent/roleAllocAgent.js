@@ -1,4 +1,3 @@
-
 const { ROLE_RATIO, DEBUG_PANEL } = require('../common/const')
 const { ChatArk } = require('./ark')
 const { shuffleTokenMap } = require('../utils/roleUtils')

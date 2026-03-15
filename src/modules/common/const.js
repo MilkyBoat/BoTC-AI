@@ -1,5 +1,7 @@
-
 // 游戏常量配置
+exports.LLM_CACHE_TIME = 3 * 60 * 60 // 3小时
+exports.DEFAULT_TEMPERATURE = 1
+
 // debug阵容
 exports.DEBUG_PANEL = { players: [
         { seat: 1, knownRole: '红唇女郎', realRole: '红唇女郎', tokens: [] },
