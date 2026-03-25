@@ -2,7 +2,7 @@ const { OpenAI } = require('openai')
 const { BaseChatModel } = require('@langchain/core/language_models/chat_models')
 const { AIMessage, HumanMessage, SystemMessage, ToolMessage } = require('@langchain/core/messages')
 const { convertToOpenAITool } = require('@langchain/core/utils/function_calling')
-const { LLM_CACHE_TIME, DEFAULT_TEMPERATURE } = require('../common/const')
+const { LLM_CACHE_TIME, DEFAULT_TEMPERATURE } = require('../../common/const')
 const { RunnableBinding } = require('@langchain/core/runnables')
 
 class ChatArk extends BaseChatModel {

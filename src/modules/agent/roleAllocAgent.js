@@ -1,6 +1,6 @@
 const { SystemMessage, HumanMessage } = require('@langchain/core/messages')
 const { ROLE_RATIO, DEBUG_PANEL } = require('../common/const')
-const { ChatArk } = require('./ark')
+const { createLlm } = require('./llm/llmFactory')
 const { shuffleTokenMap } = require('../utils/roleUtils')
 const { record } = require('../common/record')
 
@@ -57,7 +57,7 @@ class RoleAllocAgent {
     }
     const msgs = this.buildMessages({ playerCount, script, customRules })
     record('info', '角色分配：LLM思考中...')
-    const chat = this.chat || new ChatArk({})
+    const chat = this.chat || createLlm()
     const r = await chat.invoke(msgs)
     const txt = typeof r.content === 'string' ? r.content : JSON.stringify(r.content)
     record('info', '角色分配：LLM思考完成。')

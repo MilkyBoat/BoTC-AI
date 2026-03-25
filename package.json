@@ -7,6 +7,7 @@
     "knowledge:download": "node scripts/downloadKnowledge.js"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.80.0",
     "dotenv": "^17.2.3",
     "langchain": "^1.0.6",
     "openai": "^6.9.1",

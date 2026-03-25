@@ -6,7 +6,7 @@
 const { renderScript } = require('../game/scriptLoader')
 const { parseToolsFromLLM } = require('../utils/toolsUtils')
 const { SystemMessage, HumanMessage, AIMessage, ToolMessage } = require('@langchain/core/messages')
-const { ChatArk } = require('./ark')
+const { createLlm } = require('./llm/llmFactory')
 const { record } = require('../common/record')
 
 function createStorytellerLlm({ } = {}) {
@@ -106,11 +106,7 @@ function createStorytellerLlm({ } = {}) {
     // - 若返回对象包含 tools 字段，优先使用 tools
     // - 解析失败或不合法返回空数组
     async function deriveTools(messages) {
-        const chat = new ChatArk({
-            apiKey: process.env.OPENAI_API_KEY || process.env.API_KEY,
-            baseURL: process.env.OPENAI_BASE_URL || process.env.BASE_URL,
-            model: process.env.OPENAI_MODEL || process.env.MODEL,
-        })
+        const chat = createLlm()
         record('info', 'LLM思考中...')
         const r = await chat.invoke(messages)
         record('info', 'LLM思考完成。')

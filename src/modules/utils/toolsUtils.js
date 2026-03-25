@@ -14,8 +14,19 @@ function parseToolsFromLLM(input) {
     } else if (input && typeof input === 'object') {
       raw = Array.isArray(input.tools) ? input.tools : input
     } else if (typeof input === 'string') {
-      const o = JSON.parse(input)
-      raw = Array.isArray(o) ? o : (o && Array.isArray(o.tools) ? o.tools : [])
+      // 先尝试从 markdown 代码块中提取 JSON（Claude 等模型会用 ```json ... ``` 包裹输出）
+      const blocks = []
+      const blockRe = /```(?:json)?\s*([\s\S]*?)```/g
+      let m
+      while ((m = blockRe.exec(input)) !== null) blocks.push(m[1].trim())
+      const candidates = blocks.length > 0 ? blocks : [input]
+      for (const src of candidates) {
+        try {
+          const o = JSON.parse(src)
+          const items = Array.isArray(o) ? o : (o && Array.isArray(o.tools) ? o.tools : null)
+          if (items) raw.push(...items)
+        } catch { /* 继续尝试下一个 */ }
+      }
     }
   } catch {
     raw = []

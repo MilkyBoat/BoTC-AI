@@ -1,6 +1,6 @@
-const { ChatPromptTemplate, MessagesPlaceholder } = require('@langchain/core/prompts')
-const { SystemMessage, HumanMessage, AIMessage, ToolMessage } = require('@langchain/core/messages')
-const { ChatArk } = require('./ark')
+const { HumanMessage, ToolMessage } = require('@langchain/core/messages')
+const { BaseChatModel } = require('@langchain/core/language_models/chat_models')
+const { createLlm } = require('./llm/llmFactory')
 const { createGameTools } = require('./tools')
 const { renderStateTable } = require('../game/state')
 const { record } = require('../common/record')
@@ -10,7 +10,7 @@ class ReActAgent {
     this.state = state
     this.interaction = interaction
     this.script = script
-    this.model = llm instanceof ChatArk ? llm : new ChatArk({ model: llm?.model })
+    this.model = (llm instanceof BaseChatModel) ? llm : createLlm()
     this.tools = createGameTools(state, interaction)
     this.runnable = null
     this.messages = []
