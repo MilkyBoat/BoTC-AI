@@ -108,11 +108,22 @@ class ChatClaude extends BaseChatModel {
       })
     }
 
+    // 为最后一个 user 消息添加前缀缓存标记（缓存整段对话历史）
+    const lastUser = [...anthropicMsgs].reverse().find(m => m.role === 'user')
+    if (lastUser) {
+      if (typeof lastUser.content === 'string') {
+        lastUser.content = [{ type: 'text', text: lastUser.content, cache_control: { type: 'ephemeral' } }]
+      } else if (Array.isArray(lastUser.content) && lastUser.content.length > 0) {
+        const last = lastUser.content[lastUser.content.length - 1]
+        if (!last.cache_control) last.cache_control = { type: 'ephemeral' }
+      }
+    }
+
     const r = await this.client.messages.create({
       model: this.model,
       max_tokens: 8192,
       temperature: DEFAULT_TEMPERATURE,
-      system: system || undefined,
+      system: system ? [{ type: 'text', text: system, cache_control: { type: 'ephemeral' } }] : undefined,
       messages: anthropicMsgs,
       tools: anthropicTools,
     })
