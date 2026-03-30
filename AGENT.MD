@@ -122,3 +122,15 @@ interaction.broadcast(message)             // 向所有玩家广播
 - **Web/IM 接入**：替换 `src/modules/game/interaction.js`，实现相同的四个方法
 - **RAG 知识增强**：在 `buildInitialMessages` 中动态注入 `knowledge/` 内容
 - **新剧本**：在 `game_script/` 下放置标准格式 JSON，`selectAndLoadScript` 会自动识别
+
+---
+
+## 沟通记录规范
+
+- 每次完成沟通后，立刻在 `/doc/discussion/` 目录下新增记录（同一天同一主题的可以聚合在同一个文件中）
+- 文件命名格式：`YYYY-MM-DD-topic.md`
+- 记录内容至少包含以下区块：
+  - 主题
+  - 用户原始想法（尽量保留原话与动机）
+  - 我的思路与判断（关键取舍与理由）
+  - 交付结果（实际产出与文件清单）
