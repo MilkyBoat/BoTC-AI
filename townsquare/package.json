@@ -1,0 +1,46 @@
+{
+  "name": "townsquare",
+  "version": "2.16.2",
+  "description": "Blood on the Clocktower Town Square",
+  "author": "Steffen Baumgart",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build ./src/main.js",
+    "lint": "vue-cli-service lint",
+    "lint-ci": "vue-cli-service lint --no-fix --max-warnings=0"
+  },
+  "main": "App.vue",
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.32",
+    "@fortawesome/free-brands-svg-icons": "^5.15.1",
+    "@fortawesome/free-solid-svg-icons": "^5.15.1",
+    "@fortawesome/vue-fontawesome": "^0.1.10",
+    "@vue/cli-service": "^5.0.8",
+    "prom-client": "^13.0.0",
+    "sass": "^1.30.0",
+    "sass-loader": "^8.0.2",
+    "vue": "^2.6.12",
+    "vue-template-compiler": "^2.7.15",
+    "vuex": "^3.6.0",
+    "ws": "^7.4.6"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-eslint": "^5.0.8",
+    "@vue/eslint-config-prettier": "^8.0.0",
+    "eslint": "^8.53.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "eslint-plugin-vue": "^9.18.1",
+    "prettier": "^3.0.3"
+  },
+  "keywords": [
+    "botc",
+    "townsquare",
+    "vue",
+    "scss"
+  ],
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com//bra1n/townsquare.git"
+  }
+}
