@@ -3,14 +3,38 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "node src/main.js",
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "start": "npm run serve",
+    "start:agent-cli": "node src/ai/main.js",
     "knowledge:download": "node scripts/downloadKnowledge.js"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.32",
+    "@fortawesome/free-brands-svg-icons": "^5.15.1",
+    "@fortawesome/free-solid-svg-icons": "^5.15.1",
+    "@fortawesome/vue-fontawesome": "^0.1.10",
+    "@vue/cli-service": "^5.0.8",
     "@anthropic-ai/sdk": "^0.80.0",
     "dotenv": "^17.2.3",
     "langchain": "^1.0.6",
     "openai": "^6.9.1",
+    "prom-client": "^13.0.0",
+    "sass": "^1.30.0",
+    "sass-loader": "^8.0.2",
+    "vue": "^2.7.16",
+    "vuex": "^3.6.0",
+    "ws": "^8.18.0",
     "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-eslint": "^5.0.8",
+    "@vue/eslint-config-prettier": "^8.0.0",
+    "eslint": "^8.53.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "eslint-plugin-vue": "^9.18.1",
+    "prettier": "^3.0.3",
+    "vue-template-compiler": "^2.7.16"
   }
 }

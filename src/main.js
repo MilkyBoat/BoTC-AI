@@ -1,48 +1,69 @@
+import Vue from "vue";
+import App from "./App";
+import store from "./store";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+import { fab } from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-// 单文件入口：选择剧本 → 角色分配 → 初始化状态 → 启动 ReActAgent 循环
-// - 剧本选择与加载：selectAndLoadScript({ debug })
-// - 角色分配入口唯一：RoleAllocAgent.allocate
-// - 所有输出统一使用 record
-require('dotenv').config()
-const { AgentState, renderStateTable } = require('./modules/game/state')
-const { Interaction } = require('./modules/game/interaction')
-const { ReActAgent } = require('./modules/agent/agent')
-const { createStorytellerLlm } = require('./modules/agent/storytellerLlm')
-const { selectAndLoadScript } = require('./modules/game/scriptLoader')
-const { RoleAllocAgent } = require('./modules/agent/roleAllocAgent')
-const { prompt } = require('./modules/utils/console')
-const { record } = require('./modules/common/record')
+const faIcons = [
+  "AddressCard",
+  "BookOpen",
+  "BookDead",
+  "BroadcastTower",
+  "Chair",
+  "CheckSquare",
+  "CloudMoon",
+  "Cog",
+  "Copy",
+  "Clipboard",
+  "Dice",
+  "Dragon",
+  "ExchangeAlt",
+  "ExclamationTriangle",
+  "FileCode",
+  "FileUpload",
+  "HandPaper",
+  "HandPointRight",
+  "Heartbeat",
+  "Image",
+  "Link",
+  "MinusCircle",
+  "PeopleArrows",
+  "PlusCircle",
+  "Question",
+  "Random",
+  "RedoAlt",
+  "Robot",
+  "SearchMinus",
+  "SearchPlus",
+  "Skull",
+  "Square",
+  "TheaterMasks",
+  "Times",
+  "TimesCircle",
+  "TrashAlt",
+  "Undo",
+  "User",
+  "UserEdit",
+  "UserFriends",
+  "Users",
+  "VenusMars",
+  "VolumeUp",
+  "VolumeMute",
+  "VoteYea",
+  "WindowMaximize",
+  "WindowMinimize",
+];
+const fabIcons = ["Github", "Discord"];
+library.add(
+  ...faIcons.map((i) => fas["fa" + i]),
+  ...fabIcons.map((i) => fab["fa" + i]),
+);
+Vue.component("font-awesome-icon", FontAwesomeIcon);
+Vue.config.productionTip = false;
 
-async function run() {
-  const debug = process.env.DEBUG === '1'
-  let playerCount = 8
-  const scriptData = await selectAndLoadScript({ debug })
-  if (!scriptData) return
-  let customRules = ""
-  if (!debug) {
-    customRules = await prompt('请输入分配风格或自定义规则(回车跳过): ')
-  }
-  const allocator = new RoleAllocAgent()
-  let allocation = null
-  try {
-    allocation = await allocator.allocate({ playerCount, script: scriptData, customRules })
-  } catch (e) {
-    record('error', `角色分配失败: ${String(e && e.message || e)}`)
-    return
-  }
-  const state = new AgentState({ players: (allocation && allocation.players) || [] })
-  const interaction = new Interaction()
-  const llm = createStorytellerLlm()
-  const agent = new ReActAgent({ llm, state, interaction, script: scriptData })
-  // 打印当前状态表
-  record('state', renderStateTable(state))
-  await agent.loop(50)
-}
-
-if (require.main === module) {
-  run().catch(err => {
-    record('error', `运行失败: ${err && err.message}`)
-  })
-}
-
-module.exports = { run }
+new Vue({
+  render: (h) => h(App),
+  store,
+}).$mount("#app");
