@@ -1,0 +1,27 @@
+.openai/hosting.json
+  s_f87c832570a45e::t_32e4678fb767a2 1-5
+package.json
+  s_f87c832570a45e::t_ee55bf21227db7 8
+scripts/prepare-sites-build.mjs
+  s_f87c832570a45e::t_a7079949dcca0e 1-14
+worker/index.js
+  s_f87c832570a45e::t_6295d514f37f71 1-24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "b04af3a3e0211af6cb94c888c51312581d677471",
+  "prompts": {},
+  "sessions": {
+    "s_f87c832570a45e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f69fb-7bec-74f0-89a1-4068917ee666",
+        "model": "unknown"
+      },
+      "human_author": "MilkyBoat <1214208054@qq.com>"
+    }
+  },
+  "attestation_metadata": {},
+  "remote_transcripts": {}
+}
