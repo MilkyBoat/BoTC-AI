@@ -1,0 +1,265 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://botc-ai.local/schema/ruleset-scope-v1.json",
+  "title": "BotC-AI 规则范围清单",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "manifestId",
+    "version",
+    "canonicalLanguage",
+    "sourceManifestVersion",
+    "sourcePolicy",
+    "playerCount",
+    "sources",
+    "editions",
+    "specialRoles",
+    "excluded",
+    "integrity"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "./ruleset-scope.schema.json"
+    },
+    "manifestId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9.-]+$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^0\\.[0-9]+\\.[0-9]+$"
+    },
+    "canonicalLanguage": {
+      "const": "zh-CN"
+    },
+    "sourceManifestVersion": {
+      "type": "string",
+      "pattern": "^0\\.[0-9]+\\.[0-9]+$"
+    },
+    "sourcePolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primary", "englishFallback", "conflictResolution"],
+      "properties": {
+        "primary": { "const": "official-zh" },
+        "englishFallback": { "const": "missing-only" },
+        "conflictResolution": { "const": "official-zh-wins" }
+      }
+    },
+    "playerCount": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nonTravelers", "travelers", "total"],
+      "properties": {
+        "nonTravelers": { "$ref": "#/definitions/nonTravelerRange" },
+        "travelers": { "$ref": "#/definitions/travelerRange" },
+        "total": { "$ref": "#/definitions/totalRange" }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "uniqueItems": true,
+      "items": { "$ref": "#/definitions/source" }
+    },
+    "editions": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "uniqueItems": true,
+      "items": { "$ref": "#/definitions/edition" }
+    },
+    "specialRoles": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fabled", "loric"],
+      "properties": {
+        "fabled": { "$ref": "#/definitions/specialRoleGroup" },
+        "loric": { "$ref": "#/definitions/specialRoleGroup" }
+      }
+    },
+    "excluded": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "experimentalRegularRoles",
+        "experimentalTravelers",
+        "experimentalFabled",
+        "customScripts",
+        "laissezUnFaire",
+        "otherOfficialScripts"
+      ],
+      "properties": {
+        "experimentalRegularRoles": { "const": true },
+        "experimentalTravelers": { "const": true },
+        "experimentalFabled": { "const": true },
+        "customScripts": { "const": true },
+        "laissezUnFaire": { "const": true },
+        "otherOfficialScripts": { "const": true }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "canonicalization", "scope", "value"],
+      "properties": {
+        "algorithm": { "const": "sha256" },
+        "canonicalization": { "const": "sorted-json-v1" },
+        "scope": { "const": "manifest-without-integrity" },
+        "value": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        }
+      }
+    }
+  },
+  "definitions": {
+    "nonTravelerRange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["min", "max"],
+      "properties": {
+        "min": { "const": 5 },
+        "max": { "const": 15 }
+      }
+    },
+    "travelerRange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["min", "max"],
+      "properties": {
+        "min": { "const": 0 },
+        "max": { "const": 5 }
+      }
+    },
+    "totalRange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["min", "max"],
+      "properties": {
+        "min": { "const": 5 },
+        "max": { "const": 20 }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "language",
+        "authority",
+        "url",
+        "revision",
+        "revisedAt",
+        "retrievedAt",
+        "contentHash",
+        "contentHashScope"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]+$"
+        },
+        "title": {
+          "type": "string",
+          "pattern": "[\\u3400-\\u9fff]"
+        },
+        "language": { "const": "zh-CN" },
+        "authority": { "const": "official-zh" },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://clocktower-wiki\\.gstonegames\\.com/"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "revisedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "retrievedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "contentHash": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "contentHashScope": { "const": "mediawiki-wikitext" }
+      }
+    },
+    "role": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "displayName"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]*$"
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "[\\u3400-\\u9fff]"
+        }
+      }
+    },
+    "roleList": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/definitions/role" }
+    },
+    "edition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "displayName", "support", "sourceId", "roles"],
+      "properties": {
+        "id": { "enum": ["tb", "bmr", "snv"] },
+        "displayName": {
+          "type": "string",
+          "pattern": "[\\u3400-\\u9fff]"
+        },
+        "support": { "const": "strict" },
+        "sourceId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]+$"
+        },
+        "roles": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["townsfolk", "outsider", "minion", "demon", "traveler"],
+          "properties": {
+            "townsfolk": { "$ref": "#/definitions/roleList" },
+            "outsider": { "$ref": "#/definitions/roleList" },
+            "minion": { "$ref": "#/definitions/roleList" },
+            "demon": { "$ref": "#/definitions/roleList" },
+            "traveler": { "$ref": "#/definitions/roleList" }
+          }
+        }
+      }
+    },
+    "specialRoleGroup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["displayName", "support", "sourceId", "roles"],
+      "properties": {
+        "displayName": {
+          "type": "string",
+          "pattern": "[\\u3400-\\u9fff]"
+        },
+        "support": { "const": "strict" },
+        "sourceId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]+$"
+        },
+        "roles": { "$ref": "#/definitions/roleList" }
+      }
+    }
+  }
+}

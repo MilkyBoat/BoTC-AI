@@ -1,0 +1,273 @@
+{
+  "$schema": "./ruleset-scope.schema.json",
+  "manifestId": "botc-ai.m1-ruleset-scope",
+  "version": "0.1.0",
+  "canonicalLanguage": "zh-CN",
+  "sourceManifestVersion": "0.1.0",
+  "sourcePolicy": {
+    "primary": "official-zh",
+    "englishFallback": "missing-only",
+    "conflictResolution": "official-zh-wins"
+  },
+  "playerCount": {
+    "nonTravelers": { "min": 5, "max": 15 },
+    "travelers": { "min": 0, "max": 5 },
+    "total": { "min": 5, "max": 20 }
+  },
+  "sources": [
+    {
+      "id": "zh-wiki-tb",
+      "title": "暗流涌动",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=暗流涌动&oldid=2716",
+      "revision": 2716,
+      "revisedAt": "2023-01-08T09:50:38Z",
+      "retrievedAt": "2026-07-16T11:10:11Z",
+      "contentHash": "sha256:c71793156165478caed2bc9ecfaaa7e4c61b07624cf828dd68045fd45daaf53d",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-bmr",
+      "title": "黯月初升",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=黯月初升&oldid=2731",
+      "revision": 2731,
+      "revisedAt": "2023-01-08T10:28:01Z",
+      "retrievedAt": "2026-07-16T11:10:11Z",
+      "contentHash": "sha256:7a33689c3919c5b25b3985313a03c463b3edc6b71a113a8e8faefde2fcd51dc1",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-snv",
+      "title": "梦殒春宵",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=梦殒春宵&oldid=5102",
+      "revision": 5102,
+      "revisedAt": "2025-02-21T14:02:00Z",
+      "retrievedAt": "2026-07-16T11:10:11Z",
+      "contentHash": "sha256:f80a77fcc4b31c28f7a96f4360e2b040d8de6d2bd608e38ecb02cbb7ef4499a3",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-fabled",
+      "title": "传奇角色",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=传奇角色&oldid=6229",
+      "revision": 6229,
+      "revisedAt": "2026-06-17T02:27:15Z",
+      "retrievedAt": "2026-07-16T11:10:11Z",
+      "contentHash": "sha256:cc22a6d1f5344c8afaa43d677c7963402092c8fa5d5611dd80a47db76481768d",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-loric",
+      "title": "奇遇角色",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=奇遇角色&oldid=5919",
+      "revision": 5919,
+      "revisedAt": "2026-03-19T23:49:37Z",
+      "retrievedAt": "2026-07-16T11:10:11Z",
+      "contentHash": "sha256:27d47019cc52c79de083fcbaea369bb7eefbc8935778c341d7cf00bdab8ce848",
+      "contentHashScope": "mediawiki-wikitext"
+    }
+  ],
+  "editions": [
+    {
+      "id": "tb",
+      "displayName": "暗流涌动",
+      "support": "strict",
+      "sourceId": "zh-wiki-tb",
+      "roles": {
+        "townsfolk": [
+          { "id": "washerwoman", "displayName": "洗衣妇" },
+          { "id": "librarian", "displayName": "图书管理员" },
+          { "id": "investigator", "displayName": "调查员" },
+          { "id": "chef", "displayName": "厨师" },
+          { "id": "empath", "displayName": "共情者" },
+          { "id": "fortuneteller", "displayName": "占卜师" },
+          { "id": "undertaker", "displayName": "送葬者" },
+          { "id": "monk", "displayName": "僧侣" },
+          { "id": "ravenkeeper", "displayName": "守鸦人" },
+          { "id": "virgin", "displayName": "贞洁者" },
+          { "id": "slayer", "displayName": "猎手" },
+          { "id": "soldier", "displayName": "士兵" },
+          { "id": "mayor", "displayName": "镇长" }
+        ],
+        "outsider": [
+          { "id": "butler", "displayName": "管家" },
+          { "id": "drunk", "displayName": "酒鬼" },
+          { "id": "recluse", "displayName": "陌客" },
+          { "id": "saint", "displayName": "圣徒" }
+        ],
+        "minion": [
+          { "id": "poisoner", "displayName": "投毒者" },
+          { "id": "spy", "displayName": "间谍" },
+          { "id": "scarletwoman", "displayName": "红唇女郎" },
+          { "id": "baron", "displayName": "男爵" }
+        ],
+        "demon": [{ "id": "imp", "displayName": "小恶魔" }],
+        "traveler": [
+          { "id": "bureaucrat", "displayName": "官员" },
+          { "id": "beggar", "displayName": "乞丐" },
+          { "id": "gunslinger", "displayName": "枪手" },
+          { "id": "thief", "displayName": "窃贼" },
+          { "id": "scapegoat", "displayName": "替罪羊" }
+        ]
+      }
+    },
+    {
+      "id": "bmr",
+      "displayName": "黯月初升",
+      "support": "strict",
+      "sourceId": "zh-wiki-bmr",
+      "roles": {
+        "townsfolk": [
+          { "id": "grandmother", "displayName": "祖母" },
+          { "id": "sailor", "displayName": "水手" },
+          { "id": "chambermaid", "displayName": "侍女" },
+          { "id": "exorcist", "displayName": "驱魔人" },
+          { "id": "innkeeper", "displayName": "旅店老板" },
+          { "id": "gambler", "displayName": "赌徒" },
+          { "id": "gossip", "displayName": "造谣者" },
+          { "id": "courtier", "displayName": "侍臣" },
+          { "id": "professor", "displayName": "教授" },
+          { "id": "minstrel", "displayName": "吟游诗人" },
+          { "id": "tealady", "displayName": "茶艺师" },
+          { "id": "pacifist", "displayName": "和平主义者" },
+          { "id": "fool", "displayName": "弄臣" }
+        ],
+        "outsider": [
+          { "id": "tinker", "displayName": "修补匠" },
+          { "id": "moonchild", "displayName": "月之子" },
+          { "id": "goon", "displayName": "莽夫" },
+          { "id": "lunatic", "displayName": "疯子" }
+        ],
+        "minion": [
+          { "id": "godfather", "displayName": "教父" },
+          { "id": "devilsadvocate", "displayName": "魔鬼代言人" },
+          { "id": "assassin", "displayName": "刺客" },
+          { "id": "mastermind", "displayName": "主谋" }
+        ],
+        "demon": [
+          { "id": "zombuul", "displayName": "僵怖" },
+          { "id": "pukka", "displayName": "普卡" },
+          { "id": "shabaloth", "displayName": "沙巴洛斯" },
+          { "id": "po", "displayName": "珀" }
+        ],
+        "traveler": [
+          { "id": "judge", "displayName": "法官" },
+          { "id": "matron", "displayName": "女舍监" },
+          { "id": "voudon", "displayName": "巫毒师" },
+          { "id": "apprentice", "displayName": "学徒" },
+          { "id": "bishop", "displayName": "主教" }
+        ]
+      }
+    },
+    {
+      "id": "snv",
+      "displayName": "梦殒春宵",
+      "support": "strict",
+      "sourceId": "zh-wiki-snv",
+      "roles": {
+        "townsfolk": [
+          { "id": "clockmaker", "displayName": "钟表匠" },
+          { "id": "dreamer", "displayName": "筑梦师" },
+          { "id": "snakecharmer", "displayName": "舞蛇人" },
+          { "id": "mathematician", "displayName": "数学家" },
+          { "id": "flowergirl", "displayName": "卖花女孩" },
+          { "id": "towncrier", "displayName": "城镇公告员" },
+          { "id": "oracle", "displayName": "神谕者" },
+          { "id": "savant", "displayName": "博学者" },
+          { "id": "seamstress", "displayName": "女裁缝" },
+          { "id": "philosopher", "displayName": "哲学家" },
+          { "id": "artist", "displayName": "艺术家" },
+          { "id": "juggler", "displayName": "杂耍艺人" },
+          { "id": "sage", "displayName": "贤者" }
+        ],
+        "outsider": [
+          { "id": "mutant", "displayName": "畸形秀演员" },
+          { "id": "sweetheart", "displayName": "心上人" },
+          { "id": "barber", "displayName": "理发师" },
+          { "id": "klutz", "displayName": "呆瓜" }
+        ],
+        "minion": [
+          { "id": "eviltwin", "displayName": "镜像双子" },
+          { "id": "witch", "displayName": "女巫" },
+          { "id": "cerenovus", "displayName": "洗脑师" },
+          { "id": "pithag", "displayName": "麻脸巫婆" }
+        ],
+        "demon": [
+          { "id": "fanggu", "displayName": "方古" },
+          { "id": "vigormortis", "displayName": "亡骨魔" },
+          { "id": "nodashii", "displayName": "诺-达鲺" },
+          { "id": "vortox", "displayName": "涡流" }
+        ],
+        "traveler": [
+          { "id": "deviant", "displayName": "怪咖" },
+          { "id": "bonecollector", "displayName": "集骨者" },
+          { "id": "barista", "displayName": "咖啡师" },
+          { "id": "harlot", "displayName": "流莺" },
+          { "id": "butcher", "displayName": "屠夫" }
+        ]
+      }
+    }
+  ],
+  "specialRoles": {
+    "fabled": {
+      "displayName": "传奇角色",
+      "support": "strict",
+      "sourceId": "zh-wiki-fabled",
+      "roles": [
+        { "id": "doomsayer", "displayName": "末日预言者" },
+        { "id": "toymaker", "displayName": "玩具匠" },
+        { "id": "angel", "displayName": "天使" },
+        { "id": "buddhist", "displayName": "佛教徒" },
+        { "id": "revolutionary", "displayName": "革命者" },
+        { "id": "hellslibrarian", "displayName": "地狱藏书员" },
+        { "id": "fiddler", "displayName": "小提琴手" },
+        { "id": "fibbin", "displayName": "骗人精" },
+        { "id": "duchess", "displayName": "公爵夫人" },
+        { "id": "sentinel", "displayName": "哨兵" },
+        { "id": "spiritofivory", "displayName": "圣洁之魂" },
+        { "id": "djinn", "displayName": "灯神" }
+      ]
+    },
+    "loric": {
+      "displayName": "奇遇角色",
+      "support": "strict",
+      "sourceId": "zh-wiki-loric",
+      "roles": [
+        { "id": "stormcatcher", "displayName": "暴风捕手" },
+        { "id": "ventriloquist", "displayName": "腹语师" },
+        { "id": "knaves", "displayName": "诡诈杰克" },
+        { "id": "pope", "displayName": "教皇" },
+        { "id": "godofug", "displayName": "讷神" },
+        { "id": "bigwig", "displayName": "首席律师" },
+        { "id": "bootlegger", "displayName": "私货商人" },
+        { "id": "hindu", "displayName": "印度教教徒" },
+        { "id": "zenomancer", "displayName": "异术士" },
+        { "id": "tor", "displayName": "遗忘之门" },
+        { "id": "gardener", "displayName": "园丁" }
+      ]
+    }
+  },
+  "excluded": {
+    "experimentalRegularRoles": true,
+    "experimentalTravelers": true,
+    "experimentalFabled": true,
+    "customScripts": true,
+    "laissezUnFaire": true,
+    "otherOfficialScripts": true
+  },
+  "integrity": {
+    "algorithm": "sha256",
+    "canonicalization": "sorted-json-v1",
+    "scope": "manifest-without-integrity",
+    "value": "sha256:ef6f74204403bbe4a71018cf486aa0d78a852bb7f5ad6cd5c35b01bb9c15c510"
+  }
+}
