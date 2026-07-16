@@ -1,0 +1,23 @@
+README.md
+  s_f87c832570a45e::t_4dffdcfa6a8125 5-6,15
+doc/modify/2026-07-16-site-deployment.md
+  s_f87c832570a45e::t_1eaf06c0cb6d72 5,12,44,63-67,71-75
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "e2daf1168e5040821fbb27d6209c1adc26001220",
+  "prompts": {},
+  "sessions": {
+    "s_f87c832570a45e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f69fb-7bec-74f0-89a1-4068917ee666",
+        "model": "unknown"
+      },
+      "human_author": "MilkyBoat <1214208054@qq.com>"
+    }
+  },
+  "attestation_metadata": {},
+  "remote_transcripts": {}
+}
