@@ -11,7 +11,7 @@
 - [本次项目初始化需求](modify/2026-07-16-project-initialization.md)：记录仓库初始化的范围与验收结果。
 - [本项目测试基础设施](modify/2026-07-16-test-infrastructure.md)：记录 M0-R3 的测试分层、门禁和验收结果。
 - [安全开发会话环境](modify/2026-07-16-safe-development-session.md)：记录 M0-R4 的安全配置、本地中继和验收边界。
-- [M1-R1 规则范围与版本策略](modify/2026-07-16-rules-scope-version-policy.md)：冻结三个基础官方中文剧本、旅行者/传奇角色/奇遇角色范围、中文官方来源与不可变版本策略。
+- [M1-R1 规则范围与版本策略](modify/2026-07-16-rules-scope-version-policy.md)：冻结三个基础官方中文剧本、旅行者/传奇角色/奇遇角色范围、80 个术语、31 个能力类别、7 个重要规则主题、中文官方来源与不可变版本策略。
 
 ## 维护规则
 

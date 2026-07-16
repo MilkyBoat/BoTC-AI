@@ -1,18 +1,27 @@
 {
   "$schema": "./ruleset-scope.schema.json",
   "manifestId": "botc-ai.m1-ruleset-scope",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "canonicalLanguage": "zh-CN",
-  "sourceManifestVersion": "0.1.0",
+  "sourceManifestVersion": "0.2.0",
   "sourcePolicy": {
     "primary": "official-zh",
     "englishFallback": "missing-only",
     "conflictResolution": "official-zh-wins"
   },
   "playerCount": {
-    "nonTravelers": { "min": 5, "max": 15 },
-    "travelers": { "min": 0, "max": 5 },
-    "total": { "min": 5, "max": 20 }
+    "nonTravelers": {
+      "min": 5,
+      "max": 15
+    },
+    "travelers": {
+      "min": 0,
+      "max": 5
+    },
+    "total": {
+      "min": 5,
+      "max": 20
+    }
   },
   "sources": [
     {
@@ -74,6 +83,414 @@
       "retrievedAt": "2026-07-16T11:10:11Z",
       "contentHash": "sha256:27d47019cc52c79de083fcbaea369bb7eefbc8935778c341d7cf00bdab8ce848",
       "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-glossary",
+      "title": "术语汇总",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=术语汇总&oldid=6017",
+      "revision": 6017,
+      "revisedAt": "2026-05-29T11:24:16Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:ebe4c1776bd2f552609455859945aa21cb71fb442abe7e4cef6c22b1bc01c9c8",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-categories",
+      "title": "角色能力类别总览",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=角色能力类别总览&oldid=3997",
+      "revision": 3997,
+      "revisedAt": "2024-01-29T12:14:59Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:a09d785d2580b4843894f9186d460d05585f7f877f5a1effea2804c618e1baa1",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-important-details",
+      "title": "重要细节",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=重要细节&oldid=4183",
+      "revision": 4183,
+      "revisedAt": "2024-04-01T07:44:16Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:0ad4b0b776a3c73642565eb515b9051146b9276ddb0af0fc4e0acfa9221cf48a",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-visit-storyteller",
+      "title": "拜访说书人",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=拜访说书人&oldid=5047",
+      "revision": 5047,
+      "revisedAt": "2025-01-14T03:58:47Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:098a9cc2b86bb494119a379e2f1fcf278da74d0f0e100c24571bfa61ddd60140",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-protection",
+      "title": "保护",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=保护&oldid=4763",
+      "revision": 4763,
+      "revisedAt": "2024-11-11T07:55:24Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:d9cacaf1f4419b724e6cda34d18ed41eb6246e3aa633becadbe33636ff8011ae",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-role-exposure",
+      "title": "暴露角色",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=暴露角色&oldid=6319",
+      "revision": 6319,
+      "revisedAt": "2026-07-01T10:53:59Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:9aa027c6ce6f87a4e94f98e5ec84b439b7f2abf6610b68e49f2bd25492663db4",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-continuous-detection",
+      "title": "持续检测型能力",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=持续检测型能力&oldid=6329",
+      "revision": 6329,
+      "revisedAt": "2026-07-01T12:55:28Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:cf3e96eeee11234c0ce6758618d00e33cc959e29f6b49c063e3b698000912ea7",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-execution",
+      "title": "处决",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=处决&oldid=6312",
+      "revision": 6312,
+      "revisedAt": "2026-07-01T10:26:00Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:6b9c5290a37ff1d6c12f9a7f41f702c0d1057f50011d13fd7fde205642465cbb",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-extra-death",
+      "title": "额外死亡",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=额外死亡&oldid=6317",
+      "revision": 6317,
+      "revisedAt": "2026-07-01T10:53:29Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:7513117e9436590f5d5a1ee990ab124570b5c68149312e899e999223425c56da",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-madness",
+      "title": "疯狂",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=疯狂&oldid=5883",
+      "revision": 5883,
+      "revisedAt": "2026-02-12T23:03:11Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:f1cd491b1c5c6473f73045196f1742737aa8cee3f4b7e2a714544298bc8c5ffd",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-resurrection",
+      "title": "复活",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=复活&oldid=5754",
+      "revision": 5754,
+      "revisedAt": "2025-12-19T00:13:25Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:34307803036c5fbb21e03a459f4a28522a94d4129cb2e5c8e1c9f685f8991f17",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-selection-retargeting",
+      "title": "更换选择目标",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=更换选择目标&oldid=5509",
+      "revision": 5509,
+      "revisedAt": "2025-10-22T02:36:26Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:20381ecb82b83b804c59d9fd806258501de7e9c9878be99d6c8756f7eda61546",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-public-triggered-ability",
+      "title": "公开触发能力",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=公开触发能力&oldid=6385",
+      "revision": 6385,
+      "revisedAt": "2026-07-06T07:41:46Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:94bb6b5032ca6e4694f3a0bee999eabafd6617d99692edfb42c416f0a1b07915",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-ability-gain",
+      "title": "获得能力",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=获得能力&oldid=6010",
+      "revision": 6010,
+      "revisedAt": "2026-05-18T11:19:43Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:102a72c1f9fa1218467dd344a43a655cec7e318fc83b8058bf8b960f5e9ba2f7",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-information-gain",
+      "title": "获取信息",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=获取信息&oldid=6386",
+      "revision": 6386,
+      "revisedAt": "2026-07-06T07:43:47Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:cfa49d787cf18ef0f8f2da5bac0140a8647a5e27980cafb89b30ef0c06d07ace",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-interaction-interference",
+      "title": "互动干扰",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=互动干扰&oldid=6296",
+      "revision": 6296,
+      "revisedAt": "2026-07-01T08:24:34Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:ebcab3e118f1896e7141159bc104d1cd1878d0916b74756d9cf61b53d9507521",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-retrospective-ability",
+      "title": "回溯型能力",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=回溯型能力&oldid=6408",
+      "revision": 6408,
+      "revisedAt": "2026-07-15T01:18:54Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:a67ef9f61801b6f5a11762ef7a9127b8a3439e0e5d6c60739507881c5ed36dde",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-entry-ability",
+      "title": "进场能力",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=进场能力&oldid=5962",
+      "revision": 5962,
+      "revisedAt": "2026-04-18T05:47:56Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:b4000a3967654800380647580b7e77d7260c8215e130f988056ca0a4618d789f",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-character-change",
+      "title": "角色变化",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=角色变化&oldid=5755",
+      "revision": 5755,
+      "revisedAt": "2025-12-19T00:14:25Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:8054f25ebb2ed0e9765fcd8dd1dae125a2636ef1b1684242fe9bd883bed3ec92",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-adjacency",
+      "title": "邻近",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=邻近&oldid=6380",
+      "revision": 6380,
+      "revisedAt": "2026-07-06T07:33:56Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:9715da7a29ba967ad7d83121bd1bd23c8bd26e2b82220ac9603f76c86589d137",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-death-immunity",
+      "title": "免死",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=免死&oldid=5964",
+      "revision": 5964,
+      "revisedAt": "2026-04-18T05:48:33Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:ad34f1fd68b9bfb390ac4b61bf2d6d7dd9039e2e35b78ae0541eeb0b15f5a634",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-ability-effect-interference",
+      "title": "能力效果干扰",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=能力效果干扰&oldid=5915",
+      "revision": 5915,
+      "revisedAt": "2026-03-19T23:05:25Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:814d65b2b56ce4819007bae38b20e9976b3a39e480921301a45b460c3b21df19",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-perception-override",
+      "title": "认知覆盖",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=认知覆盖&oldid=6233",
+      "revision": 6233,
+      "revisedAt": "2026-06-21T11:00:56Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:5fbe505d09eff9be1ed9fde7aab8188689c927a1192b06c7810e7f5bb3479692",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-setup-adjustment",
+      "title": "设置调整",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=设置调整&oldid=6377",
+      "revision": 6377,
+      "revisedAt": "2026-07-04T15:19:20Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:7a2d2127ba621338043027bd42c40d55e194e516dac99d9a2047885330f42394",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-post-death-ability-retention",
+      "title": "死后能力保留",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=死后能力保留&oldid=6318",
+      "revision": 6318,
+      "revisedAt": "2026-07-01T10:53:35Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:fb24c55b3ae79542e3a5c981c99f6e3512fded447218ce160d61381d12bb1c0d",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-death-triggered-ability",
+      "title": "死亡触发能力",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=死亡触发能力&oldid=6308",
+      "revision": 6308,
+      "revisedAt": "2026-07-01T10:21:08Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:9d2b449db662023efd26c1546b2db5e1ecfc9b87e65a62793de438e4a361b8af",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-special-win-loss-condition",
+      "title": "特殊胜利失败条件",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=特殊胜利失败条件&oldid=5406",
+      "revision": 5406,
+      "revisedAt": "2025-08-14T11:43:08Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:2cb6f79897beed849841251af314c60a730af473f869c59dad52a38fc0adcb84",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-nomination",
+      "title": "提名",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=提名&oldid=5887",
+      "revision": 5887,
+      "revisedAt": "2026-02-13T00:41:52Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:230ea8fb14ef577469a4a2933abef2fc39c3eacbdfcc04bed5d921a6bc0b5ed9",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-vote",
+      "title": "投票",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=投票&oldid=5936",
+      "revision": 5936,
+      "revisedAt": "2026-04-08T01:43:31Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:48418634ff7491cff7bc9074c6b6dc6b37b7e1223afd3f85db84a5bfc7fe34da",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-limited-use-ability",
+      "title": "限次能力",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=限次能力&oldid=6297",
+      "revision": 6297,
+      "revisedAt": "2026-07-01T08:25:04Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:a2caf6a3816facda7194e15bc5d00e720be417f1a85ef37d2ad417249876ce72",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-influence",
+      "title": "影响",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=影响&oldid=4760",
+      "revision": 4760,
+      "revisedAt": "2024-11-11T07:55:08Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:cabce4f10ab1fdd0df0bc7f349240514434a9e4681993d72a2200c690bf56ca7",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-alignment-change",
+      "title": "阵营转变",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=阵营转变&oldid=4797",
+      "revision": 4797,
+      "revisedAt": "2024-11-18T11:03:22Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:2fba527cc9a56b9f862303acaeab0fc89c16bc391af6d4a360761e158f4f8dfa",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-poisoned",
+      "title": "中毒",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=中毒&oldid=6294",
+      "revision": 6294,
+      "revisedAt": "2026-07-01T08:21:17Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:1576253552de2a0e1c5c5a86925ff3bd1686c4eab03918d04d0860dbc9d883a0",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-ability-drunk",
+      "title": "醉酒",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=醉酒&oldid=5720",
+      "revision": 5720,
+      "revisedAt": "2025-12-09T02:27:54Z",
+      "retrievedAt": "2026-07-16T12:58:49Z",
+      "contentHash": "sha256:be4951627fa6f27b99dcab3a2041983612b4aeb7d3edabdf161d4b2c43b4f76e",
+      "contentHashScope": "mediawiki-wikitext"
     }
   ],
   "editions": [
@@ -84,39 +501,122 @@
       "sourceId": "zh-wiki-tb",
       "roles": {
         "townsfolk": [
-          { "id": "washerwoman", "displayName": "洗衣妇" },
-          { "id": "librarian", "displayName": "图书管理员" },
-          { "id": "investigator", "displayName": "调查员" },
-          { "id": "chef", "displayName": "厨师" },
-          { "id": "empath", "displayName": "共情者" },
-          { "id": "fortuneteller", "displayName": "占卜师" },
-          { "id": "undertaker", "displayName": "送葬者" },
-          { "id": "monk", "displayName": "僧侣" },
-          { "id": "ravenkeeper", "displayName": "守鸦人" },
-          { "id": "virgin", "displayName": "贞洁者" },
-          { "id": "slayer", "displayName": "猎手" },
-          { "id": "soldier", "displayName": "士兵" },
-          { "id": "mayor", "displayName": "镇长" }
+          {
+            "id": "washerwoman",
+            "displayName": "洗衣妇"
+          },
+          {
+            "id": "librarian",
+            "displayName": "图书管理员"
+          },
+          {
+            "id": "investigator",
+            "displayName": "调查员"
+          },
+          {
+            "id": "chef",
+            "displayName": "厨师"
+          },
+          {
+            "id": "empath",
+            "displayName": "共情者"
+          },
+          {
+            "id": "fortuneteller",
+            "displayName": "占卜师"
+          },
+          {
+            "id": "undertaker",
+            "displayName": "送葬者"
+          },
+          {
+            "id": "monk",
+            "displayName": "僧侣"
+          },
+          {
+            "id": "ravenkeeper",
+            "displayName": "守鸦人"
+          },
+          {
+            "id": "virgin",
+            "displayName": "贞洁者"
+          },
+          {
+            "id": "slayer",
+            "displayName": "猎手"
+          },
+          {
+            "id": "soldier",
+            "displayName": "士兵"
+          },
+          {
+            "id": "mayor",
+            "displayName": "镇长"
+          }
         ],
         "outsider": [
-          { "id": "butler", "displayName": "管家" },
-          { "id": "drunk", "displayName": "酒鬼" },
-          { "id": "recluse", "displayName": "陌客" },
-          { "id": "saint", "displayName": "圣徒" }
+          {
+            "id": "butler",
+            "displayName": "管家"
+          },
+          {
+            "id": "drunk",
+            "displayName": "酒鬼"
+          },
+          {
+            "id": "recluse",
+            "displayName": "陌客"
+          },
+          {
+            "id": "saint",
+            "displayName": "圣徒"
+          }
         ],
         "minion": [
-          { "id": "poisoner", "displayName": "投毒者" },
-          { "id": "spy", "displayName": "间谍" },
-          { "id": "scarletwoman", "displayName": "红唇女郎" },
-          { "id": "baron", "displayName": "男爵" }
+          {
+            "id": "poisoner",
+            "displayName": "投毒者"
+          },
+          {
+            "id": "spy",
+            "displayName": "间谍"
+          },
+          {
+            "id": "scarletwoman",
+            "displayName": "红唇女郎"
+          },
+          {
+            "id": "baron",
+            "displayName": "男爵"
+          }
         ],
-        "demon": [{ "id": "imp", "displayName": "小恶魔" }],
+        "demon": [
+          {
+            "id": "imp",
+            "displayName": "小恶魔"
+          }
+        ],
         "traveler": [
-          { "id": "bureaucrat", "displayName": "官员" },
-          { "id": "beggar", "displayName": "乞丐" },
-          { "id": "gunslinger", "displayName": "枪手" },
-          { "id": "thief", "displayName": "窃贼" },
-          { "id": "scapegoat", "displayName": "替罪羊" }
+          {
+            "id": "bureaucrat",
+            "displayName": "官员"
+          },
+          {
+            "id": "beggar",
+            "displayName": "乞丐"
+          },
+          {
+            "id": "gunslinger",
+            "displayName": "枪手"
+          },
+          {
+            "id": "thief",
+            "displayName": "窃贼"
+          },
+          {
+            "id": "scapegoat",
+            "displayName": "替罪羊"
+          }
         ]
       }
     },
@@ -127,44 +627,134 @@
       "sourceId": "zh-wiki-bmr",
       "roles": {
         "townsfolk": [
-          { "id": "grandmother", "displayName": "祖母" },
-          { "id": "sailor", "displayName": "水手" },
-          { "id": "chambermaid", "displayName": "侍女" },
-          { "id": "exorcist", "displayName": "驱魔人" },
-          { "id": "innkeeper", "displayName": "旅店老板" },
-          { "id": "gambler", "displayName": "赌徒" },
-          { "id": "gossip", "displayName": "造谣者" },
-          { "id": "courtier", "displayName": "侍臣" },
-          { "id": "professor", "displayName": "教授" },
-          { "id": "minstrel", "displayName": "吟游诗人" },
-          { "id": "tealady", "displayName": "茶艺师" },
-          { "id": "pacifist", "displayName": "和平主义者" },
-          { "id": "fool", "displayName": "弄臣" }
+          {
+            "id": "grandmother",
+            "displayName": "祖母"
+          },
+          {
+            "id": "sailor",
+            "displayName": "水手"
+          },
+          {
+            "id": "chambermaid",
+            "displayName": "侍女"
+          },
+          {
+            "id": "exorcist",
+            "displayName": "驱魔人"
+          },
+          {
+            "id": "innkeeper",
+            "displayName": "旅店老板"
+          },
+          {
+            "id": "gambler",
+            "displayName": "赌徒"
+          },
+          {
+            "id": "gossip",
+            "displayName": "造谣者"
+          },
+          {
+            "id": "courtier",
+            "displayName": "侍臣"
+          },
+          {
+            "id": "professor",
+            "displayName": "教授"
+          },
+          {
+            "id": "minstrel",
+            "displayName": "吟游诗人"
+          },
+          {
+            "id": "tealady",
+            "displayName": "茶艺师"
+          },
+          {
+            "id": "pacifist",
+            "displayName": "和平主义者"
+          },
+          {
+            "id": "fool",
+            "displayName": "弄臣"
+          }
         ],
         "outsider": [
-          { "id": "tinker", "displayName": "修补匠" },
-          { "id": "moonchild", "displayName": "月之子" },
-          { "id": "goon", "displayName": "莽夫" },
-          { "id": "lunatic", "displayName": "疯子" }
+          {
+            "id": "tinker",
+            "displayName": "修补匠"
+          },
+          {
+            "id": "moonchild",
+            "displayName": "月之子"
+          },
+          {
+            "id": "goon",
+            "displayName": "莽夫"
+          },
+          {
+            "id": "lunatic",
+            "displayName": "疯子"
+          }
         ],
         "minion": [
-          { "id": "godfather", "displayName": "教父" },
-          { "id": "devilsadvocate", "displayName": "魔鬼代言人" },
-          { "id": "assassin", "displayName": "刺客" },
-          { "id": "mastermind", "displayName": "主谋" }
+          {
+            "id": "godfather",
+            "displayName": "教父"
+          },
+          {
+            "id": "devilsadvocate",
+            "displayName": "魔鬼代言人"
+          },
+          {
+            "id": "assassin",
+            "displayName": "刺客"
+          },
+          {
+            "id": "mastermind",
+            "displayName": "主谋"
+          }
         ],
         "demon": [
-          { "id": "zombuul", "displayName": "僵怖" },
-          { "id": "pukka", "displayName": "普卡" },
-          { "id": "shabaloth", "displayName": "沙巴洛斯" },
-          { "id": "po", "displayName": "珀" }
+          {
+            "id": "zombuul",
+            "displayName": "僵怖"
+          },
+          {
+            "id": "pukka",
+            "displayName": "普卡"
+          },
+          {
+            "id": "shabaloth",
+            "displayName": "沙巴洛斯"
+          },
+          {
+            "id": "po",
+            "displayName": "珀"
+          }
         ],
         "traveler": [
-          { "id": "judge", "displayName": "法官" },
-          { "id": "matron", "displayName": "女舍监" },
-          { "id": "voudon", "displayName": "巫毒师" },
-          { "id": "apprentice", "displayName": "学徒" },
-          { "id": "bishop", "displayName": "主教" }
+          {
+            "id": "judge",
+            "displayName": "法官"
+          },
+          {
+            "id": "matron",
+            "displayName": "女舍监"
+          },
+          {
+            "id": "voudon",
+            "displayName": "巫毒师"
+          },
+          {
+            "id": "apprentice",
+            "displayName": "学徒"
+          },
+          {
+            "id": "bishop",
+            "displayName": "主教"
+          }
         ]
       }
     },
@@ -175,44 +765,134 @@
       "sourceId": "zh-wiki-snv",
       "roles": {
         "townsfolk": [
-          { "id": "clockmaker", "displayName": "钟表匠" },
-          { "id": "dreamer", "displayName": "筑梦师" },
-          { "id": "snakecharmer", "displayName": "舞蛇人" },
-          { "id": "mathematician", "displayName": "数学家" },
-          { "id": "flowergirl", "displayName": "卖花女孩" },
-          { "id": "towncrier", "displayName": "城镇公告员" },
-          { "id": "oracle", "displayName": "神谕者" },
-          { "id": "savant", "displayName": "博学者" },
-          { "id": "seamstress", "displayName": "女裁缝" },
-          { "id": "philosopher", "displayName": "哲学家" },
-          { "id": "artist", "displayName": "艺术家" },
-          { "id": "juggler", "displayName": "杂耍艺人" },
-          { "id": "sage", "displayName": "贤者" }
+          {
+            "id": "clockmaker",
+            "displayName": "钟表匠"
+          },
+          {
+            "id": "dreamer",
+            "displayName": "筑梦师"
+          },
+          {
+            "id": "snakecharmer",
+            "displayName": "舞蛇人"
+          },
+          {
+            "id": "mathematician",
+            "displayName": "数学家"
+          },
+          {
+            "id": "flowergirl",
+            "displayName": "卖花女孩"
+          },
+          {
+            "id": "towncrier",
+            "displayName": "城镇公告员"
+          },
+          {
+            "id": "oracle",
+            "displayName": "神谕者"
+          },
+          {
+            "id": "savant",
+            "displayName": "博学者"
+          },
+          {
+            "id": "seamstress",
+            "displayName": "女裁缝"
+          },
+          {
+            "id": "philosopher",
+            "displayName": "哲学家"
+          },
+          {
+            "id": "artist",
+            "displayName": "艺术家"
+          },
+          {
+            "id": "juggler",
+            "displayName": "杂耍艺人"
+          },
+          {
+            "id": "sage",
+            "displayName": "贤者"
+          }
         ],
         "outsider": [
-          { "id": "mutant", "displayName": "畸形秀演员" },
-          { "id": "sweetheart", "displayName": "心上人" },
-          { "id": "barber", "displayName": "理发师" },
-          { "id": "klutz", "displayName": "呆瓜" }
+          {
+            "id": "mutant",
+            "displayName": "畸形秀演员"
+          },
+          {
+            "id": "sweetheart",
+            "displayName": "心上人"
+          },
+          {
+            "id": "barber",
+            "displayName": "理发师"
+          },
+          {
+            "id": "klutz",
+            "displayName": "呆瓜"
+          }
         ],
         "minion": [
-          { "id": "eviltwin", "displayName": "镜像双子" },
-          { "id": "witch", "displayName": "女巫" },
-          { "id": "cerenovus", "displayName": "洗脑师" },
-          { "id": "pithag", "displayName": "麻脸巫婆" }
+          {
+            "id": "eviltwin",
+            "displayName": "镜像双子"
+          },
+          {
+            "id": "witch",
+            "displayName": "女巫"
+          },
+          {
+            "id": "cerenovus",
+            "displayName": "洗脑师"
+          },
+          {
+            "id": "pithag",
+            "displayName": "麻脸巫婆"
+          }
         ],
         "demon": [
-          { "id": "fanggu", "displayName": "方古" },
-          { "id": "vigormortis", "displayName": "亡骨魔" },
-          { "id": "nodashii", "displayName": "诺-达鲺" },
-          { "id": "vortox", "displayName": "涡流" }
+          {
+            "id": "fanggu",
+            "displayName": "方古"
+          },
+          {
+            "id": "vigormortis",
+            "displayName": "亡骨魔"
+          },
+          {
+            "id": "nodashii",
+            "displayName": "诺-达鲺"
+          },
+          {
+            "id": "vortox",
+            "displayName": "涡流"
+          }
         ],
         "traveler": [
-          { "id": "deviant", "displayName": "怪咖" },
-          { "id": "bonecollector", "displayName": "集骨者" },
-          { "id": "barista", "displayName": "咖啡师" },
-          { "id": "harlot", "displayName": "流莺" },
-          { "id": "butcher", "displayName": "屠夫" }
+          {
+            "id": "deviant",
+            "displayName": "怪咖"
+          },
+          {
+            "id": "bonecollector",
+            "displayName": "集骨者"
+          },
+          {
+            "id": "barista",
+            "displayName": "咖啡师"
+          },
+          {
+            "id": "harlot",
+            "displayName": "流莺"
+          },
+          {
+            "id": "butcher",
+            "displayName": "屠夫"
+          }
         ]
       }
     }
@@ -223,18 +903,54 @@
       "support": "strict",
       "sourceId": "zh-wiki-fabled",
       "roles": [
-        { "id": "doomsayer", "displayName": "末日预言者" },
-        { "id": "toymaker", "displayName": "玩具匠" },
-        { "id": "angel", "displayName": "天使" },
-        { "id": "buddhist", "displayName": "佛教徒" },
-        { "id": "revolutionary", "displayName": "革命者" },
-        { "id": "hellslibrarian", "displayName": "地狱藏书员" },
-        { "id": "fiddler", "displayName": "小提琴手" },
-        { "id": "fibbin", "displayName": "骗人精" },
-        { "id": "duchess", "displayName": "公爵夫人" },
-        { "id": "sentinel", "displayName": "哨兵" },
-        { "id": "spiritofivory", "displayName": "圣洁之魂" },
-        { "id": "djinn", "displayName": "灯神" }
+        {
+          "id": "doomsayer",
+          "displayName": "末日预言者"
+        },
+        {
+          "id": "toymaker",
+          "displayName": "玩具匠"
+        },
+        {
+          "id": "angel",
+          "displayName": "天使"
+        },
+        {
+          "id": "buddhist",
+          "displayName": "佛教徒"
+        },
+        {
+          "id": "revolutionary",
+          "displayName": "革命者"
+        },
+        {
+          "id": "hellslibrarian",
+          "displayName": "地狱藏书员"
+        },
+        {
+          "id": "fiddler",
+          "displayName": "小提琴手"
+        },
+        {
+          "id": "fibbin",
+          "displayName": "骗人精"
+        },
+        {
+          "id": "duchess",
+          "displayName": "公爵夫人"
+        },
+        {
+          "id": "sentinel",
+          "displayName": "哨兵"
+        },
+        {
+          "id": "spiritofivory",
+          "displayName": "圣洁之魂"
+        },
+        {
+          "id": "djinn",
+          "displayName": "灯神"
+        }
       ]
     },
     "loric": {
@@ -242,20 +958,2954 @@
       "support": "strict",
       "sourceId": "zh-wiki-loric",
       "roles": [
-        { "id": "stormcatcher", "displayName": "暴风捕手" },
-        { "id": "ventriloquist", "displayName": "腹语师" },
-        { "id": "knaves", "displayName": "诡诈杰克" },
-        { "id": "pope", "displayName": "教皇" },
-        { "id": "godofug", "displayName": "讷神" },
-        { "id": "bigwig", "displayName": "首席律师" },
-        { "id": "bootlegger", "displayName": "私货商人" },
-        { "id": "hindu", "displayName": "印度教教徒" },
-        { "id": "zenomancer", "displayName": "异术士" },
-        { "id": "tor", "displayName": "遗忘之门" },
-        { "id": "gardener", "displayName": "园丁" }
+        {
+          "id": "stormcatcher",
+          "displayName": "暴风捕手"
+        },
+        {
+          "id": "ventriloquist",
+          "displayName": "腹语师"
+        },
+        {
+          "id": "knaves",
+          "displayName": "诡诈杰克"
+        },
+        {
+          "id": "pope",
+          "displayName": "教皇"
+        },
+        {
+          "id": "godofug",
+          "displayName": "讷神"
+        },
+        {
+          "id": "bigwig",
+          "displayName": "首席律师"
+        },
+        {
+          "id": "bootlegger",
+          "displayName": "私货商人"
+        },
+        {
+          "id": "hindu",
+          "displayName": "印度教教徒"
+        },
+        {
+          "id": "zenomancer",
+          "displayName": "异术士"
+        },
+        {
+          "id": "tor",
+          "displayName": "遗忘之门"
+        },
+        {
+          "id": "gardener",
+          "displayName": "园丁"
+        }
       ]
     }
   },
+  "concepts": [
+    {
+      "id": "day",
+      "displayName": "白天",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "白天"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "not-in-play",
+      "displayName": "不在场",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "不在场"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "town-square",
+      "displayName": "城镇广场",
+      "responsibility": "reference",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "城镇广场"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "setup-sheet",
+      "displayName": "初始设置表",
+      "responsibility": "reference",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "初始设置表"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "execution",
+      "displayName": "处决",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term",
+        "ability-category"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "处决"
+        },
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "处决"
+        },
+        {
+          "sourceId": "zh-wiki-ability-execution",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "fabled-character",
+      "displayName": "传奇角色",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "传奇角色"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "alive",
+      "displayName": "存活",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "存活"
+        }
+      ],
+      "relatedConceptIds": [
+        "alive-and-dead"
+      ]
+    },
+    {
+      "id": "incorrect-information",
+      "displayName": "错误信息",
+      "responsibility": "storyteller-adjudication",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "错误信息"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "register-as",
+      "displayName": "当作",
+      "responsibility": "storyteller-adjudication",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "当作"
+        }
+      ],
+      "relatedConceptIds": [
+        "interaction-interference"
+      ]
+    },
+    {
+      "id": "demon",
+      "displayName": "恶魔",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "恶魔"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "demon-player",
+      "displayName": "恶魔玩家",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "恶魔玩家"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "demon-information",
+      "displayName": "恶魔信息",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "恶魔信息"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "madness",
+      "displayName": "疯狂",
+      "responsibility": "storyteller-adjudication",
+      "kinds": [
+        "glossary-term",
+        "ability-category",
+        "important-topic"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "疯狂"
+        },
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "疯狂"
+        },
+        {
+          "sourceId": "zh-wiki-ability-madness",
+          "locator": "能力简介与相关角色"
+        },
+        {
+          "sourceId": "zh-wiki-important-details",
+          "locator": "疯狂"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "resurrection",
+      "displayName": "复活",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term",
+        "ability-category"
+      ],
+      "aliases": [
+        "起死回生",
+        "被反刍",
+        "重生",
+        "破坟"
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "复活"
+        },
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "复活"
+        },
+        {
+          "sourceId": "zh-wiki-ability-resurrection",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "public",
+      "displayName": "公开",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "公开"
+        }
+      ],
+      "relatedConceptIds": [
+        "public-triggered-ability"
+      ]
+    },
+    {
+      "id": "rules-explanation",
+      "displayName": "规则解释",
+      "responsibility": "reference",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "规则解释"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "wake",
+      "displayName": "唤醒",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "唤醒"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "dusk",
+      "displayName": "黄昏",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "黄昏"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "win",
+      "displayName": "获胜",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "获胜"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "about-to-be-executed",
+      "displayName": "即将被处决",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "即将被处决"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "healthy",
+      "displayName": "健康",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "健康"
+        }
+      ],
+      "relatedConceptIds": [
+        "drunk-and-poisoned"
+      ]
+    },
+    {
+      "id": "character",
+      "displayName": "角色",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "角色"
+        }
+      ],
+      "relatedConceptIds": [
+        "character-change",
+        "alignment-and-character"
+      ]
+    },
+    {
+      "id": "character-token",
+      "displayName": "角色标记",
+      "responsibility": "reference",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "角色标记"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "character-type",
+      "displayName": "角色类型",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "角色类型"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "character-sheet",
+      "displayName": "角色列表",
+      "responsibility": "reference",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "角色列表"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "script",
+      "displayName": "剧本",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "剧本"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "script-tool",
+      "displayName": "剧本工具",
+      "responsibility": "reference",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "剧本工具"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "edition",
+      "displayName": "剧本套装",
+      "responsibility": "reference",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "剧本套装"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "may",
+      "displayName": "可能",
+      "responsibility": "storyteller-adjudication",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "可能"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "dawn",
+      "displayName": "黎明",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "黎明"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "exile",
+      "displayName": "流放",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "流放"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "traveler",
+      "displayName": "旅行者",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "旅行者"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "traveler-sheet",
+      "displayName": "旅行者列表",
+      "responsibility": "reference",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "旅行者列表"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "lose",
+      "displayName": "落败",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "落败"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "each-night",
+      "displayName": "每个夜晚",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "每个夜晚"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "each-night-except-first",
+      "displayName": "每个夜晚*",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "每个夜晚*"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "once-per-game",
+      "displayName": "每局游戏限一次",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "每局游戏限一次"
+        }
+      ],
+      "relatedConceptIds": [
+        "limited-use-ability"
+      ]
+    },
+    {
+      "id": "ally",
+      "displayName": "盟友",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "盟友"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "tomorrow",
+      "displayName": "明天",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "明天"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "grimoire",
+      "displayName": "魔典",
+      "responsibility": "reference",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "魔典"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "ability",
+      "displayName": "能力",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term",
+        "important-topic"
+      ],
+      "aliases": [
+        "角色能力"
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "能力"
+        },
+        {
+          "sourceId": "zh-wiki-important-details",
+          "locator": "角色能力"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "sober",
+      "displayName": "清醒",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "清醒"
+        }
+      ],
+      "relatedConceptIds": [
+        "drunk-and-poisoned"
+      ]
+    },
+    {
+      "id": "blood-on-the-clocktower",
+      "displayName": "染",
+      "responsibility": "reference",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "染"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "good",
+      "displayName": "善良",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "善良"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "good-character",
+      "displayName": "善良角色",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "善良角色"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "life-token",
+      "displayName": "生命标记",
+      "responsibility": "reference",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "生命标记"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "first-night",
+      "displayName": "首个夜晚",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "首个夜晚"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "storyteller",
+      "displayName": "说书人",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "说书人"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "private",
+      "displayName": "私下",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "私下"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "nomination",
+      "displayName": "提名",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term",
+        "ability-category"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "提名"
+        },
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "提名"
+        },
+        {
+          "sourceId": "zh-wiki-ability-nomination",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "reminder-token",
+      "displayName": "提示标记",
+      "responsibility": "reference",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "提示标记"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "vote",
+      "displayName": "投票",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term",
+        "ability-category"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "投票"
+        },
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "投票"
+        },
+        {
+          "sourceId": "zh-wiki-ability-vote",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "vote-token",
+      "displayName": "投票标记",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "投票标记"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "outsider",
+      "displayName": "外来者",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "外来者"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "player",
+      "displayName": "玩家",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "玩家"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "shroud",
+      "displayName": "帷幕标记",
+      "responsibility": "reference",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "帷幕标记"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "evil",
+      "displayName": "邪恶",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "邪恶"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "evil-character",
+      "displayName": "邪恶角色",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "邪恶角色"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "information",
+      "displayName": "信息",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "信息"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "information-token",
+      "displayName": "信息标记",
+      "responsibility": "reference",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "信息标记"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "announce",
+      "displayName": "宣布",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "宣布"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "choose",
+      "displayName": "选择",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "选择"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "leaf",
+      "displayName": "叶子",
+      "responsibility": "reference",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "叶子"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "night",
+      "displayName": "夜晚",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "夜晚"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "night-token",
+      "displayName": "夜晚标记",
+      "responsibility": "reference",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "夜晚标记"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "night-order",
+      "displayName": "夜晚顺序表",
+      "responsibility": "reference",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "夜晚顺序表"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "dead",
+      "displayName": "死亡",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "死亡"
+        }
+      ],
+      "relatedConceptIds": [
+        "alive-and-dead"
+      ]
+    },
+    {
+      "id": "thinks",
+      "displayName": "以为",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "以为"
+        }
+      ],
+      "relatedConceptIds": [
+        "perception-override"
+      ]
+    },
+    {
+      "id": "nearest-alive-neighbors",
+      "displayName": "与之邻近的存活玩家",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "与之邻近的存活玩家"
+        }
+      ],
+      "relatedConceptIds": [
+        "adjacency"
+      ]
+    },
+    {
+      "id": "nearest-neighbors",
+      "displayName": "与之邻近的玩家",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "与之邻近的玩家"
+        }
+      ],
+      "relatedConceptIds": [
+        "adjacency"
+      ]
+    },
+    {
+      "id": "in-play",
+      "displayName": "在场",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "在场"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "learn-first-night",
+      "displayName": "在你的首个夜晚得知",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "在你的首个夜晚得知"
+        }
+      ],
+      "relatedConceptIds": [
+        "entry-ability"
+      ]
+    },
+    {
+      "id": "minion",
+      "displayName": "爪牙",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "爪牙"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "minion-information",
+      "displayName": "爪牙信息",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "爪牙信息"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "alignment",
+      "displayName": "阵营",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "阵营"
+        }
+      ],
+      "relatedConceptIds": [
+        "alignment-change",
+        "alignment-and-character"
+      ]
+    },
+    {
+      "id": "townsfolk",
+      "displayName": "镇民",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "镇民"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "correct-information",
+      "displayName": "正确信息",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "正确信息"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "poisoned",
+      "displayName": "中毒",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term",
+        "ability-category"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "中毒"
+        },
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "中毒"
+        },
+        {
+          "sourceId": "zh-wiki-ability-poisoned",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": [
+        "drunk-and-poisoned"
+      ]
+    },
+    {
+      "id": "state",
+      "displayName": "状态",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term",
+        "important-topic"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "状态"
+        },
+        {
+          "sourceId": "zh-wiki-important-details",
+          "locator": "状态"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "drunk",
+      "displayName": "醉酒",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "glossary-term",
+        "ability-category"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-glossary",
+          "locator": "醉酒"
+        },
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "醉酒"
+        },
+        {
+          "sourceId": "zh-wiki-ability-drunk",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": [
+        "drunk-and-poisoned"
+      ]
+    },
+    {
+      "id": "visit-storyteller",
+      "displayName": "拜访说书人",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "ability-category"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "拜访说书人"
+        },
+        {
+          "sourceId": "zh-wiki-ability-visit-storyteller",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "protection",
+      "displayName": "保护",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "ability-category"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "保护"
+        },
+        {
+          "sourceId": "zh-wiki-ability-protection",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "role-exposure",
+      "displayName": "暴露角色",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "ability-category"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "暴露角色"
+        },
+        {
+          "sourceId": "zh-wiki-ability-role-exposure",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "continuous-detection",
+      "displayName": "持续检测型能力",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "ability-category"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "持续检测型能力"
+        },
+        {
+          "sourceId": "zh-wiki-ability-continuous-detection",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "extra-death",
+      "displayName": "额外死亡",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "ability-category"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "额外死亡"
+        },
+        {
+          "sourceId": "zh-wiki-ability-extra-death",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "selection-retargeting",
+      "displayName": "更换选择目标",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "ability-category"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "更换选择目标"
+        },
+        {
+          "sourceId": "zh-wiki-ability-selection-retargeting",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "public-triggered-ability",
+      "displayName": "公开触发能力",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "ability-category"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "公开触发能力"
+        },
+        {
+          "sourceId": "zh-wiki-ability-public-triggered-ability",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": [
+        "public"
+      ]
+    },
+    {
+      "id": "ability-gain",
+      "displayName": "获得能力",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "ability-category"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "获得能力"
+        },
+        {
+          "sourceId": "zh-wiki-ability-ability-gain",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "information-gain",
+      "displayName": "获取信息",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "ability-category"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "获取信息"
+        },
+        {
+          "sourceId": "zh-wiki-ability-information-gain",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "interaction-interference",
+      "displayName": "互动干扰",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "ability-category"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "互动干扰"
+        },
+        {
+          "sourceId": "zh-wiki-ability-interaction-interference",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": [
+        "register-as"
+      ]
+    },
+    {
+      "id": "retrospective-ability",
+      "displayName": "回溯型能力",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "ability-category"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "回溯型能力"
+        },
+        {
+          "sourceId": "zh-wiki-ability-retrospective-ability",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "entry-ability",
+      "displayName": "进场能力",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "ability-category"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "进场能力"
+        },
+        {
+          "sourceId": "zh-wiki-ability-entry-ability",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": [
+        "learn-first-night"
+      ]
+    },
+    {
+      "id": "character-change",
+      "displayName": "角色变化",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "ability-category"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "角色变化"
+        },
+        {
+          "sourceId": "zh-wiki-ability-character-change",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": [
+        "character"
+      ]
+    },
+    {
+      "id": "adjacency",
+      "displayName": "邻近",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "ability-category"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "邻近"
+        },
+        {
+          "sourceId": "zh-wiki-ability-adjacency",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": [
+        "nearest-alive-neighbors",
+        "nearest-neighbors"
+      ]
+    },
+    {
+      "id": "death-immunity",
+      "displayName": "免死",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "ability-category"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "免死"
+        },
+        {
+          "sourceId": "zh-wiki-ability-death-immunity",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "ability-effect-interference",
+      "displayName": "能力效果干扰",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "ability-category"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "能力效果干扰"
+        },
+        {
+          "sourceId": "zh-wiki-ability-ability-effect-interference",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "perception-override",
+      "displayName": "认知覆盖",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "ability-category"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "认知覆盖"
+        },
+        {
+          "sourceId": "zh-wiki-ability-perception-override",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": [
+        "thinks"
+      ]
+    },
+    {
+      "id": "setup-adjustment",
+      "displayName": "设置调整",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "ability-category"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "设置调整"
+        },
+        {
+          "sourceId": "zh-wiki-ability-setup-adjustment",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "post-death-ability-retention",
+      "displayName": "死后能力保留",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "ability-category"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "死后能力保留"
+        },
+        {
+          "sourceId": "zh-wiki-ability-post-death-ability-retention",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "death-triggered-ability",
+      "displayName": "死亡触发能力",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "ability-category"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "死亡触发能力"
+        },
+        {
+          "sourceId": "zh-wiki-ability-death-triggered-ability",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "special-win-loss-condition",
+      "displayName": "特殊胜利失败条件",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "ability-category"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "特殊胜利失败条件"
+        },
+        {
+          "sourceId": "zh-wiki-ability-special-win-loss-condition",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "limited-use-ability",
+      "displayName": "限次能力",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "ability-category"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "限次能力"
+        },
+        {
+          "sourceId": "zh-wiki-ability-limited-use-ability",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": [
+        "once-per-game"
+      ]
+    },
+    {
+      "id": "influence",
+      "displayName": "影响",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "ability-category"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "影响"
+        },
+        {
+          "sourceId": "zh-wiki-ability-influence",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "alignment-change",
+      "displayName": "阵营转变",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "ability-category"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-ability-categories",
+          "locator": "阵营转变"
+        },
+        {
+          "sourceId": "zh-wiki-ability-alignment-change",
+          "locator": "能力简介与相关角色"
+        }
+      ],
+      "relatedConceptIds": [
+        "alignment"
+      ]
+    },
+    {
+      "id": "rules-exceptions",
+      "displayName": "规则特例",
+      "responsibility": "storyteller-adjudication",
+      "kinds": [
+        "important-topic"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-important-details",
+          "locator": "规则特例"
+        }
+      ],
+      "relatedConceptIds": []
+    },
+    {
+      "id": "alive-and-dead",
+      "displayName": "存活与死亡",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "important-topic"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-important-details",
+          "locator": "存活与死亡"
+        }
+      ],
+      "relatedConceptIds": [
+        "alive",
+        "dead"
+      ]
+    },
+    {
+      "id": "alignment-and-character",
+      "displayName": "阵营与角色",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "important-topic"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-important-details",
+          "locator": "阵营与角色"
+        }
+      ],
+      "relatedConceptIds": [
+        "alignment",
+        "character"
+      ]
+    },
+    {
+      "id": "drunk-and-poisoned",
+      "displayName": "醉酒与中毒",
+      "responsibility": "rules-kernel",
+      "kinds": [
+        "important-topic"
+      ],
+      "aliases": [],
+      "sourceRefs": [
+        {
+          "sourceId": "zh-wiki-important-details",
+          "locator": "醉酒与中毒"
+        }
+      ],
+      "relatedConceptIds": [
+        "drunk",
+        "poisoned",
+        "sober",
+        "healthy"
+      ]
+    }
+  ],
+  "conceptIndexes": {
+    "glossary": [
+      "day",
+      "not-in-play",
+      "town-square",
+      "setup-sheet",
+      "execution",
+      "fabled-character",
+      "alive",
+      "incorrect-information",
+      "register-as",
+      "demon",
+      "demon-player",
+      "demon-information",
+      "madness",
+      "resurrection",
+      "public",
+      "rules-explanation",
+      "wake",
+      "dusk",
+      "win",
+      "about-to-be-executed",
+      "healthy",
+      "character",
+      "character-token",
+      "character-type",
+      "character-sheet",
+      "script",
+      "script-tool",
+      "edition",
+      "may",
+      "dawn",
+      "exile",
+      "traveler",
+      "traveler-sheet",
+      "lose",
+      "each-night",
+      "each-night-except-first",
+      "once-per-game",
+      "ally",
+      "tomorrow",
+      "grimoire",
+      "ability",
+      "sober",
+      "blood-on-the-clocktower",
+      "good",
+      "good-character",
+      "life-token",
+      "first-night",
+      "storyteller",
+      "private",
+      "nomination",
+      "reminder-token",
+      "vote",
+      "vote-token",
+      "outsider",
+      "player",
+      "shroud",
+      "evil",
+      "evil-character",
+      "information",
+      "information-token",
+      "announce",
+      "choose",
+      "leaf",
+      "night",
+      "night-token",
+      "night-order",
+      "dead",
+      "thinks",
+      "nearest-alive-neighbors",
+      "nearest-neighbors",
+      "in-play",
+      "learn-first-night",
+      "minion",
+      "minion-information",
+      "alignment",
+      "townsfolk",
+      "correct-information",
+      "poisoned",
+      "state",
+      "drunk"
+    ],
+    "abilityCategories": [
+      "visit-storyteller",
+      "protection",
+      "role-exposure",
+      "continuous-detection",
+      "execution",
+      "extra-death",
+      "madness",
+      "resurrection",
+      "selection-retargeting",
+      "public-triggered-ability",
+      "ability-gain",
+      "information-gain",
+      "interaction-interference",
+      "retrospective-ability",
+      "entry-ability",
+      "character-change",
+      "adjacency",
+      "death-immunity",
+      "ability-effect-interference",
+      "perception-override",
+      "setup-adjustment",
+      "post-death-ability-retention",
+      "death-triggered-ability",
+      "special-win-loss-condition",
+      "nomination",
+      "vote",
+      "limited-use-ability",
+      "influence",
+      "alignment-change",
+      "poisoned",
+      "drunk"
+    ],
+    "importantTopics": [
+      "rules-exceptions",
+      "ability",
+      "state",
+      "alive-and-dead",
+      "alignment-and-character",
+      "drunk-and-poisoned",
+      "madness"
+    ]
+  },
+  "roleAbilityCategories": [
+    {
+      "roleId": "washerwoman",
+      "categoryIds": [
+        "information-gain",
+        "entry-ability"
+      ]
+    },
+    {
+      "roleId": "librarian",
+      "categoryIds": [
+        "information-gain",
+        "entry-ability"
+      ]
+    },
+    {
+      "roleId": "investigator",
+      "categoryIds": [
+        "information-gain",
+        "entry-ability"
+      ]
+    },
+    {
+      "roleId": "chef",
+      "categoryIds": [
+        "information-gain",
+        "entry-ability",
+        "adjacency"
+      ]
+    },
+    {
+      "roleId": "empath",
+      "categoryIds": [
+        "information-gain",
+        "adjacency"
+      ]
+    },
+    {
+      "roleId": "fortuneteller",
+      "categoryIds": [
+        "continuous-detection",
+        "information-gain",
+        "interaction-interference",
+        "entry-ability"
+      ]
+    },
+    {
+      "roleId": "undertaker",
+      "categoryIds": [
+        "execution",
+        "information-gain",
+        "retrospective-ability"
+      ]
+    },
+    {
+      "roleId": "monk",
+      "categoryIds": [
+        "protection",
+        "death-immunity"
+      ]
+    },
+    {
+      "roleId": "ravenkeeper",
+      "categoryIds": [
+        "information-gain",
+        "death-triggered-ability"
+      ]
+    },
+    {
+      "roleId": "virgin",
+      "categoryIds": [
+        "execution",
+        "information-gain",
+        "nomination",
+        "limited-use-ability"
+      ]
+    },
+    {
+      "roleId": "slayer",
+      "categoryIds": [
+        "extra-death",
+        "public-triggered-ability",
+        "information-gain",
+        "limited-use-ability"
+      ]
+    },
+    {
+      "roleId": "soldier",
+      "categoryIds": [
+        "protection",
+        "death-immunity"
+      ]
+    },
+    {
+      "roleId": "mayor",
+      "categoryIds": [
+        "execution",
+        "death-immunity",
+        "special-win-loss-condition"
+      ]
+    },
+    {
+      "roleId": "butler",
+      "categoryIds": [
+        "vote"
+      ]
+    },
+    {
+      "roleId": "drunk",
+      "categoryIds": [
+        "perception-override",
+        "setup-adjustment"
+      ]
+    },
+    {
+      "roleId": "recluse",
+      "categoryIds": [
+        "interaction-interference",
+        "post-death-ability-retention"
+      ]
+    },
+    {
+      "roleId": "saint",
+      "categoryIds": [
+        "execution",
+        "death-triggered-ability",
+        "special-win-loss-condition"
+      ]
+    },
+    {
+      "roleId": "poisoner",
+      "categoryIds": [
+        "poisoned"
+      ]
+    },
+    {
+      "roleId": "spy",
+      "categoryIds": [
+        "information-gain",
+        "interaction-interference",
+        "post-death-ability-retention"
+      ]
+    },
+    {
+      "roleId": "scarletwoman",
+      "categoryIds": [
+        "character-change",
+        "death-triggered-ability"
+      ]
+    },
+    {
+      "roleId": "baron",
+      "categoryIds": [
+        "setup-adjustment"
+      ]
+    },
+    {
+      "roleId": "imp",
+      "categoryIds": [
+        "character-change",
+        "death-triggered-ability"
+      ]
+    },
+    {
+      "roleId": "bureaucrat",
+      "categoryIds": [
+        "vote"
+      ]
+    },
+    {
+      "roleId": "beggar",
+      "categoryIds": [
+        "information-gain",
+        "ability-effect-interference",
+        "vote"
+      ]
+    },
+    {
+      "roleId": "gunslinger",
+      "categoryIds": [
+        "extra-death",
+        "vote"
+      ]
+    },
+    {
+      "roleId": "thief",
+      "categoryIds": [
+        "vote"
+      ]
+    },
+    {
+      "roleId": "scapegoat",
+      "categoryIds": [
+        "execution"
+      ]
+    },
+    {
+      "roleId": "grandmother",
+      "categoryIds": [
+        "extra-death",
+        "information-gain",
+        "entry-ability",
+        "death-triggered-ability"
+      ]
+    },
+    {
+      "roleId": "sailor",
+      "categoryIds": [
+        "death-immunity",
+        "drunk"
+      ]
+    },
+    {
+      "roleId": "chambermaid",
+      "categoryIds": [
+        "information-gain"
+      ]
+    },
+    {
+      "roleId": "exorcist",
+      "categoryIds": [
+        "role-exposure",
+        "information-gain",
+        "ability-effect-interference"
+      ]
+    },
+    {
+      "roleId": "innkeeper",
+      "categoryIds": [
+        "death-immunity",
+        "drunk"
+      ]
+    },
+    {
+      "roleId": "gambler",
+      "categoryIds": [
+        "extra-death",
+        "information-gain"
+      ]
+    },
+    {
+      "roleId": "gossip",
+      "categoryIds": [
+        "extra-death",
+        "public-triggered-ability",
+        "information-gain",
+        "retrospective-ability"
+      ]
+    },
+    {
+      "roleId": "courtier",
+      "categoryIds": [
+        "limited-use-ability",
+        "drunk"
+      ]
+    },
+    {
+      "roleId": "professor",
+      "categoryIds": [
+        "resurrection",
+        "limited-use-ability"
+      ]
+    },
+    {
+      "roleId": "minstrel",
+      "categoryIds": [
+        "execution",
+        "death-triggered-ability",
+        "drunk"
+      ]
+    },
+    {
+      "roleId": "tealady",
+      "categoryIds": [
+        "continuous-detection",
+        "adjacency",
+        "death-immunity"
+      ]
+    },
+    {
+      "roleId": "pacifist",
+      "categoryIds": [
+        "execution",
+        "death-immunity"
+      ]
+    },
+    {
+      "roleId": "fool",
+      "categoryIds": [
+        "death-immunity",
+        "limited-use-ability"
+      ]
+    },
+    {
+      "roleId": "tinker",
+      "categoryIds": [
+        "extra-death"
+      ]
+    },
+    {
+      "roleId": "moonchild",
+      "categoryIds": [
+        "extra-death",
+        "public-triggered-ability",
+        "information-gain",
+        "retrospective-ability",
+        "death-triggered-ability"
+      ]
+    },
+    {
+      "roleId": "goon",
+      "categoryIds": [
+        "alignment-change",
+        "drunk"
+      ]
+    },
+    {
+      "roleId": "lunatic",
+      "categoryIds": [
+        "role-exposure",
+        "information-gain",
+        "perception-override",
+        "setup-adjustment"
+      ]
+    },
+    {
+      "roleId": "godfather",
+      "categoryIds": [
+        "extra-death",
+        "information-gain",
+        "retrospective-ability",
+        "entry-ability",
+        "setup-adjustment"
+      ]
+    },
+    {
+      "roleId": "devilsadvocate",
+      "categoryIds": [
+        "execution",
+        "death-immunity"
+      ]
+    },
+    {
+      "roleId": "assassin",
+      "categoryIds": [
+        "extra-death",
+        "ability-effect-interference",
+        "limited-use-ability"
+      ]
+    },
+    {
+      "roleId": "mastermind",
+      "categoryIds": [
+        "execution",
+        "death-triggered-ability",
+        "special-win-loss-condition"
+      ]
+    },
+    {
+      "roleId": "zombuul",
+      "categoryIds": [
+        "interaction-interference",
+        "retrospective-ability",
+        "death-immunity",
+        "limited-use-ability"
+      ]
+    },
+    {
+      "roleId": "pukka",
+      "categoryIds": [
+        "retrospective-ability",
+        "poisoned"
+      ]
+    },
+    {
+      "roleId": "shabaloth",
+      "categoryIds": [
+        "extra-death",
+        "resurrection",
+        "retrospective-ability"
+      ]
+    },
+    {
+      "roleId": "po",
+      "categoryIds": [
+        "extra-death",
+        "retrospective-ability"
+      ]
+    },
+    {
+      "roleId": "judge",
+      "categoryIds": [
+        "execution",
+        "nomination",
+        "limited-use-ability"
+      ]
+    },
+    {
+      "roleId": "matron",
+      "categoryIds": []
+    },
+    {
+      "roleId": "voudon",
+      "categoryIds": [
+        "vote"
+      ]
+    },
+    {
+      "roleId": "apprentice",
+      "categoryIds": [
+        "ability-gain",
+        "entry-ability"
+      ]
+    },
+    {
+      "roleId": "bishop",
+      "categoryIds": [
+        "nomination"
+      ]
+    },
+    {
+      "roleId": "clockmaker",
+      "categoryIds": [
+        "information-gain",
+        "entry-ability"
+      ]
+    },
+    {
+      "roleId": "dreamer",
+      "categoryIds": [
+        "information-gain"
+      ]
+    },
+    {
+      "roleId": "snakecharmer",
+      "categoryIds": [
+        "information-gain",
+        "character-change",
+        "alignment-change",
+        "poisoned"
+      ]
+    },
+    {
+      "roleId": "mathematician",
+      "categoryIds": [
+        "information-gain",
+        "retrospective-ability"
+      ]
+    },
+    {
+      "roleId": "flowergirl",
+      "categoryIds": [
+        "information-gain",
+        "retrospective-ability",
+        "vote"
+      ]
+    },
+    {
+      "roleId": "towncrier",
+      "categoryIds": [
+        "information-gain",
+        "retrospective-ability",
+        "nomination"
+      ]
+    },
+    {
+      "roleId": "oracle",
+      "categoryIds": [
+        "information-gain"
+      ]
+    },
+    {
+      "roleId": "savant",
+      "categoryIds": [
+        "visit-storyteller",
+        "information-gain"
+      ]
+    },
+    {
+      "roleId": "seamstress",
+      "categoryIds": [
+        "information-gain",
+        "limited-use-ability"
+      ]
+    },
+    {
+      "roleId": "philosopher",
+      "categoryIds": [
+        "continuous-detection",
+        "ability-gain",
+        "limited-use-ability",
+        "drunk"
+      ]
+    },
+    {
+      "roleId": "artist",
+      "categoryIds": [
+        "visit-storyteller",
+        "information-gain",
+        "limited-use-ability"
+      ]
+    },
+    {
+      "roleId": "juggler",
+      "categoryIds": [
+        "public-triggered-ability",
+        "information-gain",
+        "retrospective-ability",
+        "entry-ability"
+      ]
+    },
+    {
+      "roleId": "sage",
+      "categoryIds": [
+        "information-gain",
+        "death-triggered-ability"
+      ]
+    },
+    {
+      "roleId": "mutant",
+      "categoryIds": [
+        "execution",
+        "madness"
+      ]
+    },
+    {
+      "roleId": "sweetheart",
+      "categoryIds": [
+        "death-triggered-ability",
+        "drunk"
+      ]
+    },
+    {
+      "roleId": "barber",
+      "categoryIds": [
+        "role-exposure",
+        "character-change",
+        "death-triggered-ability"
+      ]
+    },
+    {
+      "roleId": "klutz",
+      "categoryIds": [
+        "public-triggered-ability",
+        "information-gain",
+        "death-triggered-ability",
+        "special-win-loss-condition"
+      ]
+    },
+    {
+      "roleId": "eviltwin",
+      "categoryIds": [
+        "role-exposure",
+        "execution",
+        "information-gain",
+        "entry-ability",
+        "special-win-loss-condition"
+      ]
+    },
+    {
+      "roleId": "witch",
+      "categoryIds": [
+        "continuous-detection",
+        "extra-death",
+        "nomination"
+      ]
+    },
+    {
+      "roleId": "cerenovus",
+      "categoryIds": [
+        "role-exposure",
+        "execution",
+        "madness"
+      ]
+    },
+    {
+      "roleId": "pithag",
+      "categoryIds": [
+        "extra-death",
+        "character-change",
+        "death-immunity"
+      ]
+    },
+    {
+      "roleId": "fanggu",
+      "categoryIds": [
+        "character-change",
+        "setup-adjustment",
+        "limited-use-ability",
+        "alignment-change"
+      ]
+    },
+    {
+      "roleId": "vigormortis",
+      "categoryIds": [
+        "continuous-detection",
+        "adjacency",
+        "setup-adjustment",
+        "post-death-ability-retention",
+        "poisoned"
+      ]
+    },
+    {
+      "roleId": "nodashii",
+      "categoryIds": [
+        "continuous-detection",
+        "entry-ability",
+        "adjacency",
+        "poisoned"
+      ]
+    },
+    {
+      "roleId": "vortox",
+      "categoryIds": [
+        "execution",
+        "ability-effect-interference",
+        "special-win-loss-condition"
+      ]
+    },
+    {
+      "roleId": "deviant",
+      "categoryIds": [
+        "death-immunity"
+      ]
+    },
+    {
+      "roleId": "bonecollector",
+      "categoryIds": [
+        "ability-gain",
+        "limited-use-ability"
+      ]
+    },
+    {
+      "roleId": "barista",
+      "categoryIds": [
+        "role-exposure",
+        "ability-gain",
+        "ability-effect-interference"
+      ]
+    },
+    {
+      "roleId": "harlot",
+      "categoryIds": [
+        "role-exposure",
+        "extra-death",
+        "information-gain"
+      ]
+    },
+    {
+      "roleId": "butcher",
+      "categoryIds": [
+        "execution",
+        "extra-death",
+        "nomination"
+      ]
+    },
+    {
+      "roleId": "doomsayer",
+      "categoryIds": [
+        "extra-death",
+        "public-triggered-ability",
+        "limited-use-ability"
+      ]
+    },
+    {
+      "roleId": "toymaker",
+      "categoryIds": [
+        "information-gain",
+        "entry-ability",
+        "ability-effect-interference",
+        "limited-use-ability"
+      ]
+    },
+    {
+      "roleId": "angel",
+      "categoryIds": []
+    },
+    {
+      "roleId": "buddhist",
+      "categoryIds": []
+    },
+    {
+      "roleId": "revolutionary",
+      "categoryIds": [
+        "interaction-interference",
+        "adjacency",
+        "limited-use-ability"
+      ]
+    },
+    {
+      "roleId": "hellslibrarian",
+      "categoryIds": []
+    },
+    {
+      "roleId": "fiddler",
+      "categoryIds": [
+        "special-win-loss-condition",
+        "limited-use-ability"
+      ]
+    },
+    {
+      "roleId": "fibbin",
+      "categoryIds": [
+        "ability-effect-interference",
+        "limited-use-ability"
+      ]
+    },
+    {
+      "roleId": "duchess",
+      "categoryIds": [
+        "visit-storyteller",
+        "public-triggered-ability",
+        "information-gain"
+      ]
+    },
+    {
+      "roleId": "sentinel",
+      "categoryIds": [
+        "setup-adjustment"
+      ]
+    },
+    {
+      "roleId": "spiritofivory",
+      "categoryIds": []
+    },
+    {
+      "roleId": "djinn",
+      "categoryIds": []
+    },
+    {
+      "roleId": "stormcatcher",
+      "categoryIds": [
+        "role-exposure",
+        "execution",
+        "entry-ability",
+        "death-immunity"
+      ]
+    },
+    {
+      "roleId": "ventriloquist",
+      "categoryIds": [
+        "execution",
+        "madness",
+        "death-immunity",
+        "nomination"
+      ]
+    },
+    {
+      "roleId": "knaves",
+      "categoryIds": [
+        "ability-effect-interference"
+      ]
+    },
+    {
+      "roleId": "pope",
+      "categoryIds": [
+        "setup-adjustment"
+      ]
+    },
+    {
+      "roleId": "godofug",
+      "categoryIds": [
+        "vote"
+      ]
+    },
+    {
+      "roleId": "bigwig",
+      "categoryIds": [
+        "extra-death",
+        "madness",
+        "nomination"
+      ]
+    },
+    {
+      "roleId": "bootlegger",
+      "categoryIds": []
+    },
+    {
+      "roleId": "hindu",
+      "categoryIds": [
+        "resurrection",
+        "character-change",
+        "death-triggered-ability"
+      ]
+    },
+    {
+      "roleId": "zenomancer",
+      "categoryIds": [
+        "information-gain"
+      ]
+    },
+    {
+      "roleId": "tor",
+      "categoryIds": [
+        "perception-override",
+        "setup-adjustment",
+        "death-triggered-ability"
+      ]
+    },
+    {
+      "roleId": "gardener",
+      "categoryIds": []
+    }
+  ],
   "excluded": {
     "experimentalRegularRoles": true,
     "experimentalTravelers": true,
@@ -268,6 +3918,6 @@
     "algorithm": "sha256",
     "canonicalization": "sorted-json-v1",
     "scope": "manifest-without-integrity",
-    "value": "sha256:ef6f74204403bbe4a71018cf486aa0d78a852bb7f5ad6cd5c35b01bb9c15c510"
+    "value": "sha256:aa2daef3eb6d5c29f944fa431837823eb1faea472aed71146f1a4d8a71e5dd2d"
   }
 }
