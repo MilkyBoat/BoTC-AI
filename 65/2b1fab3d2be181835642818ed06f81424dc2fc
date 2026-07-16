@@ -1,0 +1,31 @@
+doc/README.md
+  s_4a28f5dfb9fac0::t_96bac8ddf98e93 14
+doc/architecture/architecture.md
+  s_4a28f5dfb9fac0::t_f045c2ac09e778 50-61
+doc/product/product.md
+  s_4a28f5dfb9fac0::t_fcb3e992039377 17-18,158-159,239
+knowledge/README.md
+  s_4a28f5dfb9fac0::t_3ff19788893c98 3,38-41
+knowledge/rulesets/m1-ruleset-scope.json
+  s_4a28f5dfb9fac0::t_be1dee107f927f 4,6,13-24,86-493,504-555,558-573,576-597,600-619,630-681,684-699,702-717,720-735,738-757,768-819,822-837,840-855,858-873,876-895,906-953,961-1004,1008-3908,3921
+knowledge/rulesets/ruleset-scope.schema.json
+  s_4a28f5dfb9fac0::t_be050f93b9776e 3,18-20,65-66,86-127,308-414
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "652b1fab3d2be181835642818ed06f81424dc2fc",
+  "prompts": {},
+  "sessions": {
+    "s_4a28f5dfb9fac0": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f6a64-ce46-7ee3-ba64-a474ecf3e0bc",
+        "model": "unknown"
+      },
+      "human_author": "MilkyBoat <1214208054@qq.com>"
+    }
+  },
+  "attestation_metadata": {},
+  "remote_transcripts": {}
+}
