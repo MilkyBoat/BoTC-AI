@@ -1,0 +1,29 @@
+doc/README.md
+  s_1619c8c2cea57b::t_26e69457bf2611 15
+package-lock.json
+  s_1619c8c2cea57b::t_c1122c85c47e07 34,38-40,1398-1404,3472-3733,5193-5233,10204-10242,12807-12823,12880-12889
+package.json
+  s_1619c8c2cea57b::t_41739bd54a0f5c 9,49,53-55
+scripts/wiki-sync/errors.js
+  s_1619c8c2cea57b::t_2dcb8dd3e11821 1-17
+scripts/wiki-sync/output.js
+  s_1619c8c2cea57b::t_0c6a920bd8799b 1-129
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "7940aba22fe6df6eae26e63336e86a715acab0fd",
+  "prompts": {},
+  "sessions": {
+    "s_1619c8c2cea57b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f6b1b-eeaa-7790-a5cc-25057d69fd6a",
+        "model": "unknown"
+      },
+      "human_author": "MilkyBoat <1214208054@qq.com>"
+    }
+  },
+  "attestation_metadata": {},
+  "remote_transcripts": {}
+}
