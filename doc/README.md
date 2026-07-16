@@ -7,8 +7,9 @@
 - [产品全量功能文档](product/product.md)：描述产品目标、用户流程、全部目标能力和质量要求。
 - [长期里程碑规划](milestone/roadmap.md)：描述第一阶段产品化与第二阶段强化学习的交付顺序和需求拆分。
 - [目标架构](architecture/architecture.md)：描述浏览器内 Agent、规则内核、权限视图、在线会话和 LLM 适配边界。
-- [上游基线与同步约定](upstream/townsquare.md)：记录 townsquare 来源、版本、许可证和同步方法。
+- [townsquare 固定源码来源记录](upstream/townsquare.md)：记录 townsquare 来源、版本、许可证和冻结策略。
 - [本次项目初始化需求](modify/2026-07-16-project-initialization.md)：记录仓库初始化的范围与验收结果。
+- [本项目测试基础设施](modify/2026-07-16-test-infrastructure.md)：记录 M0-R3 的测试分层、门禁和验收结果。
 
 ## 维护规则
 

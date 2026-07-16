@@ -1,4 +1,4 @@
-# townsquare 上游基线与同步约定
+# townsquare 固定源码来源记录
 
 ## 当前基线
 
@@ -9,7 +9,7 @@
 - 导入日期：2026-07-16
 - 许可证：GPL-3.0
 
-当前仓库以一个新的本地初始提交保存上游源码快照，没有把 BotC-AI 的 `main` 直接设为上游历史分支。`upstream/develop` 与 `upstream/main` 只用于比较和获取更新。
+当前仓库以一个新的本地初始提交保存 townsquare 源码快照，没有把 BotC-AI 的 `main` 设为来源仓库的历史分支。该快照是 BotC-AI 的固定初始实现，后续开发以本仓库需求、产品和架构文档为事实来源。
 
 ## 初始化时的安全差异
 
@@ -18,22 +18,10 @@
 - GitHub Pages 工作流改为仅手动触发，避免 Push 到本仓库主分支时自动发布。
 - 根 README 增加 BotC-AI 目标与文档入口，上游原始说明完整保留在其后。
 
-## 同步原则
+## 冻结与来源原则
 
-1. 同步上游属于独立需求，必须先创建 `doc/modify/` 文档并明确目标版本。
-2. 获取更新前确认工作区干净，不直接在 `upstream/*` 分支修改。
-3. 先比较源码、依赖、许可证、在线协议、部署文件和素材变化，再选择合并或按模块移植。
-4. 保留 BotC-AI 的规则内核、权限视图和 Agent 边界，不允许上游同步绕过这些层。
-5. 同步后运行单元、场景、在线协议回归、Lint 和生产构建。
-6. 更新本文的基线提交和差异说明，并使用本仓库 QQ 邮箱身份本地提交。
-
-## 常用只读命令
-
-```bash
-git fetch upstream develop main
-git log --oneline --decorate HEAD..upstream/develop
-git diff --stat HEAD...upstream/develop
-git show upstream/develop:CHANGELOG.md
-```
-
-禁止把 BotC-AI 分支 Push 到 `upstream`。需要向原项目贡献时，应在独立需求中使用个人 Fork 和单独分支。
+1. 本仓库不配置常驻 `upstream` Git 远端，不定期 Fetch、比较或合并 townsquare 后续提交。
+2. 保留 GPL-3.0 许可证、原作者归属、来源 URL、导入提交、版本和初始化差异，冻结策略不表示移除来源责任。
+3. BotC-AI 后续修改直接在本仓库的开发分支完成，不在来源仓库跟踪分支上开发，也不向原仓库 Push 本项目分支。
+4. 未来确需参考 townsquare 或其他外部项目的新版本时，必须创建新的独立需求，重新确认许可证、素材权利、协议兼容、安全影响和测试范围；不得把历史同步流程作为默认授权。
+5. 外部参考不得绕过 BotC-AI 的规则内核、权限视图、统一动作协议、浏览器 Agent 和测试门禁边界。

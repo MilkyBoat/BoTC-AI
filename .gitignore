@@ -4,6 +4,9 @@ node_modules
 dist
 coverage
 .nyc_output
+.work
+playwright-report
+test-results
 .env
 .env.*
 !.env.example

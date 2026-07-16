@@ -10,13 +10,38 @@ BotC-AI 是一个基于开源魔典 [bra1n/townsquare](https://github.com/bra1n/
 - 通过适配器接入 OpenAI、Claude、DeepSeek、火山方舟及本地部署的 LLM。
 - 第一阶段完成可用的在线 AI 对局；第二阶段建设自博弈与强化学习训练闭环。
 
-当前处于上游基线初始化阶段。产品范围、架构边界和里程碑拆分见：
+当前已完成固定源码基线和本项目测试基础设施，尚未开始规则内核与 Agent 业务能力。产品范围、架构边界和里程碑拆分见：
 
 - [文档索引](doc/README.md)
 - [产品全量功能文档](doc/product/product.md)
 - [长期里程碑规划](doc/milestone/roadmap.md)
 - [目标架构](doc/architecture/architecture.md)
-- [上游基线与同步约定](doc/upstream/townsquare.md)
+- [townsquare 固定源码来源记录](doc/upstream/townsquare.md)
+
+## 本地开发与验证
+
+项目使用 Node.js 22，`.nvmrc` 是本地与 CI 的版本事实来源。首次安装和运行完整门禁：
+
+```bash
+nvm use
+npm ci
+npx playwright install chromium
+npm run test:ci
+```
+
+按层运行测试：
+
+```bash
+npm run test:unit
+npm run test:component
+npm run test:scenario
+npm run test:e2e
+npm run test:coverage
+```
+
+`test:unit` 验证独立逻辑，`test:component` 验证 Vue 组件可观察交互，`test:scenario` 验证给定初态下的多步骤状态流程，`test:e2e` 只使用本地开发服务器和 Chromium。端到端测试阻断外部 HTTP 与 WebSocket 连接，不使用公共会话服务。覆盖率报告写入 `coverage/`，当前不设置全仓百分比阈值。
+
+`npm run test:ci` 与 GitHub Actions 门禁顺序一致：快速测试、Lint、生产构建、端到端测试。遗留 Lint 警告预算为 415 条，任何错误或警告总量上升都会阻断门禁。
 
 本项目沿用上游 GPL-3.0 许可证。Blood on the Clocktower 相关商标、图像和其他素材权利归各自权利人所有；本项目与 The Pandemonium Institute 无隶属关系。
 

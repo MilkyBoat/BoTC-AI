@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: 测试与构建
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v5
+
+      - name: 配置 Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: 安装依赖
+        run: npm ci
+
+      - name: 安装 Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: 运行快速测试
+        run: npm run test:fast
+
+      - name: 运行 Lint 门禁
+        run: npm run lint-ci
+
+      - name: 运行生产构建
+        run: npm run build
+
+      - name: 运行端到端测试
+        id: e2e
+        run: npm run test:e2e
+
+      - name: 上传端到端失败报告
+        if: failure() && steps.e2e.outcome == 'failure'
+        uses: actions/upload-artifact@v5
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14
