@@ -2,6 +2,8 @@
 
 BotC-AI 是一个基于开源魔典 [bra1n/townsquare](https://github.com/bra1n/townsquare) 二次开发的“血染钟楼”在线游戏。项目保留原魔典的在线房间、魔典、投票和角色分发能力，并扩展运行在房主浏览器内的 AI 说书人与 AI 玩家。
 
+当前基线魔典已经部署到 [BotC-AI 在线站点](https://botc-ai.luczydoge.chatgpt.site)。站点目前采用私有访问模式，仅项目创建者账号可以访问。
+
 长期目标包括：
 
 - 严格遵循现有桌游规则，以确定性规则内核约束 AI 的每一次状态变更。
@@ -10,7 +12,7 @@ BotC-AI 是一个基于开源魔典 [bra1n/townsquare](https://github.com/bra1n/
 - 通过适配器接入 OpenAI、Claude、DeepSeek、火山方舟及本地部署的 LLM。
 - 第一阶段完成可用的在线 AI 对局；第二阶段建设自博弈与强化学习训练闭环。
 
-当前处于上游基线初始化阶段。产品范围、架构边界和里程碑拆分见：
+当前处于上游基线初始化阶段。在线站点只包含现有魔典能力，规划中的 AI 功能尚未上线。产品范围、架构边界和里程碑拆分见：
 
 - [文档索引](doc/README.md)
 - [产品全量功能文档](doc/product/product.md)
