@@ -1,0 +1,25 @@
+doc/architecture/architecture.md
+  s_4a28f5dfb9fac0::t_ca4bc543b17520 159
+doc/modify/2026-07-16-project-initialization.md
+  s_4a28f5dfb9fac0::t_67dca844399855 59
+doc/product/product.md
+  s_4a28f5dfb9fac0::t_161fa6942d7479 11,15-16,108-109,133,154,160,162,165,196,200
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "ad51afacb3af00f8da5acd4c36ba677a77dbf790",
+  "prompts": {},
+  "sessions": {
+    "s_4a28f5dfb9fac0": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f6a64-ce46-7ee3-ba64-a474ecf3e0bc",
+        "model": "unknown"
+      },
+      "human_author": "MilkyBoat <1214208054@qq.com>"
+    }
+  },
+  "attestation_metadata": {},
+  "remote_transcripts": {}
+}
