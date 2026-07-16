@@ -1,0 +1,139 @@
+.eslintrc.js
+  s_6ee2f811b30154::t_76baa36b443645 1-16
+.github/FUNDING.yml
+  s_6ee2f811b30154::t_2976f684fb093d 1-4
+.github/ISSUE_TEMPLATE/bug_report.md
+  s_6ee2f811b30154::t_6bf405518eef0c 1-32
+.github/ISSUE_TEMPLATE/feature_request.md
+  s_6ee2f811b30154::t_98b47ba4459847 1-20
+.github/workflows/changelog-check.yml
+  s_6ee2f811b30154::t_ea37de226dbe75 1-21
+.github/workflows/deploy.yml
+  s_6ee2f811b30154::t_1a41d09cb51d71 1-25
+.github/workflows/linter.yml
+  s_6ee2f811b30154::t_9508fabf0ecb07 1-20
+.gitignore
+  s_6ee2f811b30154::t_73def9a4447004 1-10
+AGENTS.md
+  s_6ee2f811b30154::t_f4ce36e229aff2 1-105
+CHANGELOG.md
+  s_6ee2f811b30154::t_1a8fe1831da3af 1-245
+CODE_OF_CONDUCT.md
+  s_6ee2f811b30154::t_cfefe8dd2963a2 1-76
+CONTRIBUTING.md
+  s_6ee2f811b30154::t_1a3fb548ede65d 1-111
+LICENSE
+  s_6ee2f811b30154::t_d76e2ee248f157 1-674
+doc/architecture/architecture.md
+  s_6ee2f811b30154::t_5d7f8d4206f53b 1-186
+doc/milestone/TEMPLATE.md
+  s_6ee2f811b30154::t_153b54c57b2fa7 1-25
+doc/modify/TEMPLATE.md
+  s_6ee2f811b30154::t_fc4a332c7d0d51 1-64
+doc/product/product.md
+  s_6ee2f811b30154::t_476763e99cf8c6 1-231
+doc/upstream/townsquare.md
+  s_6ee2f811b30154::t_e4e0a8925058ab 1-39
+knowledge/README.md
+  s_6ee2f811b30154::t_28baa8d3cc398e 1-34
+package-lock.json
+  s_6ee2f811b30154::t_bff64e012dca27 1-8715
+package.json
+  s_6ee2f811b30154::t_e482b2a3589804 1-46
+public/static/browserconfig.xml
+  s_6ee2f811b30154::t_14fb98617067b6 1-2
+public/static/manifest.json
+  s_6ee2f811b30154::t_b51f40b8e8a2fb 1-41
+server/README.md
+  s_6ee2f811b30154::t_5b5ab1b717c4de 1-53
+server/ecosystem.config.js
+  s_6ee2f811b30154::t_802d8bed5fe880 1-13
+server/index.js
+  s_6ee2f811b30154::t_360c63daab1b59 1-260
+src/App.vue
+  s_6ee2f811b30154::t_945f8ac6bbb306 1-370
+src/assets/fonts/papyrus.svg
+  s_6ee2f811b30154::t_a0d6483eab48af 1-2628
+src/components/Gradients.vue
+  s_6ee2f811b30154::t_41680d12f903bc 1-43
+src/components/Intro.vue
+  s_6ee2f811b30154::t_1432e57810a51a 1-99
+src/components/Menu.vue
+  s_6ee2f811b30154::t_6166a2515a966b 1-537
+src/components/Player.vue
+  s_6ee2f811b30154::t_56652732f0297b 1-956
+src/components/Token.vue
+  s_6ee2f811b30154::t_3f287aaa944c15 1-235
+src/components/TownInfo.vue
+  s_6ee2f811b30154::t_acdf17d91078ec 1-180
+src/components/TownSquare.vue
+  s_6ee2f811b30154::t_55dff72fb9f9a3 1-648
+src/components/Vote.vue
+  s_6ee2f811b30154::t_03c6d1cc3fff4e 1-433
+src/components/modals/EditionModal.vue
+  s_6ee2f811b30154::t_72dcb6bceef838 1-239
+src/components/modals/FabledModal.vue
+  s_6ee2f811b30154::t_fa439dc564bced 1-62
+src/components/modals/GameStateModal.vue
+  s_6ee2f811b30154::t_f7c5349e2fb36d 1-132
+src/components/modals/Modal.vue
+  s_6ee2f811b30154::t_d0e7299cb29647 1-142
+src/components/modals/NightOrderModal.vue
+  s_6ee2f811b30154::t_933db21f6de37a 1-370
+src/components/modals/ReferenceModal.vue
+  s_6ee2f811b30154::t_b35ca6778b2ce4 1-334
+src/components/modals/ReminderModal.vue
+  s_6ee2f811b30154::t_1a6fac83be11c2 1-160
+src/components/modals/RoleModal.vue
+  s_6ee2f811b30154::t_076a6be9cef6fc 1-148
+src/components/modals/RolesModal.vue
+  s_6ee2f811b30154::t_e20004d3f52ae1 1-312
+src/components/modals/VoteHistoryModal.vue
+  s_6ee2f811b30154::t_065e41f82a1283 1-180
+src/editions.json
+  s_6ee2f811b30154::t_cffdebb51bddb9 1-38
+src/fabled.json
+  s_6ee2f811b30154::t_89dcb22c07779c 1-136
+src/game.json
+  s_6ee2f811b30154::t_3d81e9f94f39ce 1-13
+src/hatred.json
+  s_6ee2f811b30154::t_114a0b6e31933a 1-376
+src/main.js
+  s_6ee2f811b30154::t_1c0a42ce980291 1-68
+src/media.scss
+  s_6ee2f811b30154::t_969a1e7cfaa1f3 1-84
+src/roles.json
+  s_6ee2f811b30154::t_3b3e74d3394366 1-1743
+src/store/index.js
+  s_6ee2f811b30154::t_1382e4b9b4c7f4 1-266
+src/store/modules/players.js
+  s_6ee2f811b30154::t_765230a5c12fcf 1-165
+src/store/modules/session.js
+  s_6ee2f811b30154::t_eb2325451bd868 1-116
+src/store/persistence.js
+  s_6ee2f811b30154::t_ba97b5753c7fa2 1-188
+src/store/socket.js
+  s_6ee2f811b30154::t_9081073c2dfdc9 1-927
+src/vars.scss
+  s_6ee2f811b30154::t_76f3335e8f27f1 1-6
+vue.config.js
+  s_6ee2f811b30154::t_11a32661f4f794 1-5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "f0bd40253739f829654566196bdfe674761baeda",
+  "prompts": {},
+  "sessions": {
+    "s_6ee2f811b30154": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f69c0-7384-7062-bb20-b3a008058a37",
+        "model": "unknown"
+      },
+      "human_author": "MilkyBoat <1214208054@qq.com>"
+    }
+  },
+  "attestation_metadata": {},
+  "remote_transcripts": {}
+}
