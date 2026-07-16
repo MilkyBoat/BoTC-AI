@@ -5,13 +5,15 @@
   "author": "BotC-AI contributors; based on townsquare by Steffen Baumgart",
   "scripts": {
     "serve": "vue-cli-service serve",
+    "relay:dev": "NODE_ENV=development node server/index.js",
     "build": "vue-cli-service build ./src/main.js",
     "lint": "vue-cli-service lint",
     "lint-ci": "vue-cli-service lint --no-fix --max-warnings=415",
     "test:unit": "vue-cli-service test:unit tests/unit --runInBand",
     "test:component": "vue-cli-service test:unit tests/component --runInBand",
     "test:scenario": "vue-cli-service test:unit tests/scenario --runInBand",
-    "test:fast": "npm run test:unit && npm run test:component && npm run test:scenario",
+    "test:integration": "vue-cli-service test:unit tests/integration --runInBand",
+    "test:fast": "npm run test:unit && npm run test:component && npm run test:scenario && npm run test:integration",
     "test:coverage": "vue-cli-service test:unit --coverage --runInBand",
     "test:e2e": "playwright test",
     "test:ci": "npm run test:fast && npm run lint-ci && npm run build && npm run test:e2e"

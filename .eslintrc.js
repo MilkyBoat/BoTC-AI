@@ -13,6 +13,7 @@ module.exports = {
         "tests/unit/**/*.spec.js",
         "tests/component/**/*.spec.js",
         "tests/scenario/**/*.spec.js",
+        "tests/integration/**/*.spec.js",
       ],
       env: {
         jest: true,

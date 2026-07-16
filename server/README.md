@@ -1,53 +1,41 @@
-## Live session server
-This is the home of the NodeJS live session backend.
-It allows a Storyteller and their player to communicate through
-a Websocket interface with each other.
+# 本地会话中继
 
-In order to run it, you need a recent NodeJS version (v12+) and a set
-of SSL Certificate and Key files in order to run the socket through
-a secured connection.
+`server/index.js` 是 townsquare 固定源码保留的 WebSocket 消息中继。M0-R4 只把它用于本地开发和自动测试；它不验证游戏规则，也不是已经完成安全评审的生产会话服务。
 
-### Local setup
+## 本地启动
 
-To run the backend locally, use the following commands from the project root:
+在仓库根目录安装依赖后运行：
 
-```shell
-npm install
-cd server/
-NODE_ENV=development node index.js
+```bash
+npm run relay:dev
 ```
 
-This will open the backend server on `localhost:8081` and you
-need to adjust your `/src/store/socket.js` file to connect to
-the localhost backend.
+默认监听 `ws://127.0.0.1:8081`，只允许以下本地前端 Origin：
 
-### Live setup
+- `http://localhost:8080`
+- `http://127.0.0.1:8080`
+- `http://127.0.0.1:4173`（Playwright）
 
-Generate a `cert.pem` and `key.pem` file for the domain that your
-live session backend will be available under, for example with [Let's Encrypt](https://letsencrypt.org/).
-Copy or symlink these 2 files into your `server/` folder and then run
-the following commands from the project root:
+前端开发模式默认连接该地址，不需要修改 `src/store/socket.js`。
 
-```shell
-npm install
-cd server/
-node index.js
+## 开发配置
+
+中继进程支持以下环境变量：
+
+| 变量 | 开发默认值 | 说明 |
+| --- | --- | --- |
+| `SESSION_RELAY_HOST` | `127.0.0.1` | 监听地址；本地开发不应改成对外网卡 |
+| `SESSION_RELAY_PORT` | `8081` | 监听端口，范围为 1 到 65535 |
+| `SESSION_RELAY_ALLOWED_ORIGINS` | 上述三个本地 Origin | 逗号分隔的完整 Origin 清单 |
+
+例如，前端改在 `localhost:4174` 运行时可以使用：
+
+```bash
+SESSION_RELAY_ALLOWED_ORIGINS=http://localhost:4174 npm run relay:dev
 ```
 
-This will make the backend server available at your domain on port 8080.
-If you want to have it automatically recover on crash or server restart,
-you could use [pm2](https://pm2.keymetrics.io/) with the provided `ecosystem.config.js`
+Origin 使用 URL 解析后精确匹配，不接受前缀或正则模糊匹配。端口占用、端口非法或允许清单为空时，中继启动失败并返回非零退出码。
 
-### Allowing access from different domains
+## 生产边界
 
-Currently the backend server only accepts connections coming from
-pages hosted on github.io or localhost. If you want to use your own
-domain for the page, make sure to adjust the domain whitelist pattern
-around line 15 in the `index.js`:
-
-```ecmascript 6
-  verifyClient: info =>
-    !!info.origin.match(
-      /^https?:\/\/([^.]+\.github\.io|localhost|live\.clocktower\.online|eddbra1nprivatetownsquare\.xyz)/i
-    )
-```
+生产模式仍需要 HTTPS 证书、Key 和显式的 `SESSION_RELAY_ALLOWED_ORIGINS`。正式中继的部署、域名、证书、监控、权限协议和隐私评审不属于 M0-R4；在对应独立需求完成前，不应把本目录直接部署为生产服务。

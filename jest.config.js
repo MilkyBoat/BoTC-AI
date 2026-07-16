@@ -5,6 +5,7 @@ module.exports = {
     "<rootDir>/tests/unit/**/*.spec.js",
     "<rootDir>/tests/component/**/*.spec.js",
     "<rootDir>/tests/scenario/**/*.spec.js",
+    "<rootDir>/tests/integration/**/*.spec.js",
   ],
   collectCoverageFrom: ["src/**/*.{js,vue}", "!src/main.js"],
   coverageDirectory: "coverage",

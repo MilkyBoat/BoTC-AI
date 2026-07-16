@@ -122,8 +122,18 @@
             Live Session
           </li>
           <template v-if="!session.sessionId">
-            <li @click="hostSession">Host (Storyteller)<em>[H]</em></li>
-            <li @click="joinSession">Join (Player)<em>[J]</em></li>
+            <li
+              v-if="!session.relayStatus.available"
+              class="disabled"
+              data-testid="relay-unavailable"
+            >
+              Online session unavailable
+              <em>{{ session.relayStatus.message }}</em>
+            </li>
+            <template v-else>
+              <li @click="hostSession">Host (Storyteller)<em>[H]</em></li>
+              <li @click="joinSession">Join (Player)<em>[J]</em></li>
+            </template>
           </template>
           <template v-else>
             <li v-if="session.ping">
@@ -244,6 +254,11 @@ export default {
     };
   },
   methods: {
+    ensureRelayAvailable() {
+      if (this.session.relayStatus.available) return true;
+      alert(this.session.relayStatus.message);
+      return false;
+    },
     setBackground() {
       const background = prompt("Enter custom background URL");
       if (background || background === "") {
@@ -252,6 +267,7 @@ export default {
     },
     hostSession() {
       if (this.session.sessionId) return;
+      if (!this.ensureRelayAvailable()) return;
       const sessionId = prompt(
         "Enter a channel number / name for your session",
         Math.round(Math.random() * 10000)
@@ -291,10 +307,11 @@ export default {
     },
     joinSession() {
       if (this.session.sessionId) return this.leaveSession();
+      if (!this.ensureRelayAvailable()) return;
       let sessionId = prompt(
         "Enter the channel number / name of the session you want to join"
       );
-      if (sessionId.match(/^https?:\/\//i)) {
+      if (sessionId && sessionId.match(/^https?:\/\//i)) {
         sessionId = sessionId.split("#").pop();
       }
       if (sessionId) {
@@ -505,9 +522,14 @@ export default {
         }
       }
 
-      &:not(.headline):not(.tabs):hover {
+      &:not(.headline):not(.tabs):not(.disabled):hover {
         cursor: pointer;
         color: red;
+      }
+
+      &.disabled {
+        color: gray;
+        cursor: not-allowed;
       }
 
       em {

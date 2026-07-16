@@ -11,22 +11,60 @@ register.setDefaultLabels({
 });
 
 const PING_INTERVAL = 30000; // 30 seconds
+const isDevelopment = process.env.NODE_ENV === "development";
+const relayHost =
+  process.env.SESSION_RELAY_HOST || (isDevelopment ? "127.0.0.1" : undefined);
+const relayPort = Number(
+  process.env.SESSION_RELAY_PORT || (isDevelopment ? 8081 : 8080),
+);
+const defaultAllowedOrigins = isDevelopment
+  ? ["http://localhost:8080", "http://127.0.0.1:8080", "http://127.0.0.1:4173"]
+  : [];
+const allowedOrigins = new Set(
+  (process.env.SESSION_RELAY_ALLOWED_ORIGINS
+    ? process.env.SESSION_RELAY_ALLOWED_ORIGINS.split(",")
+    : defaultAllowedOrigins
+  )
+    .map((origin) => origin.trim())
+    .filter(Boolean),
+);
+
+if (!Number.isInteger(relayPort) || relayPort < 1 || relayPort > 65535) {
+  throw new Error("SESSION_RELAY_PORT 必须是 1 到 65535 之间的整数");
+}
+if (!allowedOrigins.size) {
+  throw new Error(
+    "必须通过 SESSION_RELAY_ALLOWED_ORIGINS 配置允许的前端 Origin",
+  );
+}
+
+const isAllowedOrigin = (origin) => {
+  if (!origin) return false;
+  try {
+    return allowedOrigins.has(new URL(origin).origin);
+  } catch (_error) {
+    return false;
+  }
+};
 
 const options = {};
 
-if (process.env.NODE_ENV !== "development") {
+if (!isDevelopment) {
   options.cert = fs.readFileSync("cert.pem");
   options.key = fs.readFileSync("key.pem");
 }
 
 const server = https.createServer(options);
 const wss = new WebSocket.Server({
-  ...(process.env.NODE_ENV === "development" ? { port: 8081 } : { server }),
-  verifyClient: info =>
-    info.origin &&
-    !!info.origin.match(
-      /^https?:\/\/([^.]+\.github\.io|localhost|clocktower\.online|eddbra1nprivatetownsquare\.xyz)/i
-    )
+  ...(isDevelopment ? { host: relayHost, port: relayPort } : { server }),
+  verifyClient: (info) => isAllowedOrigin(info.origin),
+});
+
+wss.on("listening", () => {
+  const protocol = isDevelopment ? "ws" : "wss";
+  console.log(
+    `会话中继已启动：${protocol}://${relayHost || "0.0.0.0"}:${relayPort}`,
+  );
 });
 
 function noop() {}
@@ -250,9 +288,9 @@ wss.on("close", function close() {
 });
 
 // prod mode with stats API
-if (process.env.NODE_ENV !== "development") {
+if (!isDevelopment) {
   console.log("server starting");
-  server.listen(8080);
+  server.listen(relayPort, relayHost);
   server.on("request", (req, res) => {
     res.setHeader("Content-Type", register.contentType);
     register.metrics().then(out => res.end(out));

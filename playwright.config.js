@@ -20,10 +20,18 @@ module.exports = defineConfig({
       use: { ...devices["Desktop Chrome"] },
     },
   ],
-  webServer: {
-    command: "npm run serve -- --host 127.0.0.1 --port 4173",
-    url: "http://127.0.0.1:4173",
-    reuseExistingServer: false,
-    timeout: 120000,
-  },
+  webServer: [
+    {
+      command: "npm run serve -- --host 127.0.0.1 --port 4173",
+      url: "http://127.0.0.1:4173",
+      reuseExistingServer: false,
+      timeout: 120000,
+    },
+    {
+      command: "npm run relay:dev",
+      port: 8081,
+      reuseExistingServer: false,
+      timeout: 30000,
+    },
+  ],
 });

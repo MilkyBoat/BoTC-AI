@@ -10,6 +10,7 @@
 - [townsquare 固定源码来源记录](upstream/townsquare.md)：记录 townsquare 来源、版本、许可证和冻结策略。
 - [本次项目初始化需求](modify/2026-07-16-project-initialization.md)：记录仓库初始化的范围与验收结果。
 - [本项目测试基础设施](modify/2026-07-16-test-infrastructure.md)：记录 M0-R3 的测试分层、门禁和验收结果。
+- [安全开发会话环境](modify/2026-07-16-safe-development-session.md)：记录 M0-R4 的安全配置、本地中继和验收边界。
 
 ## 维护规则
 

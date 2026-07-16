@@ -10,7 +10,7 @@ BotC-AI 是一个基于开源魔典 [bra1n/townsquare](https://github.com/bra1n/
 - 通过适配器接入 OpenAI、Claude、DeepSeek、火山方舟及本地部署的 LLM。
 - 第一阶段完成可用的在线 AI 对局；第二阶段建设自博弈与强化学习训练闭环。
 
-当前已完成固定源码基线和本项目测试基础设施，尚未开始规则内核与 Agent 业务能力。产品范围、架构边界和里程碑拆分见：
+当前已完成固定源码基线、本项目测试基础设施和安全本地会话环境，尚未开始规则内核与 Agent 业务能力。产品范围、架构边界和里程碑拆分见：
 
 - [文档索引](doc/README.md)
 - [产品全量功能文档](doc/product/product.md)
@@ -29,17 +29,32 @@ npx playwright install chromium
 npm run test:ci
 ```
 
+启动本地在线房间时使用两个终端：
+
+```bash
+# 终端一：仅监听 127.0.0.1:8081 的本地 WebSocket 中继
+npm run relay:dev
+
+# 终端二：前端开发服务器
+npm run serve
+```
+
+打开 `http://localhost:8080` 建房，再用另一个浏览器页面打开复制出的 Hash 链接即可加入。开发模式默认只连接 `ws://127.0.0.1:8081/`，无需修改源码；不得使用 `clocktower.online` 或其他公共服务进行开发测试。
+
+部署构建如需在线会话，必须通过 `VUE_APP_SESSION_RELAY_URL` 显式提供自有的 `wss:` 地址。未配置或 URL 非法时，离线魔典仍可构建和使用，但会话菜单会禁用建房与加入；系统不会回退公共服务。配置示例见 [`.env.example`](.env.example)，本地中继参数见 [`server/README.md`](server/README.md)。
+
 按层运行测试：
 
 ```bash
 npm run test:unit
 npm run test:component
 npm run test:scenario
+npm run test:integration
 npm run test:e2e
 npm run test:coverage
 ```
 
-`test:unit` 验证独立逻辑，`test:component` 验证 Vue 组件可观察交互，`test:scenario` 验证给定初态下的多步骤状态流程，`test:e2e` 只使用本地开发服务器和 Chromium。端到端测试阻断外部 HTTP 与 WebSocket 连接，不使用公共会话服务。覆盖率报告写入 `coverage/`，当前不设置全仓百分比阈值。
+`test:unit` 验证独立逻辑，`test:component` 验证 Vue 组件可观察交互，`test:scenario` 验证给定初态下的多步骤状态流程，`test:integration` 启动真实本地中继验证转发和 Origin 拒绝，`test:e2e` 只使用本地前端、中继和 Chromium。端到端测试阻断外部 HTTP 与 WebSocket 连接，不使用公共会话服务。覆盖率报告写入 `coverage/`，当前不设置全仓百分比阈值。
 
 `npm run test:ci` 与 GitHub Actions 门禁顺序一致：快速测试、Lint、生产构建、端到端测试。遗留 Lint 警告预算为 415 条，任何错误或警告总量上升都会阻断门禁。
 

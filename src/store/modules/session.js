@@ -27,7 +27,12 @@ const state = () => ({
   voteHistory: [],
   markedPlayer: -1,
   isVoteHistoryAllowed: true,
-  isRolesDistributed: false
+  isRolesDistributed: false,
+  relayStatus: {
+    available: false,
+    url: "",
+    message: "正在检查会话中继配置",
+  },
 });
 
 const getters = {};
@@ -52,6 +57,7 @@ const mutations = {
   setVoteHistoryAllowed: set("isVoteHistoryAllowed"),
   claimSeat: set("claimedSeat"),
   distributeRoles: set("isRolesDistributed"),
+  setRelayStatus: set("relayStatus"),
   setSessionId(state, sessionId) {
     state.sessionId = sessionId
       .toLocaleLowerCase()

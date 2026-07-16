@@ -1,7 +1,8 @@
+import { getSessionRelayConfig } from "@/config/sessionRelay";
+
 class LiveSession {
-  constructor(store) {
-    this._wss = "wss://live.clocktower.online:8080/";
-    // this._wss = "ws://localhost:8081/"; // uncomment if using local server with NODE_ENV=development
+  constructor(store, relayUrl) {
+    this._wss = relayUrl;
     this._socket = null;
     this._isSpectator = true;
     this._gamestate = [];
@@ -838,14 +839,23 @@ class LiveSession {
 
 export default store => {
   // setup
-  const session = new LiveSession(store);
+  const relayStatus = getSessionRelayConfig();
+  store.commit("session/setRelayStatus", relayStatus);
+  if (!relayStatus.available && store.state.session.sessionId) {
+    store.commit("session/setSessionId", "");
+  }
+  const session = new LiveSession(store, relayStatus.url);
 
   // listen to mutations
   store.subscribe(({ type, payload }, state) => {
     switch (type) {
       case "session/setSessionId":
         if (state.session.sessionId) {
-          session.connect(state.session.sessionId);
+          if (relayStatus.available) {
+            session.connect(state.session.sessionId);
+          } else {
+            store.commit("session/setSessionId", "");
+          }
         } else {
           window.location.hash = "";
           session.disconnect();
@@ -919,9 +929,11 @@ export default store => {
 
   // check for session Id in hash
   const sessionId = window.location.hash.substr(1);
-  if (sessionId) {
+  if (sessionId && relayStatus.available) {
     store.commit("session/setSpectator", true);
     store.commit("session/setSessionId", sessionId);
     store.commit("toggleGrimoire", false);
+  } else if (sessionId) {
+    window.location.hash = "";
   }
 };
