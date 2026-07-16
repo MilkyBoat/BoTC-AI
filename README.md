@@ -10,7 +10,7 @@ BotC-AI 是一个基于开源魔典 [bra1n/townsquare](https://github.com/bra1n/
 - 通过适配器接入 OpenAI、Claude、DeepSeek、火山方舟及本地部署的 LLM。
 - 第一阶段完成可用的在线 AI 对局；第二阶段建设自博弈与强化学习训练闭环。
 
-当前已完成固定源码基线、本项目测试基础设施和安全本地会话环境，尚未开始规则内核与 Agent 业务能力。产品范围、架构边界和里程碑拆分见：
+当前已完成固定源码基线、本项目测试基础设施、安全本地会话环境、首期规则范围清单和 Wiki 同步清洗工具，尚未开始规则内核与 Agent 业务能力。产品范围、架构边界和里程碑拆分见：
 
 - [文档索引](doc/README.md)
 - [产品全量功能文档](doc/product/product.md)
@@ -54,7 +54,19 @@ npm run test:e2e
 npm run test:coverage
 ```
 
-`test:unit` 验证独立逻辑，`test:component` 验证 Vue 组件可观察交互，`test:scenario` 验证给定初态下的多步骤状态流程，`test:integration` 启动真实本地中继验证转发和 Origin 拒绝，`test:e2e` 只使用本地前端、中继和 Chromium。端到端测试阻断外部 HTTP 与 WebSocket 连接，不使用公共会话服务。覆盖率报告写入 `coverage/`，当前不设置全仓百分比阈值。
+`test:unit` 验证独立逻辑，`test:component` 验证 Vue 组件可观察交互，`test:scenario` 验证给定初态下的多步骤状态流程，`test:integration` 启动真实本地中继验证转发和 Origin 拒绝，`test:e2e` 只使用本地前端、中继和 Chromium。端到端测试阻断外部 HTTP 与 WebSocket 连接，不使用公共会话服务。覆盖率报告写入 `coverage/`，当前不设置全仓百分比阈值；新增 Wiki 同步模块具有独立的语句、分支、函数和行覆盖率门禁。
+
+固定修订 Wiki 同步是显式开发命令，不在应用运行时执行，也不属于默认测试网络依赖：
+
+```bash
+# 同步现有清单到 .work/m2-r2-wiki-sync/output/
+npm run knowledge:sync
+
+# 只验证一个固定来源
+npm run knowledge:sync -- --only zh-wiki-glossary
+```
+
+同步命令只处理清单中显式选择的修订，并校验原始 Wikitext 哈希；新发现页面只写入候选报告，不自动成为规则事实。现场正文、图片引用和报告均留在被 Git 忽略的 `.work/`，当前不提交完整 Wiki 内容。
 
 `npm run test:ci` 与 GitHub Actions 门禁顺序一致：快速测试、Lint、生产构建、端到端测试。遗留 Lint 警告预算为 415 条，任何错误或警告总量上升都会阻断门禁。
 

@@ -1,0 +1,15 @@
+{
+  "$schema": "./wiki-sync.config.schema.json",
+  "formatVersion": 1,
+  "id": "botc-ai.zh-official-wiki",
+  "baseUrl": "https://clocktower-wiki.gstonegames.com/",
+  "allowedOrigins": ["https://clocktower-wiki.gstonegames.com"],
+  "sourceManifest": "../rulesets/m1-ruleset-scope.json",
+  "request": {
+    "userAgent": "ClocktowerKnowledgeSync/0.1 (+https://github.com/MilkyBoat)",
+    "minIntervalMs": 1000,
+    "timeoutMs": 15000,
+    "retries": 2,
+    "maxResponseBytes": 4194304
+  }
+}

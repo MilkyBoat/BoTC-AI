@@ -6,6 +6,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "relay:dev": "NODE_ENV=development node server/index.js",
+    "knowledge:sync": "node scripts/wiki-sync/cli.js",
     "build": "vue-cli-service build ./src/main.js",
     "lint": "vue-cli-service lint",
     "lint-ci": "vue-cli-service lint --no-fix --max-warnings=415",
@@ -45,10 +46,13 @@
     "@vue/test-utils": "1.3.6",
     "@vue/vue2-jest": "27.0.0",
     "ajv": "6.12.6",
+    "cheerio": "^1.1.2",
     "eslint": "^8.53.0",
     "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-vue": "^9.18.1",
-    "prettier": "^3.0.3"
+    "prettier": "^3.0.3",
+    "turndown": "^7.2.1",
+    "turndown-plugin-gfm": "^1.0.2"
   },
   "keywords": [
     "botc",

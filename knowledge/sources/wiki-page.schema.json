@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://botc-ai.local/schemas/wiki-page.schema.json",
+  "title": "BotC-AI Wiki 页面元数据",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "formatVersion",
+    "sourceId",
+    "title",
+    "language",
+    "authority",
+    "trust",
+    "requestedUrl",
+    "finalUrl",
+    "revision",
+    "parentRevision",
+    "pageId",
+    "revisedAt",
+    "retrievedAt",
+    "redirected",
+    "mediawikiSha1",
+    "hashes",
+    "links",
+    "cleaning"
+  ],
+  "properties": {
+    "formatVersion": { "const": 1 },
+    "sourceId": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "title": { "type": "string", "minLength": 1 },
+    "language": { "type": "string", "minLength": 1 },
+    "authority": { "type": "string", "minLength": 1 },
+    "trust": { "const": "untrusted-external-content" },
+    "requestedUrl": { "type": "string", "pattern": "^https://" },
+    "finalUrl": { "type": "string", "pattern": "^https://" },
+    "revision": { "type": "integer", "minimum": 1 },
+    "parentRevision": { "type": "integer", "minimum": 0 },
+    "pageId": { "type": "integer", "minimum": 1 },
+    "revisedAt": { "type": "string", "format": "date-time" },
+    "retrievedAt": { "type": "string", "format": "date-time" },
+    "redirected": { "type": "boolean" },
+    "mediawikiSha1": { "type": "string", "minLength": 1 },
+    "hashes": { "$ref": "#/definitions/hashes" },
+    "links": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["selected", "known", "candidates", "external", "rejected"],
+      "properties": {
+        "selected": { "$ref": "#/definitions/count" },
+        "known": { "$ref": "#/definitions/count" },
+        "candidates": { "$ref": "#/definitions/count" },
+        "external": { "$ref": "#/definitions/count" },
+        "rejected": { "$ref": "#/definitions/count" }
+      }
+    },
+    "cleaning": { "$ref": "#/definitions/cleaning" }
+  },
+  "definitions": {
+    "count": { "type": "integer", "minimum": 0 },
+    "sha256": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "hashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["wikitext", "html", "markdown"],
+      "properties": {
+        "wikitext": { "$ref": "#/definitions/sha256" },
+        "html": { "$ref": "#/definitions/sha256" },
+        "markdown": { "$ref": "#/definitions/sha256" }
+      }
+    },
+    "cleaning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "removedNodes",
+        "removedAttributes",
+        "rejectedLinks",
+        "rejectedImages",
+        "candidateLinks",
+        "selectedLinks",
+        "knownLinks",
+        "sourceHtmlBytes",
+        "markdownBytes"
+      ],
+      "properties": {
+        "removedNodes": { "$ref": "#/definitions/count" },
+        "removedAttributes": { "$ref": "#/definitions/count" },
+        "rejectedLinks": { "$ref": "#/definitions/count" },
+        "rejectedImages": { "$ref": "#/definitions/count" },
+        "candidateLinks": { "$ref": "#/definitions/count" },
+        "selectedLinks": { "$ref": "#/definitions/count" },
+        "knownLinks": { "$ref": "#/definitions/count" },
+        "sourceHtmlBytes": { "$ref": "#/definitions/count" },
+        "markdownBytes": { "$ref": "#/definitions/count" }
+      }
+    }
+  }
+}
