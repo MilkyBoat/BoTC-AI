@@ -1,0 +1,10 @@
+.idea
+.DS_Store
+node_modules
+dist
+coverage
+.nyc_output
+.env
+.env.*
+!.env.example
+*.pem
