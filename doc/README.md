@@ -9,7 +9,6 @@
 - [目标架构](architecture/architecture.md)：描述浏览器内 Agent、规则内核、权限视图、在线会话和 LLM 适配边界。
 - [上游基线与同步约定](upstream/townsquare.md)：记录 townsquare 来源、版本、许可证和同步方法。
 - [本次项目初始化需求](modify/2026-07-16-project-initialization.md)：记录仓库初始化的范围与验收结果。
-- [站点部署需求](modify/2026-07-16-site-deployment.md)：记录魔典站点发布目标、授权、验收条件与当前阻断。
 
 ## 维护规则
 

@@ -5,7 +5,7 @@
   "author": "BotC-AI contributors; based on townsquare by Steffen Baumgart",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build ./src/main.js && node scripts/prepare-sites-build.mjs",
+    "build": "vue-cli-service build ./src/main.js",
     "lint": "vue-cli-service lint",
     "lint-ci": "vue-cli-service lint --no-fix --max-warnings=0"
   },
