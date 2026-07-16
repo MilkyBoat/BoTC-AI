@@ -1,0 +1,63 @@
+.env.example
+  s_f541625a5e45ae::t_fe68b422b03e10 1-3
+.eslintrc.js
+  s_f541625a5e45ae::t_a3ac64222056d0 16
+README.md
+  s_f541625a5e45ae::t_7c497b3234b5e9 13,32-45,52,57
+doc/README.md
+  s_f541625a5e45ae::t_a79efb100200b2 13
+doc/architecture/architecture.md
+  s_f541625a5e45ae::t_fae0d75cbdb790 143-144,175
+doc/milestone/roadmap.md
+  s_f541625a5e45ae::t_92bdcc3432bd47 16,20-21
+doc/modify/2026-07-16-safe-development-session.md
+  s_f541625a5e45ae::t_005020fe155f6d 1-129
+doc/product/product.md
+  s_f541625a5e45ae::t_271d464a7e8e62 106-107,200,229
+jest.config.js
+  s_f541625a5e45ae::t_60d48e7ef4adea 8
+package.json
+  s_f541625a5e45ae::t_93de2534ded0ea 8,15-16
+playwright.config.js
+  s_f541625a5e45ae::t_ec1ef027c23934 23-36
+server/README.md
+  s_f541625a5e45ae::t_c4e7b3617e8e2d 1,3,5,7,9-10,13,15-17,19,21,23,25-29,31,33-34,36-41
+server/index.js
+  s_f541625a5e45ae::t_8c88be18501030 14-48,52,59-67,291,293
+src/components/Menu.vue
+  s_f541625a5e45ae::t_d58cdf2030be5b 125-136,257-261,270,310,314,525,530-534
+src/config/sessionRelay.js
+  s_f541625a5e45ae::t_3a232f69006574 1-57
+src/store/modules/session.js
+  s_f541625a5e45ae::t_d9564fa174dc6d 30-35,60
+src/store/socket.js
+  s_f541625a5e45ae::t_d584a2273dda2f 1-2,4-5,842-847,854-858,932,936-937
+tests/component/MenuSessionAvailability.spec.js
+  s_f541625a5e45ae::t_82af97cc16fc63 1-82
+tests/e2e/app.spec.js
+  s_f541625a5e45ae::t_e98ce3b28bd81e 50-162
+tests/integration/relay.spec.js
+  s_f541625a5e45ae::t_4dbe625b2780f7 1-83
+tests/unit/sessionRelayConfig.spec.js
+  s_f541625a5e45ae::t_5447f3a5bff5db 1-51
+tests/unit/socket.spec.js
+  s_f541625a5e45ae::t_874920db30d0fc 1-61
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "49ad4003b405e027b775be51a72b79f667f58ed9",
+  "prompts": {},
+  "sessions": {
+    "s_f541625a5e45ae": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f6a3f-6f20-7da1-b2cb-855f0b697fcf",
+        "model": "unknown"
+      },
+      "human_author": "MilkyBoat <1214208054@qq.com>"
+    }
+  },
+  "attestation_metadata": {},
+  "remote_transcripts": {}
+}
