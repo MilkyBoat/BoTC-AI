@@ -1,0 +1,53 @@
+doc/README.md
+  s_9a07617acdd348::t_02be114ddf67e2 17
+doc/architecture/architecture.md
+  s_9a07617acdd348::t_cdc1acc73fbb43 64,91-100,103,122
+doc/milestone/roadmap.md
+  s_9a07617acdd348::t_31422b554abf4f 31
+doc/modify/2026-07-17-phase-basic-rules-kernel.md
+  s_9a07617acdd348::t_ec64673abf694b 1-224
+doc/product/product.md
+  s_9a07617acdd348::t_dd82eaf4341481 7,116,120,122,124-128,143,264-279
+jest.config.js
+  s_9a07617acdd348::t_2d3939dde32bb1 34-39
+src/domain/protocol/README.md
+  s_9a07617acdd348::t_c95f99f9f65532 3,11,25-38,45-55,62
+src/domain/protocol/builtins.js
+  s_9a07617acdd348::t_87bafb66f69c00 9-12,41-45,71,87-93,97
+src/domain/protocol/constants.js
+  s_9a07617acdd348::t_07b52a4ddccec3 1,3,7-11,16-21
+src/domain/protocol/engine.js
+  s_9a07617acdd348::t_270edd61980c41 18,450,648-655,691-693,702
+src/domain/protocol/index.js
+  s_9a07617acdd348::t_0042187c70c2a4 10-16
+src/domain/protocol/protocol.schema.json
+  s_9a07617acdd348::t_6fea9ba610f1ee 3,7,165-171,193-218,373-563
+src/domain/rules/basic.js
+  s_9a07617acdd348::t_9e7d1327850fc4 1-647
+src/domain/rules/index.js
+  s_9a07617acdd348::t_ef3705fa09b746 1-12
+tests/scenario/basicRulesReplay.spec.js
+  s_9a07617acdd348::t_6b1b76d7ed4338 1-161
+tests/unit/basicRulesKernel.spec.js
+  s_9a07617acdd348::t_643ee9ad4aa10f 1-567
+tests/unit/domainProtocol.spec.js
+  s_9a07617acdd348::t_47c5b8dcc54d28 169-175,494
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "723b772b52b0c291d6127fd2abc75d5688ba54f0",
+  "prompts": {},
+  "sessions": {
+    "s_9a07617acdd348": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f6e3d-1e6e-7963-bef8-5fa32d431684",
+        "model": "unknown"
+      },
+      "human_author": "MilkyBoat <1214208054@qq.com>"
+    }
+  },
+  "attestation_metadata": {},
+  "remote_transcripts": {}
+}
