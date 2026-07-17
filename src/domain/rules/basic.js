@@ -137,6 +137,40 @@ const rejectActiveBallotChange = (state, reject) =>
       )
     : null;
 
+const invokeOverrideHook = (rolePackage, hookName, context) => {
+  const hook = rolePackage.ruleHooks?.[hookName];
+  if (!hook) return null;
+  return hook(context) ?? null;
+};
+
+const invokeGameStartValidation = (rolePackage, context) => {
+  const validate = rolePackage.ruleHooks?.validateGameStart;
+  if (!validate) return null;
+  const result = validate(context);
+  if (result === null || result === undefined) return null;
+  if (
+    !result ||
+    typeof result !== "object" ||
+    Array.isArray(result) ||
+    Object.keys(result).some(
+      (key) => !["code", "message", "details"].includes(key),
+    ) ||
+    !/^[A-Z][A-Z0-9_]{1,63}$/.test(result.code ?? "") ||
+    typeof result.message !== "string" ||
+    result.message.length === 0 ||
+    (result.details !== undefined &&
+      (result.details === null ||
+        typeof result.details !== "object" ||
+        Array.isArray(result.details)))
+  ) {
+    throw protocolError(
+      "INVALID_ROLE_PACKAGE_HOOK_RESULT",
+      "validateGameStart 钩子返回了无效的领域拒绝",
+    );
+  }
+  return result;
+};
+
 export const determineBasicWinner = (seats) => {
   const livingDemons = seats.filter(
     ({ alive, characterType }) => alive && characterType === "demon",
@@ -195,6 +229,7 @@ export const createStartGameCommand = ({
   actor,
   seats,
   abilityInstances = [],
+  troubleBrewing,
 }) =>
   createCommand({
     commandId,
@@ -202,7 +237,11 @@ export const createStartGameCommand = ({
     expectedRevision,
     actor,
     type: COMMAND_TYPES.GAME_START,
-    payload: { seats, abilityInstances },
+    payload: {
+      seats,
+      abilityInstances,
+      ...(troubleBrewing === undefined ? {} : { troubleBrewing }),
+    },
   });
 
 export const createAdvancePhaseCommand = ({
@@ -278,6 +317,14 @@ export const BASIC_COMMAND_DEFINITIONS = Object.freeze([
           phase: state?.phase ?? null,
         });
       }
+      const hookError = invokeGameStartValidation(rolePackage, {
+        state,
+        command,
+        rolePackage,
+      });
+      if (hookError) {
+        return reject(hookError.code, hookError.message, hookError.details);
+      }
       const reason = validateSetupSeats(command.payload.seats);
       if (reason) return reject("INVALID_SETUP", reason);
       const instanceIds = new Set();
@@ -308,6 +355,9 @@ export const BASIC_COMMAND_DEFINITIONS = Object.freeze([
             payload: {
               seats: command.payload.seats,
               abilityInstances: command.payload.abilityInstances,
+              ...(command.payload.troubleBrewing === undefined
+                ? {}
+                : { troubleBrewing: command.payload.troubleBrewing }),
               ruleSourceId: BASIC_RULE_SOURCES.PHASE,
             },
           },
@@ -318,11 +368,18 @@ export const BASIC_COMMAND_DEFINITIONS = Object.freeze([
   Object.freeze({
     type: COMMAND_TYPES.PHASE_ADVANCE,
     payloadSchema: payloadReference("emptyPayload"),
-    handle: ({ state, command, reject }) => {
+    handle: ({ state, command, reject, rolePackage }) => {
       const unauthorized = rejectUnauthorized(command, reject);
       if (unauthorized) return unauthorized;
       const invalidState = rejectUnlessRunning(state, reject);
       if (invalidState) return invalidState;
+      const hookResult = invokeOverrideHook(rolePackage, "handlePhaseAdvance", {
+        state,
+        command,
+        reject,
+        rolePackage,
+      });
+      if (hookResult) return hookResult;
       if (
         state.abilityTriggers.some(({ status }) =>
           ["pending", "waiting-adjudication"].includes(status),
@@ -362,11 +419,18 @@ export const BASIC_COMMAND_DEFINITIONS = Object.freeze([
   Object.freeze({
     type: COMMAND_TYPES.PLAYER_KILL,
     payloadSchema: payloadReference("lifeCommandPayload"),
-    handle: ({ state, command, reject }) => {
+    handle: ({ state, command, reject, rolePackage }) => {
       const unauthorized = rejectUnauthorized(command, reject);
       if (unauthorized) return unauthorized;
       const invalidState = rejectUnlessRunning(state, reject);
       if (invalidState) return invalidState;
+      const hookResult = invokeOverrideHook(rolePackage, "handleKill", {
+        state,
+        command,
+        reject,
+        rolePackage,
+      });
+      if (hookResult) return hookResult;
       const active = rejectActiveBallotChange(state, reject);
       if (active) return active;
       const seat = findSeat(state, command.payload.seatId);
@@ -428,11 +492,18 @@ export const BASIC_COMMAND_DEFINITIONS = Object.freeze([
   Object.freeze({
     type: COMMAND_TYPES.EXECUTION_RESOLVE,
     payloadSchema: payloadReference("executionResolvePayload"),
-    handle: ({ state, command, reject }) => {
+    handle: ({ state, command, reject, rolePackage }) => {
       const unauthorized = rejectUnauthorized(command, reject);
       if (unauthorized) return unauthorized;
       const invalidState = rejectUnlessRunning(state, reject, "day");
       if (invalidState) return invalidState;
+      const hookResult = invokeOverrideHook(rolePackage, "handleExecution", {
+        state,
+        command,
+        reject,
+        rolePackage,
+      });
+      if (hookResult) return hookResult;
       const active = rejectActiveBallotChange(state, reject);
       if (active) return active;
       if (state.executionToday !== null) {
@@ -549,6 +620,9 @@ export const BASIC_EVENT_DEFINITIONS = Object.freeze([
           createdAtRevision: event.sequence,
           endedAtRevision: null,
         })),
+        ...(event.payload.troubleBrewing === undefined
+          ? {}
+          : { troubleBrewing: event.payload.troubleBrewing }),
       };
     },
   }),
@@ -768,12 +842,26 @@ export const assertBasicStateInvariants = (state) => {
   if (state.lifecycle !== "ended" || state.phase !== "ended" || !state.winner) {
     invariantError("结束阶段状态组合无效");
   }
+  const specialWinnerAlignments = {
+    "saint-executed": "evil",
+    "mayor-three-alive-no-execution": "good",
+  };
+  const specialAlignment = specialWinnerAlignments[state.winner.reason];
+  const winnerRevisionMatches = state.troubleBrewing
+    ? state.winner.decidedAtRevision <= state.revision
+    : state.winner.decidedAtRevision === state.revision;
+  if (specialAlignment !== undefined) {
+    if (state.winner.alignment !== specialAlignment || !winnerRevisionMatches) {
+      invariantError("特殊胜利的阵营或决定修订无效");
+    }
+    return;
+  }
   const expectedWinner = determineBasicWinner(state.seats);
   if (
     !expectedWinner ||
     expectedWinner.alignment !== state.winner.alignment ||
     expectedWinner.reason !== state.winner.reason ||
-    state.winner.decidedAtRevision !== state.revision
+    !winnerRevisionMatches
   ) {
     invariantError("结束状态胜方与权威事实不一致");
   }

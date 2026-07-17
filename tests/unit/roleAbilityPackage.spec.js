@@ -6,8 +6,23 @@ import {
   isRoleAbilityPackageError,
 } from "@/domain/abilities";
 import { DomainProtocolError, M1_RULESET_IDENTITY } from "@/domain/protocol";
+import 暗流涌动来源 from "../../knowledge/rulesets/trouble-brewing-sources.json";
 
 const 空处理器 = Object.freeze({});
+
+const 创建包内来源 = (覆盖 = {}) => ({
+  id: "zh-wiki-role-fictional",
+  title: "虚构角色",
+  language: "zh-CN",
+  authority: "official-zh",
+  url: "https://clocktower-wiki.gstonegames.com/index.php?title=虚构角色&oldid=100",
+  revision: 100,
+  revisedAt: "2026-07-17T00:00:00Z",
+  contentHash:
+    "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  contentHashScope: "mediawiki-wikitext",
+  ...覆盖,
+});
 
 const 创建虚构清单 = (覆盖 = {}) => {
   const 清单 = {
@@ -125,6 +140,130 @@ describe("M1-R6 版本化角色能力规则包", () => {
     expect(规则包.getHandler("missing")).toBeNull();
     expect(规则包.getValidators("missing")).toBeNull();
     expect(规则包.eventDefinitions).toHaveLength(1);
+  });
+
+  test("包内固定来源参与引用校验、完整性计算和不可变运行时", () => {
+    const 清单 = 创建虚构清单({
+      sources: 暗流涌动来源.sources,
+    });
+    清单.abilities[0].sourceRefs = [
+      { sourceId: "zh-wiki-important-details" },
+      { sourceId: "zh-wiki-role-washerwoman" },
+    ];
+    清单.integrity.value = calculateRoleAbilityPackageIntegrity(清单);
+
+    const 规则包 = createRoleAbilityPackage({
+      manifest: 清单,
+      handlers: 处理器,
+      eventDefinitions: 事件定义,
+    });
+
+    expect(规则包.manifest.sources).toHaveLength(22);
+    expect(规则包.manifest.sources[0]).toMatchObject({
+      id: "zh-wiki-role-baron",
+      revision: 6143,
+      contentHashScope: "mediawiki-wikitext",
+    });
+    expect(Object.isFrozen(规则包.manifest.sources)).toBe(true);
+    expect(规则包.identity.integrity).toBe(
+      calculateRoleAbilityPackageIntegrity(清单),
+    );
+  });
+
+  test.each([
+    [
+      "包内来源未按稳定 ID 排序",
+      () => {
+        const 清单 = 创建虚构清单({
+          sources: [
+            创建包内来源({ id: "zh-wiki-role-z" }),
+            创建包内来源({
+              id: "zh-wiki-role-a",
+              title: "另一个虚构角色",
+              url: "https://clocktower-wiki.gstonegames.com/index.php?title=另一个虚构角色&oldid=100",
+            }),
+          ],
+        });
+        清单.integrity.value = calculateRoleAbilityPackageIntegrity(清单);
+        return { manifest: 清单, handlers: 处理器, eventDefinitions: 事件定义 };
+      },
+    ],
+    [
+      "包内来源 ID 重复",
+      () => {
+        const 清单 = 创建虚构清单({
+          sources: [
+            创建包内来源(),
+            创建包内来源({
+              revision: 101,
+              url: "https://clocktower-wiki.gstonegames.com/index.php?title=虚构角色&oldid=101",
+            }),
+          ],
+        });
+        清单.integrity.value = calculateRoleAbilityPackageIntegrity(清单);
+        return { manifest: 清单, handlers: 处理器, eventDefinitions: 事件定义 };
+      },
+    ],
+    [
+      "包内来源与 M1 范围来源冲突",
+      () => {
+        const 清单 = 创建虚构清单({
+          sources: [创建包内来源({ id: "zh-wiki-important-details" })],
+        });
+        清单.integrity.value = calculateRoleAbilityPackageIntegrity(清单);
+        return { manifest: 清单, handlers: 处理器, eventDefinitions: 事件定义 };
+      },
+    ],
+    [
+      "包内来源固定 URL 与修订号不一致",
+      () => {
+        const 清单 = 创建虚构清单({
+          sources: [创建包内来源({ revision: 101 })],
+        });
+        清单.integrity.value = calculateRoleAbilityPackageIntegrity(清单);
+        return { manifest: 清单, handlers: 处理器, eventDefinitions: 事件定义 };
+      },
+    ],
+    [
+      "包内来源标题与固定 URL 不一致",
+      () => {
+        const 清单 = 创建虚构清单({
+          sources: [创建包内来源({ title: "另一标题" })],
+        });
+        清单.integrity.value = calculateRoleAbilityPackageIntegrity(清单);
+        return { manifest: 清单, handlers: 处理器, eventDefinitions: 事件定义 };
+      },
+    ],
+    [
+      "能力引用不存在于 M1 或包内来源",
+      () => {
+        const 清单 = 创建虚构清单({ sources: [创建包内来源()] });
+        清单.abilities[0].sourceRefs = [{ sourceId: "zh-wiki-role-missing" }];
+        清单.integrity.value = calculateRoleAbilityPackageIntegrity(清单);
+        return { manifest: 清单, handlers: 处理器, eventDefinitions: 事件定义 };
+      },
+    ],
+  ])("%s时拒绝加载规则包", (_名称, 输入) => {
+    捕获错误(() => createRoleAbilityPackage(输入()), "INVALID_ROLE_PACKAGE");
+  });
+
+  test.each([
+    ["非官方中文来源", { authority: "community" }],
+    ["非 Wikitext 哈希范围", { contentHashScope: "cleaned-markdown" }],
+    ["非法修订时间", { revisedAt: "2026-07-17" }],
+    ["非法内容哈希", { contentHash: "sha256:abc" }],
+  ])("包内来源包含%s时不符合 Schema", (_名称, 覆盖) => {
+    const 清单 = 创建虚构清单({ sources: [创建包内来源(覆盖)] });
+    清单.integrity.value = calculateRoleAbilityPackageIntegrity(清单);
+    捕获错误(
+      () =>
+        createRoleAbilityPackage({
+          manifest: 清单,
+          handlers: 处理器,
+          eventDefinitions: 事件定义,
+        }),
+      "INVALID_ROLE_PACKAGE",
+    );
   });
 
   test.each([

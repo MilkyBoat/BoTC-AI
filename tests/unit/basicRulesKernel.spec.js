@@ -184,7 +184,7 @@ describe("M1-R4 阶段与基础规则内核", () => {
     const 引擎 = 创建引擎();
     初始化(引擎);
 
-    expect(PROTOCOL_VERSION).toBe("0.4.0");
+    expect(PROTOCOL_VERSION).toBe("0.5.0");
     expect(引擎.getState()).toEqual({
       schemaVersion: PROTOCOL_VERSION,
       gameId: GAME_ID,

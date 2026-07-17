@@ -1,10 +1,10 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://botc-ai.local/schema/domain-protocol-v0.4.0.json",
+  "$id": "https://botc-ai.local/schema/domain-protocol-v0.5.0.json",
   "$ref": "#/definitions/eventStream",
   "definitions": {
     "protocolVersion": {
-      "const": "0.4.0"
+      "const": "0.5.0"
     },
     "stableId": {
       "type": "string",
@@ -304,6 +304,9 @@
           "type": "array",
           "maxItems": 4096,
           "items": { "$ref": "#/definitions/adjudicationTaskState" }
+        },
+        "troubleBrewing": {
+          "$ref": "#/definitions/troubleBrewingState"
         }
       }
     },
@@ -483,7 +486,11 @@
           "minimum": 1,
           "maximum": 9007199254740991
         },
-        "characterType": { "$ref": "#/definitions/characterType" }
+        "characterType": { "$ref": "#/definitions/characterType" },
+        "actualRoleId": { "$ref": "#/definitions/stableId" },
+        "perceivedRoleId": { "$ref": "#/definitions/stableId" },
+        "alignment": { "enum": ["good", "evil"] },
+        "roleInstanceId": { "$ref": "#/definitions/stableId" }
       }
     },
     "basicSeatState": {
@@ -505,7 +512,94 @@
         },
         "characterType": { "$ref": "#/definitions/characterType" },
         "alive": { "type": "boolean" },
-        "deadVoteAvailable": { "type": "boolean" }
+        "deadVoteAvailable": { "type": "boolean" },
+        "actualRoleId": { "$ref": "#/definitions/stableId" },
+        "perceivedRoleId": { "$ref": "#/definitions/stableId" },
+        "alignment": { "enum": ["good", "evil"] },
+        "roleInstanceId": { "$ref": "#/definitions/stableId" }
+      }
+    },
+    "troubleBrewingRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["recordId", "type", "content"],
+      "properties": {
+        "recordId": { "$ref": "#/definitions/stableId" },
+        "type": { "$ref": "#/definitions/messageType" },
+        "content": { "type": "object" }
+      }
+    },
+    "troubleBrewingState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packageId",
+        "version",
+        "setup",
+        "information",
+        "markers",
+        "deathHistory",
+        "registrationHistory",
+        "publicActions",
+        "butlerViolations"
+      ],
+      "properties": {
+        "packageId": { "$ref": "#/definitions/stableId" },
+        "version": { "$ref": "#/definitions/semanticVersion" },
+        "setup": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["redHerringSeatId", "demonBluffs", "evilTeamSeatIds"],
+          "properties": {
+            "redHerringSeatId": {
+              "anyOf": [
+                { "type": "null" },
+                { "$ref": "#/definitions/stableId" }
+              ]
+            },
+            "demonBluffs": {
+              "type": "array",
+              "maxItems": 3,
+              "uniqueItems": true,
+              "items": { "$ref": "#/definitions/stableId" }
+            },
+            "evilTeamSeatIds": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "$ref": "#/definitions/stableId" }
+            }
+          }
+        },
+        "information": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "markers": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "deathHistory": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "registrationHistory": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "publicActions": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "butlerViolations": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        }
       }
     },
     "abilityInstanceInput": {
@@ -593,10 +687,7 @@
         "sourceAbilityInstanceId": { "$ref": "#/definitions/stableId" },
         "status": { "enum": ["active", "cleared"] },
         "completionReason": {
-          "anyOf": [
-            { "type": "null" },
-            { "enum": ["cleared", "role-changed"] }
-          ]
+          "anyOf": [{ "type": "null" }, { "enum": ["cleared", "role-changed"] }]
         },
         "createdAtRevision": {
           "type": "integer",
@@ -894,20 +985,44 @@
       "required": ["alignment", "reason", "decidedAtRevision"],
       "properties": {
         "alignment": { "enum": ["good", "evil"] },
-        "reason": { "enum": ["all-demons-dead", "two-alive"] },
+        "reason": {
+          "enum": [
+            "all-demons-dead",
+            "two-alive",
+            "saint-executed",
+            "mayor-three-alive-no-execution"
+          ]
+        },
         "decidedAtRevision": {
           "type": "integer",
           "minimum": 1,
           "maximum": 9007199254740991
         }
       },
-      "allOf": [
+      "oneOf": [
         {
-          "if": { "properties": { "alignment": { "const": "good" } } },
-          "then": {
-            "properties": { "reason": { "const": "all-demons-dead" } }
-          },
-          "else": { "properties": { "reason": { "const": "two-alive" } } }
+          "properties": {
+            "alignment": { "const": "good" },
+            "reason": { "const": "all-demons-dead" }
+          }
+        },
+        {
+          "properties": {
+            "alignment": { "const": "evil" },
+            "reason": { "const": "two-alive" }
+          }
+        },
+        {
+          "properties": {
+            "alignment": { "const": "evil" },
+            "reason": { "const": "saint-executed" }
+          }
+        },
+        {
+          "properties": {
+            "alignment": { "const": "good" },
+            "reason": { "const": "mayor-three-alive-no-execution" }
+          }
         }
       ]
     },
@@ -1115,6 +1230,9 @@
           "type": "array",
           "maxItems": 256,
           "items": { "$ref": "#/definitions/abilityInstanceInput" }
+        },
+        "troubleBrewing": {
+          "$ref": "#/definitions/troubleBrewingState"
         }
       }
     },
@@ -1132,6 +1250,9 @@
           "type": "array",
           "maxItems": 256,
           "items": { "$ref": "#/definitions/abilityInstanceInput" }
+        },
+        "troubleBrewing": {
+          "$ref": "#/definitions/troubleBrewingState"
         },
         "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
       }
@@ -1456,16 +1577,40 @@
       "required": ["alignment", "reason", "ruleSourceId"],
       "properties": {
         "alignment": { "enum": ["good", "evil"] },
-        "reason": { "enum": ["all-demons-dead", "two-alive"] },
+        "reason": {
+          "enum": [
+            "all-demons-dead",
+            "two-alive",
+            "saint-executed",
+            "mayor-three-alive-no-execution"
+          ]
+        },
         "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
       },
-      "allOf": [
+      "oneOf": [
         {
-          "if": { "properties": { "alignment": { "const": "good" } } },
-          "then": {
-            "properties": { "reason": { "const": "all-demons-dead" } }
-          },
-          "else": { "properties": { "reason": { "const": "two-alive" } } }
+          "properties": {
+            "alignment": { "const": "good" },
+            "reason": { "const": "all-demons-dead" }
+          }
+        },
+        {
+          "properties": {
+            "alignment": { "const": "evil" },
+            "reason": { "const": "two-alive" }
+          }
+        },
+        {
+          "properties": {
+            "alignment": { "const": "evil" },
+            "reason": { "const": "saint-executed" }
+          }
+        },
+        {
+          "properties": {
+            "alignment": { "const": "good" },
+            "reason": { "const": "mayor-three-alive-no-execution" }
+          }
         }
       ]
     }

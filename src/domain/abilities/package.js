@@ -8,7 +8,13 @@ import { M1_RULESET_IDENTITY } from "../protocol/ruleset";
 import { sha256Hex } from "../protocol/sha256";
 
 const validateManifest = new Ajv({ allErrors: true }).compile(packageSchema);
-const sourceIds = new Set(scope.sources.map(({ id }) => id));
+const scopeSourceIds = new Set(scope.sources.map(({ id }) => id));
+const RULE_HOOK_NAMES = Object.freeze([
+  "handleExecution",
+  "handleKill",
+  "handlePhaseAdvance",
+  "validateGameStart",
+]);
 
 const sameJson = (left, right) =>
   canonicalizeJson(left) === canonicalizeJson(right);
@@ -24,6 +30,18 @@ const formatSchemaErrors = (errors = []) =>
     message,
     params,
   }));
+
+const hasMatchingFixedSourceUrl = (source) => {
+  try {
+    const url = new URL(source.url);
+    return (
+      url.searchParams.get("title") === source.title &&
+      url.searchParams.get("oldid") === String(source.revision)
+    );
+  } catch (_error) {
+    return false;
+  }
+};
 
 export const calculateRoleAbilityPackageIntegrity = (input) => {
   const manifest = JSON.parse(JSON.stringify(input));
@@ -61,6 +79,19 @@ const assertManifest = (manifest) => {
       "角色能力规则包事件类型必须唯一并按稳定 ID 排序",
     );
   }
+  const packageSources = manifest.sources ?? [];
+  const packageSourceIds = packageSources.map(({ id }) => id);
+  if (
+    !sortedUnique(packageSourceIds) ||
+    packageSourceIds.some((sourceId) => scopeSourceIds.has(sourceId)) ||
+    packageSources.some((source) => !hasMatchingFixedSourceUrl(source))
+  ) {
+    throw protocolError(
+      "INVALID_ROLE_PACKAGE",
+      "规则包自有来源必须按唯一 ID 排序、不得覆盖 M1 来源，且固定 URL 必须匹配标题与修订号",
+    );
+  }
+  const availableSourceIds = new Set([...scopeSourceIds, ...packageSourceIds]);
   const abilityIds = manifest.abilities.map(({ abilityId }) => abilityId);
   const handlerIds = manifest.abilities.map(({ handlerId }) => handlerId);
   if (
@@ -78,7 +109,7 @@ const assertManifest = (manifest) => {
     if (
       new Set(triggerIds).size !== triggerIds.length ||
       new Set(sourceRefIds).size !== sourceRefIds.length ||
-      sourceRefIds.some((sourceId) => !sourceIds.has(sourceId)) ||
+      sourceRefIds.some((sourceId) => !availableSourceIds.has(sourceId)) ||
       ability.allowedEventTypes.some(
         (eventType) => !manifest.eventTypes.includes(eventType),
       )
@@ -153,6 +184,24 @@ const assertRuntime = (manifest, handlers, eventDefinitions) => {
   }
 };
 
+const assertRuleHooks = (ruleHooks) => {
+  if (
+    !ruleHooks ||
+    typeof ruleHooks !== "object" ||
+    Array.isArray(ruleHooks) ||
+    Object.keys(ruleHooks).some(
+      (name) =>
+        !RULE_HOOK_NAMES.includes(name) ||
+        typeof ruleHooks[name] !== "function",
+    )
+  ) {
+    throw protocolError(
+      "INVALID_ROLE_PACKAGE_RUNTIME",
+      "角色能力规则包结算钩子必须来自固定白名单且值为函数",
+    );
+  }
+};
+
 const compileAbilityValidators = (manifest) => {
   const ajv = new Ajv({ allErrors: true, jsonPointers: true });
   return new Map(
@@ -183,6 +232,7 @@ export const createRoleAbilityPackage = ({
   manifest: inputManifest,
   handlers = {},
   eventDefinitions = [],
+  ruleHooks = {},
 }) => {
   let manifest;
   try {
@@ -194,6 +244,7 @@ export const createRoleAbilityPackage = ({
   }
   assertManifest(manifest);
   assertRuntime(manifest, handlers, eventDefinitions);
+  assertRuleHooks(ruleHooks);
   const frozenManifest = cloneAndFreezeJson(manifest);
   const abilityById = new Map(
     frozenManifest.abilities.map((ability) => [ability.abilityId, ability]),
@@ -206,10 +257,18 @@ export const createRoleAbilityPackage = ({
     frameworkVersion: manifest.frameworkVersion,
     integrity: manifest.integrity.value,
   });
+  const frozenRuleHooks = Object.freeze(
+    Object.fromEntries(
+      Object.entries(ruleHooks).sort(([left], [right]) =>
+        left.localeCompare(right),
+      ),
+    ),
+  );
   const runtime = {
     identity,
     manifest: frozenManifest,
     eventDefinitions: Object.freeze(eventDefinitions.slice()),
+    ruleHooks: frozenRuleHooks,
     getAbilityDefinition: (abilityId) => abilityById.get(abilityId) ?? null,
     getHandler: (handlerId) => handlerById.get(handlerId) ?? null,
     getValidators: (abilityId) => validatorsByAbilityId.get(abilityId) ?? null,

@@ -200,6 +200,34 @@ const rejectTriggerActor = (command, trigger, instance, definition, reject) => {
   });
 };
 
+const handlerValidationError = (result, fallbackMessage) => {
+  if (result === null || result === undefined || result === true) return null;
+  if (result === false) {
+    return { code: "INVALID_ABILITY_INPUT", message: fallbackMessage };
+  }
+  if (
+    !result ||
+    typeof result !== "object" ||
+    Array.isArray(result) ||
+    Object.keys(result).some(
+      (key) => !["code", "message", "details"].includes(key),
+    ) ||
+    !/^[A-Z][A-Z0-9_]{1,63}$/.test(result.code ?? "") ||
+    typeof result.message !== "string" ||
+    result.message.length === 0 ||
+    (result.details !== undefined &&
+      (result.details === null ||
+        typeof result.details !== "object" ||
+        Array.isArray(result.details)))
+  ) {
+    throw protocolError(
+      "INVALID_ROLE_PACKAGE_RUNTIME",
+      "能力处理器返回了无效的输入校验结果",
+    );
+  }
+  return result;
+};
+
 const clonePlan = (plan) => {
   try {
     return JSON.parse(JSON.stringify(plan));
@@ -582,6 +610,25 @@ const buildCommandDefinitions = (rolePackage) => [
       }
       const effective = isAbilityInstanceEffective(state, instance, ability);
       const handler = rolePackage.getHandler(ability.handlerId);
+      if (typeof handler.validateInput === "function") {
+        const validation = handlerValidationError(
+          handler.validateInput({
+            state,
+            instance,
+            trigger,
+            input: cloneAndFreezeJson(command.payload.input),
+            effective,
+          }),
+          "能力动作不满足当前权威状态约束",
+        );
+        if (validation) {
+          return reject(
+            validation.code,
+            validation.message,
+            validation.details,
+          );
+        }
+      }
       let rawPlan;
       if (effective) {
         rawPlan = handler.resolve({
@@ -599,6 +646,14 @@ const buildCommandDefinitions = (rolePackage) => [
           );
         }
         rawPlan = handler.createIntoxicatedAdjudication({
+          state,
+          instance,
+          trigger,
+          input: cloneAndFreezeJson(command.payload.input),
+          effective: false,
+        });
+      } else if (typeof handler.resolveSuppressed === "function") {
+        rawPlan = handler.resolveSuppressed({
           state,
           instance,
           trigger,
@@ -769,6 +824,26 @@ const buildCommandDefinitions = (rolePackage) => [
           "ABILITY_TRIGGER_NOT_READY",
           "裁量任务的来源触发状态无效",
         );
+      }
+      if (typeof handler.validateAdjudication === "function") {
+        const validation = handlerValidationError(
+          handler.validateAdjudication({
+            state,
+            instance,
+            task,
+            result: cloneAndFreezeJson(command.payload.result),
+          }),
+          "裁量结果不满足当前权威状态约束",
+        );
+        if (validation) {
+          return reject(
+            validation.code === "INVALID_ABILITY_INPUT"
+              ? "INVALID_ADJUDICATION_RESULT"
+              : validation.code,
+            validation.message,
+            validation.details,
+          );
+        }
       }
       const rawPlan = handler.resolveAdjudication({
         state,
@@ -1468,6 +1543,10 @@ const buildReaction = (rolePackage, registeredEventTypes) => ({
     for (const instance of instances) {
       const ability = rolePackage.getAbilityDefinition(instance.definitionId);
       if (!ability) continue;
+      const ownerSeat = findSeat(state, instance.ownerSeatId);
+      if (!ownerSeat || (!ownerSeat.alive && !ability.retainsAfterDeath)) {
+        continue;
+      }
       for (const definition of ability.triggers) {
         if (
           (triggerKind !== null && definition.kind === triggerKind) ||

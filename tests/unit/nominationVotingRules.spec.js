@@ -199,10 +199,10 @@ const 设置流放支持 = (
   );
 
 describe("M1-R5 提名与投票规则", () => {
-  test("协议 0.4.0 初始化提名、流放、死亡票与空能力状态", () => {
+  test("协议 0.5.0 初始化提名、流放、死亡票与空能力状态", () => {
     const 引擎 = 建立白天对局();
 
-    expect(PROTOCOL_VERSION).toBe("0.4.0");
+    expect(PROTOCOL_VERSION).toBe("0.5.0");
     expect(引擎.getState()).toMatchObject({
       phase: "day",
       nominationsToday: [],
