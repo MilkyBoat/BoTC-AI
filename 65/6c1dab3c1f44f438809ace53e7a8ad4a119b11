@@ -1,0 +1,59 @@
+doc/README.md
+  s_e85f3d0c8cc215::t_08c73fca3bf97e 15
+doc/architecture/architecture.md
+  s_e85f3d0c8cc215::t_4e4ac1480a7e7d 60,64-65,85-90
+doc/milestone/roadmap.md
+  s_e85f3d0c8cc215::t_981afb9ff03de9 29
+doc/product/product.md
+  s_e85f3d0c8cc215::t_15c2005f6a5b71 7,114-125,253
+jest.config.js
+  s_e85f3d0c8cc215::t_413c82230bd75b 22-27
+package-lock.json
+  s_e85f3d0c8cc215::t_d0b4430e91bd93 17
+package.json
+  s_e85f3d0c8cc215::t_4598f82028174b 32
+src/domain/protocol/README.md
+  s_e85f3d0c8cc215::t_6510a8aa5065f8 1-39
+src/domain/protocol/builtins.js
+  s_e85f3d0c8cc215::t_be3cc5d45586d0 1-81
+src/domain/protocol/constants.js
+  s_e85f3d0c8cc215::t_5bd1f9429b4c24 1-11
+src/domain/protocol/engine.js
+  s_e85f3d0c8cc215::t_e15f1fa776f20f 1-809
+src/domain/protocol/errors.js
+  s_e85f3d0c8cc215::t_c6e2393bd10a82 1-13
+src/domain/protocol/immutable.js
+  s_e85f3d0c8cc215::t_96bc72710d07c1 1-81
+src/domain/protocol/index.js
+  s_e85f3d0c8cc215::t_66c1e9417c9488 1-9
+src/domain/protocol/protocol.schema.json
+  s_e85f3d0c8cc215::t_b1b510c05a2f92 1-345
+src/domain/protocol/ruleset.js
+  s_e85f3d0c8cc215::t_d5e926a0b1c32d 1-10
+src/domain/protocol/sha256.js
+  s_e85f3d0c8cc215::t_f974c9cb9bf238 1-121
+src/domain/protocol/validators.js
+  s_e85f3d0c8cc215::t_1cc98c6687b21f 1-78
+tests/scenario/domainProtocolReplay.spec.js
+  s_e85f3d0c8cc215::t_f44eefe4cf96cf 1-162
+tests/unit/domainProtocol.spec.js
+  s_e85f3d0c8cc215::t_503ffc9888358f 1-577
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "656c1dab3c1f44f438809ace53e7a8ad4a119b11",
+  "prompts": {},
+  "sessions": {
+    "s_e85f3d0c8cc215": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f6df1-230a-73b0-ada7-a9507061cf49",
+        "model": "unknown"
+      },
+      "human_author": "MilkyBoat <1214208054@qq.com>"
+    }
+  },
+  "attestation_metadata": {},
+  "remote_transcripts": {}
+}
