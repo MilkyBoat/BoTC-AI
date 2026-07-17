@@ -19,6 +19,12 @@ module.exports = {
     "^cheerio/slim$": "<rootDir>/node_modules/cheerio/dist/commonjs/slim.js",
   },
   coverageThreshold: {
+    "./src/domain/protocol/": {
+      statements: 80,
+      branches: 70,
+      functions: 80,
+      lines: 80,
+    },
     "./scripts/wiki-sync/": {
       statements: 75,
       branches: 60,
