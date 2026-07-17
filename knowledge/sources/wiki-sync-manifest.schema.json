@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://botc-ai.local/schemas/wiki-sync-manifest.schema.json",
+  "title": "BotC-AI Wiki 同步成功清单",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "formatVersion",
+    "syncId",
+    "sourceManifestVersion",
+    "canonicalLanguage",
+    "generatedAt",
+    "pages"
+  ],
+  "properties": {
+    "formatVersion": { "const": 1 },
+    "syncId": { "type": "string", "minLength": 1 },
+    "sourceManifestVersion": { "type": "string", "minLength": 1 },
+    "canonicalLanguage": { "type": "string", "minLength": 1 },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "pages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "sourceId",
+          "title",
+          "language",
+          "revision",
+          "markdownPath",
+          "metadataPath",
+          "hashes"
+        ],
+        "properties": {
+          "sourceId": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$"
+          },
+          "title": { "type": "string", "minLength": 1 },
+          "language": { "type": "string", "minLength": 1 },
+          "revision": { "type": "integer", "minimum": 1 },
+          "markdownPath": {
+            "type": "string",
+            "pattern": "^official/[A-Za-z-]+/[a-z0-9-]+\\.md$"
+          },
+          "metadataPath": {
+            "type": "string",
+            "pattern": "^sources/[a-z0-9-]+\\.json$"
+          },
+          "hashes": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["wikitext", "html", "markdown"],
+            "properties": {
+              "wikitext": { "$ref": "#/definitions/sha256" },
+              "html": { "$ref": "#/definitions/sha256" },
+              "markdown": { "$ref": "#/definitions/sha256" }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "sha256": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" }
+  }
+}

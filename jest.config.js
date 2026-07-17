@@ -7,7 +7,23 @@ module.exports = {
     "<rootDir>/tests/scenario/**/*.spec.js",
     "<rootDir>/tests/integration/**/*.spec.js",
   ],
-  collectCoverageFrom: ["src/**/*.{js,vue}", "!src/main.js"],
+  collectCoverageFrom: [
+    "src/**/*.{js,vue}",
+    "!src/main.js",
+    "scripts/wiki-sync/**/*.js",
+    "!scripts/wiki-sync/cli.js",
+  ],
   coverageDirectory: "coverage",
   coverageReporters: ["text-summary", "html", "lcov"],
+  moduleNameMapper: {
+    "^cheerio/slim$": "<rootDir>/node_modules/cheerio/dist/commonjs/slim.js",
+  },
+  coverageThreshold: {
+    "./scripts/wiki-sync/": {
+      statements: 75,
+      branches: 60,
+      functions: 70,
+      lines: 75,
+    },
+  },
 };

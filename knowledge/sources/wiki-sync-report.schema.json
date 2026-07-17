@@ -1,0 +1,132 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://botc-ai.local/schemas/wiki-sync-report.schema.json",
+  "title": "BotC-AI Wiki 同步报告",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "formatVersion",
+    "syncId",
+    "sourceManifestVersion",
+    "startedAt",
+    "completedAt",
+    "summary",
+    "pages",
+    "failures",
+    "candidateLinks",
+    "rejectedLinks",
+    "duplicates"
+  ],
+  "properties": {
+    "formatVersion": { "const": 1 },
+    "syncId": { "type": "string", "minLength": 1 },
+    "sourceManifestVersion": { "type": "string", "minLength": 1 },
+    "startedAt": { "type": "string", "format": "date-time" },
+    "completedAt": { "type": "string", "format": "date-time" },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "selected",
+        "succeeded",
+        "failed",
+        "candidateLinks",
+        "rejectedLinks",
+        "duplicateGroups"
+      ],
+      "properties": {
+        "selected": { "$ref": "#/definitions/count" },
+        "succeeded": { "$ref": "#/definitions/count" },
+        "failed": { "$ref": "#/definitions/count" },
+        "candidateLinks": { "$ref": "#/definitions/count" },
+        "rejectedLinks": { "$ref": "#/definitions/count" },
+        "duplicateGroups": { "$ref": "#/definitions/count" }
+      }
+    },
+    "pages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "sourceId",
+          "revision",
+          "redirected",
+          "hashes",
+          "cleaning"
+        ],
+        "properties": {
+          "sourceId": { "type": "string", "minLength": 1 },
+          "revision": { "type": "integer", "minimum": 1 },
+          "redirected": { "type": "boolean" },
+          "hashes": { "type": "object" },
+          "cleaning": { "type": "object" }
+        }
+      }
+    },
+    "failures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sourceId", "code", "message", "details"],
+        "properties": {
+          "sourceId": { "type": "string", "minLength": 1 },
+          "code": { "type": "string", "minLength": 1 },
+          "message": { "type": "string", "minLength": 1 },
+          "details": { "type": "object" }
+        }
+      }
+    },
+    "candidateLinks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "href", "discoveredFrom"],
+        "properties": {
+          "title": { "type": "string", "minLength": 1 },
+          "href": { "type": "string", "minLength": 1 },
+          "discoveredFrom": { "$ref": "#/definitions/sourceIds" }
+        }
+      }
+    },
+    "rejectedLinks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["href", "reason", "discoveredFrom"],
+        "properties": {
+          "href": { "type": "string" },
+          "reason": { "type": "string", "minLength": 1 },
+          "discoveredFrom": { "$ref": "#/definitions/sourceIds" }
+        }
+      }
+    },
+    "duplicates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["hash", "sourceIds"],
+        "properties": {
+          "hash": { "$ref": "#/definitions/sha256" },
+          "sourceIds": {
+            "allOf": [{ "$ref": "#/definitions/sourceIds" }, { "minItems": 2 }]
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "count": { "type": "integer", "minimum": 0 },
+    "sha256": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "sourceIds": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}
