@@ -1,10 +1,10 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://botc-ai.local/schema/domain-protocol-v0.1.0.json",
+  "$id": "https://botc-ai.local/schema/domain-protocol-v0.2.0.json",
   "$ref": "#/definitions/eventStream",
   "definitions": {
     "protocolVersion": {
-      "const": "0.1.0"
+      "const": "0.2.0"
     },
     "stableId": {
       "type": "string",
@@ -162,7 +162,13 @@
         "ruleset",
         "seed",
         "revision",
-        "lifecycle"
+        "lifecycle",
+        "phase",
+        "dayNumber",
+        "nightNumber",
+        "seats",
+        "executionToday",
+        "winner"
       ],
       "properties": {
         "schemaVersion": {
@@ -184,8 +190,32 @@
           "minimum": 1,
           "maximum": 9007199254740991
         },
-        "lifecycle": {
-          "const": "initialized"
+        "lifecycle": { "enum": ["preparing", "running", "ended"] },
+        "phase": {
+          "enum": ["setup", "first-night", "day", "night", "ended"]
+        },
+        "dayNumber": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "nightNumber": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "seats": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/basicSeatState" }
+        },
+        "executionToday": {
+          "anyOf": [
+            { "type": "null" },
+            { "$ref": "#/definitions/executionState" }
+          ]
+        },
+        "winner": {
+          "anyOf": [{ "type": "null" }, { "$ref": "#/definitions/winnerState" }]
         }
       }
     },
@@ -340,6 +370,197 @@
     },
     "gameCreatedPayload": {
       "$ref": "#/definitions/gameCreatePayload"
+    },
+    "characterType": {
+      "enum": ["townsfolk", "outsider", "minion", "demon", "traveler"]
+    },
+    "basicSeatInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seatId", "order", "characterType"],
+      "properties": {
+        "seatId": { "$ref": "#/definitions/stableId" },
+        "order": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "characterType": { "$ref": "#/definitions/characterType" }
+      }
+    },
+    "basicSeatState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seatId", "order", "characterType", "alive"],
+      "properties": {
+        "seatId": { "$ref": "#/definitions/stableId" },
+        "order": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "characterType": { "$ref": "#/definitions/characterType" },
+        "alive": { "type": "boolean" }
+      }
+    },
+    "executionState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dayNumber", "seatId", "died"],
+      "properties": {
+        "dayNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "seatId": { "$ref": "#/definitions/stableId" },
+        "died": { "type": "boolean" }
+      }
+    },
+    "winnerState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["alignment", "reason", "decidedAtRevision"],
+      "properties": {
+        "alignment": { "enum": ["good", "evil"] },
+        "reason": { "enum": ["all-demons-dead", "two-alive"] },
+        "decidedAtRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "alignment": { "const": "good" } } },
+          "then": {
+            "properties": { "reason": { "const": "all-demons-dead" } }
+          },
+          "else": { "properties": { "reason": { "const": "two-alive" } } }
+        }
+      ]
+    },
+    "ruleSourceId": { "$ref": "#/definitions/stableId" },
+    "gameStartPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seats"],
+      "properties": {
+        "seats": {
+          "type": "array",
+          "minItems": 3,
+          "items": { "$ref": "#/definitions/basicSeatInput" }
+        }
+      }
+    },
+    "gameStartedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seats", "ruleSourceId"],
+      "properties": {
+        "seats": {
+          "type": "array",
+          "minItems": 3,
+          "items": { "$ref": "#/definitions/basicSeatInput" }
+        },
+        "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
+      }
+    },
+    "emptyPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {}
+    },
+    "phaseAdvancedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from",
+        "to",
+        "dayNumber",
+        "nightNumber",
+        "reason",
+        "ruleSourceId"
+      ],
+      "properties": {
+        "from": { "enum": ["first-night", "day", "night"] },
+        "to": { "enum": ["day", "night"] },
+        "dayNumber": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "nightNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "reason": { "enum": ["manual", "execution"] },
+        "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
+      }
+    },
+    "lifeCommandPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seatId", "causeId"],
+      "properties": {
+        "seatId": { "$ref": "#/definitions/stableId" },
+        "causeId": { "$ref": "#/definitions/stableId" },
+        "sourceId": { "$ref": "#/definitions/stableId" }
+      }
+    },
+    "lifeEventPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seatId", "causeId", "ruleSourceId"],
+      "properties": {
+        "seatId": { "$ref": "#/definitions/stableId" },
+        "causeId": { "$ref": "#/definitions/stableId" },
+        "sourceId": { "$ref": "#/definitions/stableId" },
+        "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
+      }
+    },
+    "executionResolvePayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seatId"],
+      "properties": {
+        "seatId": { "$ref": "#/definitions/stableId" }
+      }
+    },
+    "playerExecutedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seatId", "dayNumber", "died", "ruleSourceId"],
+      "properties": {
+        "seatId": { "$ref": "#/definitions/stableId" },
+        "dayNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "died": { "type": "boolean" },
+        "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
+      }
+    },
+    "gameEndedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["alignment", "reason", "ruleSourceId"],
+      "properties": {
+        "alignment": { "enum": ["good", "evil"] },
+        "reason": { "enum": ["all-demons-dead", "two-alive"] },
+        "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "alignment": { "const": "good" } } },
+          "then": {
+            "properties": { "reason": { "const": "all-demons-dead" } }
+          },
+          "else": { "properties": { "reason": { "const": "two-alive" } } }
+        }
+      ]
     }
   }
 }

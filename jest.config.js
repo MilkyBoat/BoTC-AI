@@ -31,6 +31,12 @@ module.exports = {
       functions: 80,
       lines: 80,
     },
+    "./src/domain/rules/": {
+      statements: 80,
+      branches: 70,
+      functions: 80,
+      lines: 80,
+    },
     "./scripts/wiki-sync/": {
       statements: 75,
       branches: 60,

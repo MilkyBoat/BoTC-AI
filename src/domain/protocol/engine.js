@@ -15,6 +15,7 @@ import {
 import { M1_RULESET_IDENTITY } from "./ruleset";
 import { sha256Hex } from "./sha256";
 import { assertValid, createProtocolValidators } from "./validators";
+import { assertBasicStateInvariants } from "../rules/basic";
 
 const STABLE_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$/;
 const ENGINE_INTERNALS = new WeakMap();
@@ -446,6 +447,7 @@ class DomainProtocolEngine {
       trialState = this[REDUCE_EVENT](trialState, event);
       trialEvents.push(event);
     }
+    assertBasicStateInvariants(trialState);
 
     const receipt = createReceipt({
       command,
@@ -643,6 +645,14 @@ class DomainProtocolEngine {
     const internals = getInternals(this);
     let state = null;
     const events = [];
+    const receiptBoundaries = new Set(
+      stream.receipts
+        .filter(
+          ({ status, eventIds }) =>
+            status === "accepted" && eventIds.length > 0,
+        )
+        .map(({ eventIds }) => eventIds[eventIds.length - 1]),
+    );
     stream.events.forEach((event, index) => {
       if (event.protocolVersion !== PROTOCOL_VERSION) {
         throw protocolError(
@@ -678,6 +688,9 @@ class DomainProtocolEngine {
       );
       state = this[REDUCE_EVENT](state, cloneAndFreezeJson(event));
       events.push(cloneAndFreezeJson(event));
+      if (receiptBoundaries.has(event.eventId)) {
+        assertBasicStateInvariants(state);
+      }
     });
 
     if (!sameJson(stream.ruleset, state?.ruleset ?? null)) {
@@ -686,6 +699,7 @@ class DomainProtocolEngine {
         "事件流规则集身份与重放状态不一致",
       );
     }
+    assertBasicStateInvariants(state);
     this[VALIDATE_RECEIPT_HISTORY](
       stream.receipts,
       events,

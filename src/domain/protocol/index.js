@@ -7,3 +7,10 @@ export {
 } from "./engine";
 export { DomainProtocolError } from "./errors";
 export { M1_RULESET_IDENTITY } from "./ruleset";
+export {
+  createAdvancePhaseCommand,
+  createKillPlayerCommand,
+  createResolveExecutionCommand,
+  createRevivePlayerCommand,
+  createStartGameCommand,
+} from "../rules";

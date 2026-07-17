@@ -166,7 +166,13 @@ describe("M1-R2 领域状态与事件协议", () => {
       ruleset: M1_RULESET_IDENTITY,
       seed: "seed-fixed-001",
       revision: 1,
-      lifecycle: "initialized",
+      lifecycle: "preparing",
+      phase: "setup",
+      dayNumber: 0,
+      nightNumber: 0,
+      seats: [],
+      executionToday: null,
+      winner: null,
     });
     expect(引擎.getEvents()).toEqual([
       {
@@ -485,7 +491,7 @@ describe("M1-R2 领域状态与事件协议", () => {
         }),
       "HANDLER_FAILURE",
     );
-    expect(引擎.getState().lifecycle).toBe("initialized");
+    expect(引擎.getState().lifecycle).toBe("preparing");
   });
 
   test("输入、查询结果和导出结果都不能反向修改内部状态", () => {

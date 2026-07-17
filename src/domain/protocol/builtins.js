@@ -6,6 +6,10 @@ import {
 } from "./constants";
 import { cloneAndFreezeJson } from "./immutable";
 import { M1_RULESET_IDENTITY } from "./ruleset";
+import {
+  BASIC_COMMAND_DEFINITIONS,
+  BASIC_EVENT_DEFINITIONS,
+} from "../rules/basic";
 
 const payloadReference = (name) => ({
   $ref: `${PROTOCOL_SCHEMA_ID}#/definitions/${name}`,
@@ -34,6 +38,11 @@ export const BUILTIN_COMMAND_DEFINITIONS = Object.freeze([
     type: COMMAND_TYPES.GAME_CREATE,
     payloadSchema: payloadReference("gameCreatePayload"),
     handle: ({ state, command, reject, isSupportedRuleset }) => {
+      if (!["host", "system"].includes(command.actor.kind)) {
+        return reject("ACTOR_NOT_AUTHORIZED", "当前主体无权创建权威对局", {
+          actorKind: command.actor.kind,
+        });
+      }
       if (state !== null) {
         return reject("GAME_ALREADY_INITIALIZED", "当前对局已经完成初始化");
       }
@@ -59,6 +68,7 @@ export const BUILTIN_COMMAND_DEFINITIONS = Object.freeze([
       };
     },
   }),
+  ...BASIC_COMMAND_DEFINITIONS,
 ]);
 
 export const BUILTIN_EVENT_DEFINITIONS = Object.freeze([
@@ -74,8 +84,15 @@ export const BUILTIN_EVENT_DEFINITIONS = Object.freeze([
         ruleset: event.payload.ruleset,
         seed: event.payload.seed,
         revision: event.sequence,
-        lifecycle: "initialized",
+        lifecycle: "preparing",
+        phase: "setup",
+        dayNumber: 0,
+        nightNumber: 0,
+        seats: [],
+        executionToday: null,
+        winner: null,
       };
     },
   }),
+  ...BASIC_EVENT_DEFINITIONS,
 ]);
