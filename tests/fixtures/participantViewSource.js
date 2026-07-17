@@ -1,4 +1,8 @@
-import { M1_RULESET_IDENTITY, PROTOCOL_VERSION } from "@/domain/protocol";
+import {
+  M1_ROLE_ABILITY_FRAMEWORK_PACKAGE,
+  M1_RULESET_IDENTITY,
+  PROTOCOL_VERSION,
+} from "@/domain/protocol";
 import { PARTICIPANT_VIEW_VERSION } from "@/domain/views";
 
 export const VIEW_GAME_ID = "game-m1-r3-001";
@@ -283,5 +287,6 @@ export const createDomainEventFixture = ({
   actor: { kind: "host", id: "host-view-test" },
   recordedAt: "2026-07-17T10:00:00.000Z",
   ruleset: M1_RULESET_IDENTITY,
+  rulePackage: M1_ROLE_ABILITY_FRAMEWORK_PACKAGE.identity,
   payload,
 });

@@ -1,0 +1,21 @@
+{
+  "$schema": "./role-ability-package.schema.json",
+  "packageId": "botc-ai.m1-role-ability-framework",
+  "version": "0.1.0",
+  "frameworkVersion": "0.1.0",
+  "canonicalLanguage": "zh-CN",
+  "ruleset": {
+    "id": "botc-ai.m1-ruleset-scope",
+    "version": "0.2.0",
+    "canonicalLanguage": "zh-CN",
+    "sourceManifestVersion": "0.2.0",
+    "integrity": "sha256:aa2daef3eb6d5c29f944fa431837823eb1faea472aed71146f1a4d8a71e5dd2d"
+  },
+  "eventTypes": [],
+  "abilities": [],
+  "integrity": {
+    "algorithm": "sha256",
+    "scope": "manifest-without-integrity",
+    "value": "sha256:8d8cf6a02185c5bc9791e31e04b58070e8fd007a5c75a64a64e1d546ebbbbf26"
+  }
+}

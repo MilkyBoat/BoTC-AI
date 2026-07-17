@@ -1,10 +1,10 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://botc-ai.local/schema/domain-protocol-v0.3.0.json",
+  "$id": "https://botc-ai.local/schema/domain-protocol-v0.4.0.json",
   "$ref": "#/definitions/eventStream",
   "definitions": {
     "protocolVersion": {
-      "const": "0.3.0"
+      "const": "0.4.0"
     },
     "stableId": {
       "type": "string",
@@ -64,6 +64,17 @@
         }
       }
     },
+    "rolePackageIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "frameworkVersion", "integrity"],
+      "properties": {
+        "id": { "$ref": "#/definitions/stableId" },
+        "version": { "$ref": "#/definitions/semanticVersion" },
+        "frameworkVersion": { "$ref": "#/definitions/semanticVersion" },
+        "integrity": { "$ref": "#/definitions/sha256" }
+      }
+    },
     "commandEnvelope": {
       "type": "object",
       "additionalProperties": false,
@@ -115,6 +126,7 @@
         "actor",
         "recordedAt",
         "ruleset",
+        "rulePackage",
         "payload"
       ],
       "properties": {
@@ -148,6 +160,9 @@
         "ruleset": {
           "$ref": "#/definitions/rulesetIdentity"
         },
+        "rulePackage": {
+          "$ref": "#/definitions/rolePackageIdentity"
+        },
         "payload": {
           "type": "object"
         }
@@ -174,7 +189,13 @@
         "highestNominationVotes",
         "executionCandidate",
         "exilesToday",
-        "activeExile"
+        "activeExile",
+        "abilityInstances",
+        "abilityConditions",
+        "abilityTriggers",
+        "ongoingAbilityEffects",
+        "delayedAbilityEffects",
+        "adjudicationTasks"
       ],
       "properties": {
         "schemaVersion": {
@@ -185,6 +206,9 @@
         },
         "ruleset": {
           "$ref": "#/definitions/rulesetIdentity"
+        },
+        "rulePackage": {
+          "$ref": "#/definitions/rolePackageIdentity"
         },
         "seed": {
           "type": "string",
@@ -250,6 +274,36 @@
         },
         "activeExile": {
           "anyOf": [{ "type": "null" }, { "$ref": "#/definitions/activeExile" }]
+        },
+        "abilityInstances": {
+          "type": "array",
+          "maxItems": 256,
+          "items": { "$ref": "#/definitions/abilityInstanceState" }
+        },
+        "abilityConditions": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/abilityConditionState" }
+        },
+        "abilityTriggers": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/abilityTriggerState" }
+        },
+        "ongoingAbilityEffects": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/ongoingAbilityEffectState" }
+        },
+        "delayedAbilityEffects": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/delayedAbilityEffectState" }
+        },
+        "adjudicationTasks": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/adjudicationTaskState" }
         }
       }
     },
@@ -354,6 +408,7 @@
         "protocolVersion",
         "gameId",
         "ruleset",
+        "rulePackage",
         "events",
         "receipts"
       ],
@@ -373,6 +428,12 @@
             { "$ref": "#/definitions/rulesetIdentity" }
           ]
         },
+        "rulePackage": {
+          "anyOf": [
+            { "type": "null" },
+            { "$ref": "#/definitions/rolePackageIdentity" }
+          ]
+        },
         "events": {
           "type": "array",
           "items": {
@@ -390,10 +451,13 @@
     "gameCreatePayload": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["ruleset", "seed"],
+      "required": ["ruleset", "rulePackage", "seed"],
       "properties": {
         "ruleset": {
           "$ref": "#/definitions/rulesetIdentity"
+        },
+        "rulePackage": {
+          "$ref": "#/definitions/rolePackageIdentity"
         },
         "seed": {
           "type": "string",
@@ -442,6 +506,372 @@
         "characterType": { "$ref": "#/definitions/characterType" },
         "alive": { "type": "boolean" },
         "deadVoteAvailable": { "type": "boolean" }
+      }
+    },
+    "abilityInstanceInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "instanceId",
+        "definitionId",
+        "ownerSeatId",
+        "sourceRoleId",
+        "sourceRoleInstanceId"
+      ],
+      "properties": {
+        "instanceId": { "$ref": "#/definitions/stableId" },
+        "definitionId": { "$ref": "#/definitions/stableId" },
+        "ownerSeatId": { "$ref": "#/definitions/stableId" },
+        "sourceRoleId": { "$ref": "#/definitions/stableId" },
+        "sourceRoleInstanceId": { "$ref": "#/definitions/stableId" }
+      }
+    },
+    "revisionOrNull": {
+      "anyOf": [
+        { "type": "null" },
+        {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        }
+      ]
+    },
+    "abilityInstanceState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "instanceId",
+        "definitionId",
+        "ownerSeatId",
+        "sourceRoleId",
+        "sourceRoleInstanceId",
+        "status",
+        "usesConsumed",
+        "createdAtRevision",
+        "endedAtRevision"
+      ],
+      "properties": {
+        "instanceId": { "$ref": "#/definitions/stableId" },
+        "definitionId": { "$ref": "#/definitions/stableId" },
+        "ownerSeatId": { "$ref": "#/definitions/stableId" },
+        "sourceRoleId": { "$ref": "#/definitions/stableId" },
+        "sourceRoleInstanceId": { "$ref": "#/definitions/stableId" },
+        "status": { "enum": ["active", "replaced"] },
+        "usesConsumed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "createdAtRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "endedAtRevision": { "$ref": "#/definitions/revisionOrNull" }
+      }
+    },
+    "abilityConditionState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "conditionId",
+        "seatId",
+        "conditionType",
+        "sourceId",
+        "status",
+        "completionReason",
+        "createdAtRevision",
+        "completedAtRevision"
+      ],
+      "properties": {
+        "conditionId": { "$ref": "#/definitions/stableId" },
+        "seatId": { "$ref": "#/definitions/stableId" },
+        "conditionType": {
+          "enum": ["drunk", "poisoned", "ability-disabled"]
+        },
+        "sourceId": { "$ref": "#/definitions/stableId" },
+        "sourceAbilityInstanceId": { "$ref": "#/definitions/stableId" },
+        "status": { "enum": ["active", "cleared"] },
+        "completionReason": {
+          "anyOf": [
+            { "type": "null" },
+            { "enum": ["cleared", "role-changed"] }
+          ]
+        },
+        "createdAtRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "completedAtRevision": { "$ref": "#/definitions/revisionOrNull" }
+      }
+    },
+    "abilityTriggerState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "triggerId",
+        "definitionTriggerId",
+        "abilityInstanceId",
+        "sourceEventId",
+        "kind",
+        "priority",
+        "ownerSeatOrder",
+        "phase",
+        "dayNumber",
+        "nightNumber",
+        "status",
+        "outcome",
+        "cancellationReason",
+        "createdAtRevision",
+        "completedAtRevision"
+      ],
+      "properties": {
+        "triggerId": { "$ref": "#/definitions/stableId" },
+        "definitionTriggerId": { "$ref": "#/definitions/stableId" },
+        "abilityInstanceId": { "$ref": "#/definitions/stableId" },
+        "sourceEventId": { "$ref": "#/definitions/stableId" },
+        "delayedEffectId": { "$ref": "#/definitions/stableId" },
+        "kind": {
+          "enum": [
+            "first-night",
+            "other-night",
+            "entry",
+            "domain-event",
+            "delayed"
+          ]
+        },
+        "priority": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "ownerSeatOrder": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "phase": { "enum": ["first-night", "day", "night"] },
+        "dayNumber": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "nightNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "status": {
+          "enum": ["pending", "waiting-adjudication", "resolved", "cancelled"]
+        },
+        "outcome": {
+          "anyOf": [
+            { "type": "null" },
+            { "enum": ["applied", "suppressed", "adjudicated"] }
+          ]
+        },
+        "cancellationReason": {
+          "anyOf": [
+            { "type": "null" },
+            {
+              "enum": [
+                "skipped",
+                "source-invalid",
+                "role-changed",
+                "phase-ended",
+                "host-error"
+              ]
+            }
+          ]
+        },
+        "createdAtRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "completedAtRevision": { "$ref": "#/definitions/revisionOrNull" }
+      }
+    },
+    "ongoingAbilityEffectState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "effectId",
+        "effectType",
+        "targetIds",
+        "endEventTypes",
+        "abilityInstanceId",
+        "triggerId",
+        "ruleSourceIds",
+        "status",
+        "completionReason",
+        "createdAtRevision",
+        "completedAtRevision"
+      ],
+      "properties": {
+        "effectId": { "$ref": "#/definitions/stableId" },
+        "effectType": { "$ref": "#/definitions/stableId" },
+        "targetIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/stableId" }
+        },
+        "endEventTypes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/messageType" }
+        },
+        "abilityInstanceId": { "$ref": "#/definitions/stableId" },
+        "triggerId": { "$ref": "#/definitions/stableId" },
+        "ruleSourceIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/stableId" }
+        },
+        "status": { "enum": ["active", "ended"] },
+        "completionReason": {
+          "anyOf": [
+            { "type": "null" },
+            {
+              "enum": [
+                "manual",
+                "end-trigger",
+                "source-invalid",
+                "source-ineffective",
+                "role-changed"
+              ]
+            }
+          ]
+        },
+        "createdAtRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "completedAtRevision": { "$ref": "#/definitions/revisionOrNull" }
+      }
+    },
+    "delayedAbilityEffectState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "effectId",
+        "effectType",
+        "triggerDefinitionId",
+        "targetIds",
+        "eventTypes",
+        "abilityInstanceId",
+        "triggerId",
+        "ruleSourceIds",
+        "status",
+        "completionReason",
+        "createdAtRevision",
+        "completedAtRevision"
+      ],
+      "properties": {
+        "effectId": { "$ref": "#/definitions/stableId" },
+        "effectType": { "$ref": "#/definitions/stableId" },
+        "triggerDefinitionId": { "$ref": "#/definitions/stableId" },
+        "targetIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/stableId" }
+        },
+        "eventTypes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/messageType" }
+        },
+        "abilityInstanceId": { "$ref": "#/definitions/stableId" },
+        "triggerId": { "$ref": "#/definitions/stableId" },
+        "ruleSourceIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/stableId" }
+        },
+        "status": { "enum": ["pending", "triggered", "cancelled"] },
+        "completionReason": {
+          "anyOf": [
+            { "type": "null" },
+            {
+              "enum": [
+                "manual",
+                "end-trigger",
+                "source-invalid",
+                "source-ineffective",
+                "role-changed",
+                "triggered"
+              ]
+            }
+          ]
+        },
+        "createdAtRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "completedAtRevision": { "$ref": "#/definitions/revisionOrNull" }
+      }
+    },
+    "adjudicationTaskState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "taskId",
+        "kind",
+        "summary",
+        "candidateSeatIds",
+        "triggerId",
+        "abilityInstanceId",
+        "resultSchema",
+        "ruleSourceIds",
+        "visibility",
+        "status",
+        "result",
+        "cancellationReason",
+        "createdAtRevision",
+        "completedAtRevision"
+      ],
+      "properties": {
+        "taskId": { "$ref": "#/definitions/stableId" },
+        "kind": { "$ref": "#/definitions/stableId" },
+        "summary": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "candidateSeatIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/stableId" }
+        },
+        "triggerId": { "$ref": "#/definitions/stableId" },
+        "abilityInstanceId": { "$ref": "#/definitions/stableId" },
+        "resultSchema": { "type": "object" },
+        "ruleSourceIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/stableId" }
+        },
+        "visibility": { "const": "storyteller-only" },
+        "status": { "enum": ["pending", "resolved", "cancelled"] },
+        "result": { "anyOf": [{ "type": "null" }, { "type": "object" }] },
+        "cancellationReason": {
+          "anyOf": [
+            { "type": "null" },
+            {
+              "enum": [
+                "source-invalid",
+                "role-changed",
+                "phase-ended",
+                "host-error"
+              ]
+            }
+          ]
+        },
+        "createdAtRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "completedAtRevision": { "$ref": "#/definitions/revisionOrNull" }
       }
     },
     "executionState": {
@@ -674,24 +1104,34 @@
     "gameStartPayload": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["seats"],
+      "required": ["seats", "abilityInstances"],
       "properties": {
         "seats": {
           "type": "array",
           "minItems": 3,
           "items": { "$ref": "#/definitions/basicSeatInput" }
+        },
+        "abilityInstances": {
+          "type": "array",
+          "maxItems": 256,
+          "items": { "$ref": "#/definitions/abilityInstanceInput" }
         }
       }
     },
     "gameStartedPayload": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["seats", "ruleSourceId"],
+      "required": ["seats", "abilityInstances", "ruleSourceId"],
       "properties": {
         "seats": {
           "type": "array",
           "minItems": 3,
           "items": { "$ref": "#/definitions/basicSeatInput" }
+        },
+        "abilityInstances": {
+          "type": "array",
+          "maxItems": 256,
+          "items": { "$ref": "#/definitions/abilityInstanceInput" }
         },
         "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
       }

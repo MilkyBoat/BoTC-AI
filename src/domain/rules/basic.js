@@ -194,6 +194,7 @@ export const createStartGameCommand = ({
   expectedRevision,
   actor,
   seats,
+  abilityInstances = [],
 }) =>
   createCommand({
     commandId,
@@ -201,7 +202,7 @@ export const createStartGameCommand = ({
     expectedRevision,
     actor,
     type: COMMAND_TYPES.GAME_START,
-    payload: { seats },
+    payload: { seats, abilityInstances },
   });
 
 export const createAdvancePhaseCommand = ({
@@ -268,7 +269,7 @@ export const BASIC_COMMAND_DEFINITIONS = Object.freeze([
   Object.freeze({
     type: COMMAND_TYPES.GAME_START,
     payloadSchema: payloadReference("gameStartPayload"),
-    handle: ({ state, command, reject }) => {
+    handle: ({ state, command, reject, rolePackage }) => {
       const unauthorized = rejectUnauthorized(command, reject);
       if (unauthorized) return unauthorized;
       if (state?.lifecycle !== "preparing" || state.phase !== "setup") {
@@ -279,12 +280,34 @@ export const BASIC_COMMAND_DEFINITIONS = Object.freeze([
       }
       const reason = validateSetupSeats(command.payload.seats);
       if (reason) return reject("INVALID_SETUP", reason);
+      const instanceIds = new Set();
+      for (const instance of command.payload.abilityInstances) {
+        const definition = rolePackage.getAbilityDefinition(
+          instance.definitionId,
+        );
+        if (
+          instanceIds.has(instance.instanceId) ||
+          !command.payload.seats.some(
+            ({ seatId }) => seatId === instance.ownerSeatId,
+          ) ||
+          !definition ||
+          definition.roleId !== instance.sourceRoleId
+        ) {
+          return reject(
+            "INVALID_ABILITY_INSTANCE",
+            "开局能力实例的 ID、拥有席位、定义或来源角色无效",
+            { instanceId: instance.instanceId },
+          );
+        }
+        instanceIds.add(instance.instanceId);
+      }
       return {
         events: [
           {
             type: EVENT_TYPES.GAME_STARTED,
             payload: {
               seats: command.payload.seats,
+              abilityInstances: command.payload.abilityInstances,
               ruleSourceId: BASIC_RULE_SOURCES.PHASE,
             },
           },
@@ -300,6 +323,17 @@ export const BASIC_COMMAND_DEFINITIONS = Object.freeze([
       if (unauthorized) return unauthorized;
       const invalidState = rejectUnlessRunning(state, reject);
       if (invalidState) return invalidState;
+      if (
+        state.abilityTriggers.some(({ status }) =>
+          ["pending", "waiting-adjudication"].includes(status),
+        ) ||
+        state.adjudicationTasks.some(({ status }) => status === "pending")
+      ) {
+        return reject(
+          "ABILITY_QUEUE_BLOCKED",
+          "当前阶段仍有未完成的能力触发或说书人裁量任务",
+        );
+      }
       if (state.phase === "day") {
         const active = rejectActiveBallotChange(state, reject);
         if (active) return active;
@@ -508,6 +542,13 @@ export const BASIC_EVENT_DEFINITIONS = Object.freeze([
         })),
         executionToday: null,
         winner: null,
+        abilityInstances: event.payload.abilityInstances.map((instance) => ({
+          ...instance,
+          status: "active",
+          usesConsumed: 0,
+          createdAtRevision: event.sequence,
+          endedAtRevision: null,
+        })),
       };
     },
   }),

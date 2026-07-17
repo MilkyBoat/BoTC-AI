@@ -6,6 +6,7 @@ import {
 } from "./constants";
 import { cloneAndFreezeJson } from "./immutable";
 import { M1_RULESET_IDENTITY } from "./ruleset";
+import { M1_ROLE_ABILITY_FRAMEWORK_PACKAGE } from "../abilities";
 import {
   BASIC_COMMAND_DEFINITIONS,
   BASIC_EVENT_DEFINITIONS,
@@ -26,6 +27,7 @@ export const createGameCommand = ({
   actor,
   seed,
   ruleset = M1_RULESET_IDENTITY,
+  rulePackage = M1_ROLE_ABILITY_FRAMEWORK_PACKAGE.identity,
 }) =>
   cloneAndFreezeJson({
     protocolVersion: PROTOCOL_VERSION,
@@ -34,14 +36,20 @@ export const createGameCommand = ({
     expectedRevision,
     actor,
     type: COMMAND_TYPES.GAME_CREATE,
-    payload: { ruleset, seed },
+    payload: { ruleset, rulePackage, seed },
   });
 
 export const BUILTIN_COMMAND_DEFINITIONS = Object.freeze([
   Object.freeze({
     type: COMMAND_TYPES.GAME_CREATE,
     payloadSchema: payloadReference("gameCreatePayload"),
-    handle: ({ state, command, reject, isSupportedRuleset }) => {
+    handle: ({
+      state,
+      command,
+      reject,
+      isSupportedRuleset,
+      isSupportedRolePackage,
+    }) => {
       if (!["host", "system"].includes(command.actor.kind)) {
         return reject("ACTOR_NOT_AUTHORIZED", "当前主体无权创建权威对局", {
           actorKind: command.actor.kind,
@@ -59,12 +67,20 @@ export const BUILTIN_COMMAND_DEFINITIONS = Object.freeze([
           },
         );
       }
+      if (!isSupportedRolePackage(command.payload.rulePackage)) {
+        return reject(
+          "UNSUPPORTED_ROLE_PACKAGE",
+          "请求的角色能力规则包身份不受当前内核支持",
+          { rulePackage: command.payload.rulePackage },
+        );
+      }
       return {
         events: [
           {
             type: EVENT_TYPES.GAME_CREATED,
             payload: {
               ruleset: command.payload.ruleset,
+              rulePackage: command.payload.rulePackage,
               seed: command.payload.seed,
             },
           },
@@ -87,6 +103,7 @@ export const BUILTIN_EVENT_DEFINITIONS = Object.freeze([
         schemaVersion: PROTOCOL_VERSION,
         gameId: event.gameId,
         ruleset: event.payload.ruleset,
+        rulePackage: event.payload.rulePackage,
         seed: event.payload.seed,
         revision: event.sequence,
         lifecycle: "preparing",
@@ -102,6 +119,12 @@ export const BUILTIN_EVENT_DEFINITIONS = Object.freeze([
         executionCandidate: null,
         exilesToday: [],
         activeExile: null,
+        abilityInstances: [],
+        abilityConditions: [],
+        abilityTriggers: [],
+        ongoingAbilityEffects: [],
+        delayedAbilityEffects: [],
+        adjudicationTasks: [],
       };
     },
   }),
