@@ -1,10 +1,10 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://botc-ai.local/schema/domain-protocol-v0.5.0.json",
+  "$id": "https://botc-ai.local/schema/domain-protocol-v0.6.0.json",
   "$ref": "#/definitions/eventStream",
   "definitions": {
     "protocolVersion": {
-      "const": "0.5.0"
+      "const": "0.6.0"
     },
     "stableId": {
       "type": "string",
@@ -307,6 +307,9 @@
         },
         "troubleBrewing": {
           "$ref": "#/definitions/troubleBrewingState"
+        },
+        "badMoonRising": {
+          "$ref": "#/definitions/badMoonRisingState"
         }
       }
     },
@@ -513,6 +516,7 @@
         "characterType": { "$ref": "#/definitions/characterType" },
         "alive": { "type": "boolean" },
         "deadVoteAvailable": { "type": "boolean" },
+        "secretlyAlive": { "type": "boolean" },
         "actualRoleId": { "$ref": "#/definitions/stableId" },
         "perceivedRoleId": { "$ref": "#/definitions/stableId" },
         "alignment": { "enum": ["good", "evil"] },
@@ -599,6 +603,124 @@
           "type": "array",
           "maxItems": 4096,
           "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        }
+      }
+    },
+    "badMoonRisingState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packageId",
+        "version",
+        "setup",
+        "information",
+        "markers",
+        "deathHistory",
+        "resurrectionHistory",
+        "publicActions",
+        "mastermindContinuation"
+      ],
+      "properties": {
+        "packageId": { "$ref": "#/definitions/stableId" },
+        "version": { "$ref": "#/definitions/semanticVersion" },
+        "setup": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "godfatherDelta",
+            "grandchildSeatId",
+            "demonBluffs",
+            "evilTeamSeatIds",
+            "lunaticSeatId",
+            "lunaticMinionSeatIds",
+            "lunaticBluffs"
+          ],
+          "properties": {
+            "godfatherDelta": { "enum": [-1, 0, 1] },
+            "grandchildSeatId": {
+              "anyOf": [
+                { "type": "null" },
+                { "$ref": "#/definitions/stableId" }
+              ]
+            },
+            "demonBluffs": {
+              "type": "array",
+              "maxItems": 3,
+              "uniqueItems": true,
+              "items": { "$ref": "#/definitions/stableId" }
+            },
+            "evilTeamSeatIds": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "$ref": "#/definitions/stableId" }
+            },
+            "lunaticSeatId": {
+              "anyOf": [
+                { "type": "null" },
+                { "$ref": "#/definitions/stableId" }
+              ]
+            },
+            "lunaticMinionSeatIds": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "$ref": "#/definitions/stableId" }
+            },
+            "lunaticBluffs": {
+              "type": "array",
+              "maxItems": 3,
+              "uniqueItems": true,
+              "items": { "$ref": "#/definitions/stableId" }
+            }
+          }
+        },
+        "information": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "markers": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "deathHistory": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "resurrectionHistory": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "publicActions": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "mastermindContinuation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["active", "demonSeatId", "startedDayNumber"],
+          "properties": {
+            "active": { "type": "boolean" },
+            "demonSeatId": {
+              "anyOf": [
+                { "type": "null" },
+                { "$ref": "#/definitions/stableId" }
+              ]
+            },
+            "startedDayNumber": {
+              "anyOf": [
+                { "type": "null" },
+                {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991
+                }
+              ]
+            }
+          }
         }
       }
     },
@@ -990,7 +1112,9 @@
             "all-demons-dead",
             "two-alive",
             "saint-executed",
-            "mayor-three-alive-no-execution"
+            "mayor-three-alive-no-execution",
+            "mastermind-good-executed",
+            "mastermind-no-good-executed"
           ]
         },
         "decidedAtRevision": {
@@ -1022,6 +1146,18 @@
           "properties": {
             "alignment": { "const": "good" },
             "reason": { "const": "mayor-three-alive-no-execution" }
+          }
+        },
+        {
+          "properties": {
+            "alignment": { "const": "evil" },
+            "reason": { "const": "mastermind-good-executed" }
+          }
+        },
+        {
+          "properties": {
+            "alignment": { "const": "good" },
+            "reason": { "const": "mastermind-no-good-executed" }
           }
         }
       ]
@@ -1233,6 +1369,9 @@
         },
         "troubleBrewing": {
           "$ref": "#/definitions/troubleBrewingState"
+        },
+        "badMoonRising": {
+          "$ref": "#/definitions/badMoonRisingState"
         }
       }
     },
@@ -1253,6 +1392,9 @@
         },
         "troubleBrewing": {
           "$ref": "#/definitions/troubleBrewingState"
+        },
+        "badMoonRising": {
+          "$ref": "#/definitions/badMoonRisingState"
         },
         "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
       }
@@ -1582,7 +1724,9 @@
             "all-demons-dead",
             "two-alive",
             "saint-executed",
-            "mayor-three-alive-no-execution"
+            "mayor-three-alive-no-execution",
+            "mastermind-good-executed",
+            "mastermind-no-good-executed"
           ]
         },
         "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
@@ -1610,6 +1754,18 @@
           "properties": {
             "alignment": { "const": "good" },
             "reason": { "const": "mayor-three-alive-no-execution" }
+          }
+        },
+        {
+          "properties": {
+            "alignment": { "const": "evil" },
+            "reason": { "const": "mastermind-good-executed" }
+          }
+        },
+        {
+          "properties": {
+            "alignment": { "const": "good" },
+            "reason": { "const": "mastermind-no-good-executed" }
           }
         }
       ]

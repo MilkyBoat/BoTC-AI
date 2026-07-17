@@ -18,6 +18,7 @@
 - [M1-R5 提名与投票规则](modify/2026-07-17-nomination-voting-rules.md)：实现每天提名限制、环形逐席投票、死亡票、最高票/平票候选、旅行者流放、处决约束与权限投影。
 - [M1-R6 角色能力执行框架](modify/2026-07-17-role-ability-execution-framework.md)：实现版本化角色规则包、能力实例、确定性触发队列、持续/延迟效果生命周期和结构化说书人裁量任务。
 - [M1-R7《暗流涌动》规则包](modify/2026-07-17-trouble-brewing-rules-package.md)：实现固定 22 角色来源、5 至 15 人开局、两套夜间队列、角色能力、保护/继任/特殊胜负、权限投影和事件重放。
+- [M1-R8《黯月初升》规则包](modify/2026-07-17-bad-moon-rising-rules-package.md)：实现固定 25 角色来源、教父设置与疯子认知、两套夜间队列、死亡/免死/复活、僵怖和主谋特殊流程、权限投影和事件重放。
 - [M2-R2 Wiki 同步与清洗工具](modify/2026-07-17-wiki-sync-cleaning.md)：定义固定修订同步、DOM 清洗、Markdown/元数据输出、失败恢复与抓取报告。
 
 ## 维护规则

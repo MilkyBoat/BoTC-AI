@@ -1,6 +1,6 @@
-export const PROTOCOL_VERSION = "0.5.0";
+export const PROTOCOL_VERSION = "0.6.0";
 export const PROTOCOL_SCHEMA_ID =
-  "https://botc-ai.local/schema/domain-protocol-v0.5.0.json";
+  "https://botc-ai.local/schema/domain-protocol-v0.6.0.json";
 
 export const COMMAND_TYPES = Object.freeze({
   GAME_CREATE: "game.create",

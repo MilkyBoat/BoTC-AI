@@ -13,6 +13,7 @@ const RULE_HOOK_NAMES = Object.freeze([
   "handleExecution",
   "handleKill",
   "handlePhaseAdvance",
+  "handleRevive",
   "validateGameStart",
 ]);
 

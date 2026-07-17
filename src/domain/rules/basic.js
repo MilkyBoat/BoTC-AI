@@ -112,7 +112,14 @@ const nextPhasePayload = (state, reason, ruleSourceId) => {
 const withSeatAlive = (seats, seatId, alive) =>
   seats.map((seat) =>
     seat.seatId === seatId
-      ? { ...seat, alive, deadVoteAvailable: !alive }
+      ? {
+          ...seat,
+          alive,
+          deadVoteAvailable: !alive,
+          ...(alive && seat.secretlyAlive !== undefined
+            ? { secretlyAlive: false }
+            : {}),
+        }
       : seat,
   );
 
@@ -173,13 +180,15 @@ const invokeGameStartValidation = (rolePackage, context) => {
 
 export const determineBasicWinner = (seats) => {
   const livingDemons = seats.filter(
-    ({ alive, characterType }) => alive && characterType === "demon",
+    ({ alive, secretlyAlive, characterType }) =>
+      (alive || secretlyAlive) && characterType === "demon",
   );
   if (livingDemons.length === 0) {
     return { alignment: "good", reason: "all-demons-dead" };
   }
   const livingNonTravelers = seats.filter(
-    ({ alive, characterType }) => alive && characterType !== "traveler",
+    ({ alive, secretlyAlive, characterType }) =>
+      (alive || secretlyAlive) && characterType !== "traveler",
   );
   if (livingNonTravelers.length <= 2) {
     return { alignment: "evil", reason: "two-alive" };
@@ -230,6 +239,7 @@ export const createStartGameCommand = ({
   seats,
   abilityInstances = [],
   troubleBrewing,
+  badMoonRising,
 }) =>
   createCommand({
     commandId,
@@ -241,6 +251,7 @@ export const createStartGameCommand = ({
       seats,
       abilityInstances,
       ...(troubleBrewing === undefined ? {} : { troubleBrewing }),
+      ...(badMoonRising === undefined ? {} : { badMoonRising }),
     },
   });
 
@@ -358,6 +369,9 @@ export const BASIC_COMMAND_DEFINITIONS = Object.freeze([
               ...(command.payload.troubleBrewing === undefined
                 ? {}
                 : { troubleBrewing: command.payload.troubleBrewing }),
+              ...(command.payload.badMoonRising === undefined
+                ? {}
+                : { badMoonRising: command.payload.badMoonRising }),
               ruleSourceId: BASIC_RULE_SOURCES.PHASE,
             },
           },
@@ -461,11 +475,18 @@ export const BASIC_COMMAND_DEFINITIONS = Object.freeze([
   Object.freeze({
     type: COMMAND_TYPES.PLAYER_REVIVE,
     payloadSchema: payloadReference("lifeCommandPayload"),
-    handle: ({ state, command, reject }) => {
+    handle: ({ state, command, reject, rolePackage }) => {
       const unauthorized = rejectUnauthorized(command, reject);
       if (unauthorized) return unauthorized;
       const invalidState = rejectUnlessRunning(state, reject);
       if (invalidState) return invalidState;
+      const hookResult = invokeOverrideHook(rolePackage, "handleRevive", {
+        state,
+        command,
+        reject,
+        rolePackage,
+      });
+      if (hookResult) return hookResult;
       const active = rejectActiveBallotChange(state, reject);
       if (active) return active;
       const seat = findSeat(state, command.payload.seatId);
@@ -623,6 +644,9 @@ export const BASIC_EVENT_DEFINITIONS = Object.freeze([
         ...(event.payload.troubleBrewing === undefined
           ? {}
           : { troubleBrewing: event.payload.troubleBrewing }),
+        ...(event.payload.badMoonRising === undefined
+          ? {}
+          : { badMoonRising: event.payload.badMoonRising }),
       };
     },
   }),
@@ -845,11 +869,14 @@ export const assertBasicStateInvariants = (state) => {
   const specialWinnerAlignments = {
     "saint-executed": "evil",
     "mayor-three-alive-no-execution": "good",
+    "mastermind-good-executed": "evil",
+    "mastermind-no-good-executed": "good",
   };
   const specialAlignment = specialWinnerAlignments[state.winner.reason];
-  const winnerRevisionMatches = state.troubleBrewing
-    ? state.winner.decidedAtRevision <= state.revision
-    : state.winner.decidedAtRevision === state.revision;
+  const winnerRevisionMatches =
+    state.troubleBrewing || state.badMoonRising
+      ? state.winner.decidedAtRevision <= state.revision
+      : state.winner.decidedAtRevision === state.revision;
   if (specialAlignment !== undefined) {
     if (state.winner.alignment !== specialAlignment || !winnerRevisionMatches) {
       invariantError("特殊胜利的阵营或决定修订无效");
