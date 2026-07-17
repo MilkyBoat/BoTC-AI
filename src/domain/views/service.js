@@ -302,6 +302,33 @@ const assertEventReferences = (source, event) => {
   if (event.type === "public.vote-resolved") {
     references.push(event.payload.nomineeSeatId, ...event.payload.voterSeatIds);
   }
+  if (event.type === "nomination.opened") {
+    references.push(event.payload.nominatorSeatId, event.payload.nomineeSeatId);
+  }
+  if (event.type === "vote.opened") {
+    references.push(event.payload.nomineeSeatId, ...event.payload.votingOrder);
+  }
+  if (event.type === "vote.recorded") {
+    references.push(event.payload.voterSeatId);
+  }
+  if (event.type === "vote.closed") {
+    references.push(event.payload.nomineeSeatId, ...event.payload.voterSeatIds);
+    if (event.payload.executionCandidateSeatId !== null) {
+      references.push(event.payload.executionCandidateSeatId);
+    }
+  }
+  if (event.type === "exile.opened") {
+    references.push(event.payload.proposerSeatId, event.payload.travelerSeatId);
+  }
+  if (event.type === "exile.support-set") {
+    references.push(event.payload.supporterSeatId);
+  }
+  if (event.type === "exile.closed") {
+    references.push(
+      event.payload.travelerSeatId,
+      ...event.payload.supporterSeatIds,
+    );
+  }
   if (references.some((seatId) => !seatIds.has(seatId))) {
     throw participantViewError(
       "INVALID_EVENT_PAYLOAD",

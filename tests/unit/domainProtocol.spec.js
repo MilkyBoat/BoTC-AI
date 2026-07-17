@@ -172,6 +172,12 @@ describe("M1-R2 领域状态与事件协议", () => {
       nightNumber: 0,
       seats: [],
       executionToday: null,
+      nominationsToday: [],
+      activeNomination: null,
+      highestNominationVotes: 0,
+      executionCandidate: null,
+      exilesToday: [],
+      activeExile: null,
       winner: null,
     });
     expect(引擎.getEvents()).toEqual([

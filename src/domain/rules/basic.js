@@ -110,7 +110,32 @@ const nextPhasePayload = (state, reason, ruleSourceId) => {
 };
 
 const withSeatAlive = (seats, seatId, alive) =>
-  seats.map((seat) => (seat.seatId === seatId ? { ...seat, alive } : seat));
+  seats.map((seat) =>
+    seat.seatId === seatId
+      ? { ...seat, alive, deadVoteAvailable: !alive }
+      : seat,
+  );
+
+const clearBallotState = (state) => ({
+  ...state,
+  nominationsToday: [],
+  activeNomination: null,
+  highestNominationVotes: 0,
+  executionCandidate: null,
+  exilesToday: [],
+  activeExile: null,
+});
+
+const hasActiveBallot = (state) =>
+  state.activeNomination !== null || state.activeExile !== null;
+
+const rejectActiveBallotChange = (state, reject) =>
+  hasActiveBallot(state)
+    ? reject(
+        "ACTIVE_BALLOT_IN_PROGRESS",
+        "活动提名或流放窗口期间不能改变生死、阶段或处决",
+      )
+    : null;
 
 export const determineBasicWinner = (seats) => {
   const livingDemons = seats.filter(
@@ -275,6 +300,17 @@ export const BASIC_COMMAND_DEFINITIONS = Object.freeze([
       if (unauthorized) return unauthorized;
       const invalidState = rejectUnlessRunning(state, reject);
       if (invalidState) return invalidState;
+      if (state.phase === "day") {
+        const active = rejectActiveBallotChange(state, reject);
+        if (active) return active;
+        if (state.executionCandidate !== null) {
+          return reject(
+            "EXECUTION_CANDIDATE_PENDING",
+            "当前存在即将被处决候选，不能按无人处决结束白天",
+            { seatId: state.executionCandidate.seatId },
+          );
+        }
+      }
       return {
         events: [
           {
@@ -297,6 +333,8 @@ export const BASIC_COMMAND_DEFINITIONS = Object.freeze([
       if (unauthorized) return unauthorized;
       const invalidState = rejectUnlessRunning(state, reject);
       if (invalidState) return invalidState;
+      const active = rejectActiveBallotChange(state, reject);
+      if (active) return active;
       const seat = findSeat(state, command.payload.seatId);
       if (!seat) {
         return reject("SEAT_NOT_FOUND", "死亡命令引用了不存在的席位", {
@@ -330,6 +368,8 @@ export const BASIC_COMMAND_DEFINITIONS = Object.freeze([
       if (unauthorized) return unauthorized;
       const invalidState = rejectUnlessRunning(state, reject);
       if (invalidState) return invalidState;
+      const active = rejectActiveBallotChange(state, reject);
+      if (active) return active;
       const seat = findSeat(state, command.payload.seatId);
       if (!seat) {
         return reject("SEAT_NOT_FOUND", "复活命令引用了不存在的席位", {
@@ -359,6 +399,8 @@ export const BASIC_COMMAND_DEFINITIONS = Object.freeze([
       if (unauthorized) return unauthorized;
       const invalidState = rejectUnlessRunning(state, reject, "day");
       if (invalidState) return invalidState;
+      const active = rejectActiveBallotChange(state, reject);
+      if (active) return active;
       if (state.executionToday !== null) {
         return reject(
           "EXECUTION_ALREADY_OCCURRED",
@@ -371,6 +413,29 @@ export const BASIC_COMMAND_DEFINITIONS = Object.freeze([
         return reject("SEAT_NOT_FOUND", "处决命令引用了不存在的席位", {
           seatId: command.payload.seatId,
         });
+      }
+      if (seat.characterType === "traveler") {
+        return reject(
+          "TRAVELER_CANNOT_BE_EXECUTED",
+          "旅行者不能被常规处决，只能进入流放流程",
+          { seatId: seat.seatId },
+        );
+      }
+      if (state.executionCandidate === null) {
+        return reject(
+          "NO_EXECUTION_CANDIDATE",
+          "当前白天没有由提名投票产生的处决候选",
+        );
+      }
+      if (state.executionCandidate.seatId !== seat.seatId) {
+        return reject(
+          "EXECUTION_CANDIDATE_MISMATCH",
+          "处决目标必须是当前唯一即将被处决候选",
+          {
+            expectedSeatId: state.executionCandidate.seatId,
+            actualSeatId: seat.seatId,
+          },
+        );
       }
       const seatsAfter = seat.alive
         ? withSeatAlive(state.seats, seat.seatId, false)
@@ -436,7 +501,11 @@ export const BASIC_EVENT_DEFINITIONS = Object.freeze([
         phase: "first-night",
         dayNumber: 0,
         nightNumber: 1,
-        seats: event.payload.seats.map((seat) => ({ ...seat, alive: true })),
+        seats: event.payload.seats.map((seat) => ({
+          ...seat,
+          alive: true,
+          deadVoteAvailable: false,
+        })),
         executionToday: null,
         winner: null,
       };
@@ -448,6 +517,20 @@ export const BASIC_EVENT_DEFINITIONS = Object.freeze([
     reduce: (state, event) => {
       if (state?.lifecycle !== "running") {
         throw new Error("只有运行中的对局可以推进阶段");
+      }
+      if (hasActiveBallot(state)) {
+        throw new Error("活动提名或流放窗口期间不能归约阶段推进事件");
+      }
+      if (state.phase === "day") {
+        const reason = state.executionToday === null ? "manual" : "execution";
+        if (
+          event.payload.reason !== reason ||
+          state.executionCandidate !== null
+        ) {
+          throw new Error("白天阶段推进与处决候选或处决记录不一致");
+        }
+      } else if (event.payload.reason !== "manual") {
+        throw new Error("非白天阶段不能使用处决原因推进");
       }
       const expectedSource =
         event.payload.reason === "execution"
@@ -461,14 +544,14 @@ export const BASIC_EVENT_DEFINITIONS = Object.freeze([
       if (JSON.stringify(event.payload) !== JSON.stringify(expected)) {
         throw new Error("阶段推进事件与当前状态不一致");
       }
-      return {
+      return clearBallotState({
         ...state,
         phase: event.payload.to,
         dayNumber: event.payload.dayNumber,
         nightNumber: event.payload.nightNumber,
         executionToday:
           event.payload.to === "day" ? null : state.executionToday,
-      };
+      });
     },
   }),
   Object.freeze({
@@ -477,6 +560,7 @@ export const BASIC_EVENT_DEFINITIONS = Object.freeze([
     reduce: (state, event) => {
       if (
         state?.lifecycle !== "running" ||
+        hasActiveBallot(state) ||
         event.payload.ruleSourceId !== BASIC_RULE_SOURCES.LIFE
       ) {
         throw new Error("死亡事件的对局状态或规则来源无效");
@@ -495,6 +579,7 @@ export const BASIC_EVENT_DEFINITIONS = Object.freeze([
     reduce: (state, event) => {
       if (
         state?.lifecycle !== "running" ||
+        hasActiveBallot(state) ||
         event.payload.ruleSourceId !== BASIC_RULE_SOURCES.LIFE
       ) {
         throw new Error("复活事件的对局状态或规则来源无效");
@@ -514,6 +599,7 @@ export const BASIC_EVENT_DEFINITIONS = Object.freeze([
       if (
         state?.lifecycle !== "running" ||
         state.phase !== "day" ||
+        hasActiveBallot(state) ||
         state.executionToday !== null ||
         event.payload.dayNumber !== state.dayNumber ||
         event.payload.ruleSourceId !== BASIC_RULE_SOURCES.EXECUTION
@@ -521,11 +607,17 @@ export const BASIC_EVENT_DEFINITIONS = Object.freeze([
         throw new Error("处决事件与当前白天状态不一致");
       }
       const seat = findSeat(state, event.payload.seatId);
-      if (!seat || event.payload.died !== seat.alive) {
+      if (
+        !seat ||
+        seat.characterType === "traveler" ||
+        state.executionCandidate?.seatId !== seat.seatId ||
+        event.payload.died !== seat.alive
+      ) {
         throw new Error("处决事件目标或死亡结果不一致");
       }
       return {
         ...state,
+        executionCandidate: null,
         executionToday: {
           dayNumber: state.dayNumber,
           seatId: seat.seatId,
@@ -552,7 +644,7 @@ export const BASIC_EVENT_DEFINITIONS = Object.freeze([
       ) {
         throw new Error("结束事件与当前常规胜负事实不一致");
       }
-      return {
+      return clearBallotState({
         ...state,
         lifecycle: "ended",
         phase: "ended",
@@ -561,7 +653,7 @@ export const BASIC_EVENT_DEFINITIONS = Object.freeze([
           reason: winner.reason,
           decidedAtRevision: event.sequence,
         },
-      };
+      });
     },
   }),
 ]);

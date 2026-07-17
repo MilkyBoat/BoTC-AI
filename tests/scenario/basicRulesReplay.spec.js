@@ -1,6 +1,10 @@
 import {
   createAdvancePhaseCommand,
+  createCloseVoteCommand,
   createKillPlayerCommand,
+  createOpenNominationCommand,
+  createOpenVoteCommand,
+  createRecordVoteCommand,
   createResolveExecutionCommand,
   createStartGameCommand,
 } from "@/domain/rules";
@@ -64,6 +68,54 @@ const 建立白天对局 = () => {
   return 引擎;
 };
 
+const 选为处决候选 = (引擎, seatId, 前缀) => {
+  const nominationId = `nomination-${前缀}`;
+  const 参数 = (commandId) => ({
+    commandId,
+    gameId: GAME_ID,
+    expectedRevision: 引擎.getState().revision,
+    actor: HOST,
+  });
+  const nominatorSeatId = 引擎
+    .getState()
+    .seats.find(
+      ({ alive, seatId: current }) => alive && current !== seatId,
+    ).seatId;
+  引擎.dispatch(
+    createOpenNominationCommand({
+      ...参数(`command-${前缀}-nominate`),
+      nominationId,
+      nominatorSeatId,
+      nomineeSeatId: seatId,
+    }),
+  );
+  引擎.dispatch(
+    createOpenVoteCommand({
+      ...参数(`command-${前缀}-vote-open`),
+      nominationId,
+    }),
+  );
+  引擎.getState().activeNomination.votingOrder.forEach((voterSeatId, index) => {
+    const support = 引擎
+      .getState()
+      .seats.find(({ seatId: current }) => current === voterSeatId).alive;
+    引擎.dispatch(
+      createRecordVoteCommand({
+        ...参数(`command-${前缀}-vote-${index + 1}`),
+        nominationId,
+        voterSeatId,
+        support,
+      }),
+    );
+  });
+  引擎.dispatch(
+    createCloseVoteCommand({
+      ...参数(`command-${前缀}-vote-close`),
+      nominationId,
+    }),
+  );
+};
+
 const 捕获错误码 = (执行) => {
   try {
     执行();
@@ -82,6 +134,7 @@ describe("M1-R4 基础规则事件重放场景", () => {
         seatId: "seat-a",
       }),
     );
+    选为处决候选(原引擎, "seat-b", "execute-b");
     const 处决命令 = 创建基础命令(原引擎, "command-execute-b", "execute", {
       seatId: "seat-b",
     });
@@ -98,6 +151,8 @@ describe("M1-R4 基础规则事件重放场景", () => {
 
   test("处决多事件批次保持连续修订和单一因果命令", () => {
     const 引擎 = 建立白天对局();
+    选为处决候选(引擎, "seat-a", "execute-a");
+    const 处决前修订 = 引擎.getState().revision;
     const 回执 = 引擎.dispatch(
       创建基础命令(引擎, "command-execute-a", "execute", {
         seatId: "seat-a",
@@ -107,11 +162,18 @@ describe("M1-R4 基础规则事件重放场景", () => {
       .getEvents()
       .filter(({ eventId }) => 回执.eventIds.includes(eventId));
 
-    expect(批次事件.map(({ sequence }) => sequence)).toEqual([4, 5, 6]);
+    expect(批次事件.map(({ sequence }) => sequence)).toEqual([
+      处决前修订 + 1,
+      处决前修订 + 2,
+      处决前修订 + 3,
+    ]);
     expect(new Set(批次事件.map(({ causationId }) => causationId))).toEqual(
       new Set(["command-execute-a"]),
     );
-    expect(回执).toMatchObject({ revisionBefore: 3, revisionAfter: 6 });
+    expect(回执).toMatchObject({
+      revisionBefore: 处决前修订,
+      revisionAfter: 处决前修订 + 3,
+    });
   });
 
   test("删去致胜批次的结束事件即使同步修订回执也因不变量失败", () => {

@@ -10,6 +10,10 @@ import {
   BASIC_COMMAND_DEFINITIONS,
   BASIC_EVENT_DEFINITIONS,
 } from "../rules/basic";
+import {
+  NOMINATION_COMMAND_DEFINITIONS,
+  NOMINATION_EVENT_DEFINITIONS,
+} from "../rules/nomination";
 
 const payloadReference = (name) => ({
   $ref: `${PROTOCOL_SCHEMA_ID}#/definitions/${name}`,
@@ -69,6 +73,7 @@ export const BUILTIN_COMMAND_DEFINITIONS = Object.freeze([
     },
   }),
   ...BASIC_COMMAND_DEFINITIONS,
+  ...NOMINATION_COMMAND_DEFINITIONS,
 ]);
 
 export const BUILTIN_EVENT_DEFINITIONS = Object.freeze([
@@ -91,8 +96,15 @@ export const BUILTIN_EVENT_DEFINITIONS = Object.freeze([
         seats: [],
         executionToday: null,
         winner: null,
+        nominationsToday: [],
+        activeNomination: null,
+        highestNominationVotes: 0,
+        executionCandidate: null,
+        exilesToday: [],
+        activeExile: null,
       };
     },
   }),
   ...BASIC_EVENT_DEFINITIONS,
+  ...NOMINATION_EVENT_DEFINITIONS,
 ]);

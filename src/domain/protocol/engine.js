@@ -16,6 +16,7 @@ import { M1_RULESET_IDENTITY } from "./ruleset";
 import { sha256Hex } from "./sha256";
 import { assertValid, createProtocolValidators } from "./validators";
 import { assertBasicStateInvariants } from "../rules/basic";
+import { assertNominationStateInvariants } from "../rules/nomination";
 
 const STABLE_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$/;
 const ENGINE_INTERNALS = new WeakMap();
@@ -448,6 +449,7 @@ class DomainProtocolEngine {
       trialEvents.push(event);
     }
     assertBasicStateInvariants(trialState);
+    assertNominationStateInvariants(trialState);
 
     const receipt = createReceipt({
       command,
@@ -690,6 +692,7 @@ class DomainProtocolEngine {
       events.push(cloneAndFreezeJson(event));
       if (receiptBoundaries.has(event.eventId)) {
         assertBasicStateInvariants(state);
+        assertNominationStateInvariants(state);
       }
     });
 
@@ -700,6 +703,7 @@ class DomainProtocolEngine {
       );
     }
     assertBasicStateInvariants(state);
+    assertNominationStateInvariants(state);
     this[VALIDATE_RECEIPT_HISTORY](
       stream.receipts,
       events,

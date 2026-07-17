@@ -1,4 +1,5 @@
 import { M1_RULESET_IDENTITY, PROTOCOL_VERSION } from "@/domain/protocol";
+import { PARTICIPANT_VIEW_VERSION } from "@/domain/views";
 
 export const VIEW_GAME_ID = "game-m1-r3-001";
 
@@ -48,7 +49,7 @@ export const resolveTestPrincipal = (credential) => {
 };
 
 export const createParticipantViewSourceFixture = () => ({
-  schemaVersion: "0.1.0",
+  schemaVersion: PARTICIPANT_VIEW_VERSION,
   game: {
     gameId: VIEW_GAME_ID,
     ruleset: M1_RULESET_IDENTITY,
@@ -68,7 +69,11 @@ export const createParticipantViewSourceFixture = () => ({
       order: 1,
       displayName: "甲",
       controllerKind: "human",
-      publicState: { alive: true, publicRoleId: null },
+      publicState: {
+        alive: true,
+        publicRoleId: null,
+        deadVoteAvailable: false,
+      },
       truth: {
         roleId: "truth-role-imp-a",
         alignment: "evil",
@@ -123,7 +128,11 @@ export const createParticipantViewSourceFixture = () => ({
       order: 2,
       displayName: "乙",
       controllerKind: "ai",
-      publicState: { alive: false, publicRoleId: "washerwoman" },
+      publicState: {
+        alive: false,
+        publicRoleId: "washerwoman",
+        deadVoteAvailable: true,
+      },
       truth: {
         roleId: "truth-role-drunk-b",
         alignment: "good",
@@ -163,7 +172,11 @@ export const createParticipantViewSourceFixture = () => ({
       order: 3,
       displayName: "丙",
       controllerKind: "unassigned",
-      publicState: { alive: true, publicRoleId: null },
+      publicState: {
+        alive: true,
+        publicRoleId: null,
+        deadVoteAvailable: false,
+      },
       truth: {
         roleId: "truth-role-saint-c",
         alignment: "good",

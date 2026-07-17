@@ -1,7 +1,11 @@
 import {
   BASIC_RULE_SOURCES,
   createAdvancePhaseCommand,
+  createCloseVoteCommand,
   createKillPlayerCommand,
+  createOpenNominationCommand,
+  createOpenVoteCommand,
+  createRecordVoteCommand,
   createResolveExecutionCommand,
   createRevivePlayerCommand,
   createStartGameCommand,
@@ -118,14 +122,71 @@ const 处决 = (引擎, seatId, commandId, 覆盖 = {}) =>
     }),
   );
 
+const 选为处决候选 = (引擎, seatId, 前缀) => {
+  const nominationId = `nomination-${前缀}`;
+  const nominatorSeatId = 引擎
+    .getState()
+    .seats.find(
+      ({ alive, seatId: candidate }) => alive && candidate !== seatId,
+    ).seatId;
+  const 派发 = (命令) => {
+    const 回执 = 引擎.dispatch(命令);
+    expect(回执.status).toBe("accepted");
+  };
+  const 公共参数 = (commandId) => ({
+    commandId,
+    gameId: GAME_ID,
+    expectedRevision: 引擎.getState().revision,
+    actor: HOST,
+  });
+
+  派发(
+    createOpenNominationCommand({
+      ...公共参数(`command-${前缀}-nominate`),
+      nominationId,
+      nominatorSeatId,
+      nomineeSeatId: seatId,
+    }),
+  );
+  派发(
+    createOpenVoteCommand({
+      ...公共参数(`command-${前缀}-vote-open`),
+      nominationId,
+    }),
+  );
+  引擎.getState().activeNomination.votingOrder.forEach((voterSeatId, index) => {
+    const voter = 引擎
+      .getState()
+      .seats.find(({ seatId: candidate }) => candidate === voterSeatId);
+    派发(
+      createRecordVoteCommand({
+        ...公共参数(`command-${前缀}-vote-${index + 1}`),
+        nominationId,
+        voterSeatId,
+        support: voter.alive,
+      }),
+    );
+  });
+  派发(
+    createCloseVoteCommand({
+      ...公共参数(`command-${前缀}-vote-close`),
+      nominationId,
+    }),
+  );
+  expect(引擎.getState().executionCandidate).toEqual({
+    seatId,
+    votes: 引擎.getState().seats.filter(({ alive }) => alive).length,
+  });
+};
+
 describe("M1-R4 阶段与基础规则内核", () => {
-  test("领域协议提升为 0.2.0 且创建后进入准备阶段", () => {
+  test("当前领域协议创建后进入准备阶段并初始化当日表决状态", () => {
     const 引擎 = 创建引擎();
     初始化(引擎);
 
-    expect(PROTOCOL_VERSION).toBe("0.2.0");
+    expect(PROTOCOL_VERSION).toBe("0.3.0");
     expect(引擎.getState()).toEqual({
-      schemaVersion: "0.2.0",
+      schemaVersion: PROTOCOL_VERSION,
       gameId: GAME_ID,
       ruleset: expect.any(Object),
       seed: "seed-r4-fixed",
@@ -136,6 +197,12 @@ describe("M1-R4 阶段与基础规则内核", () => {
       nightNumber: 0,
       seats: [],
       executionToday: null,
+      nominationsToday: [],
+      activeNomination: null,
+      highestNominationVotes: 0,
+      executionCandidate: null,
+      exilesToday: [],
+      activeExile: null,
       winner: null,
     });
   });
@@ -442,12 +509,14 @@ describe("M1-R4 阶段与基础规则内核", () => {
   test("处决存活目标原子记录处决、死亡并进入夜晚", () => {
     const 引擎 = 创建并开始();
     推进(引擎, "command-to-day");
+    选为处决候选(引擎, "seat-a", "execute-a");
+    const 处决前修订 = 引擎.getState().revision;
 
     const 回执 = 处决(引擎, "seat-a", "command-execute-a");
 
     expect(回执).toMatchObject({
-      revisionBefore: 3,
-      revisionAfter: 6,
+      revisionBefore: 处决前修订,
+      revisionAfter: 处决前修订 + 3,
       status: "accepted",
     });
     expect(
@@ -476,6 +545,7 @@ describe("M1-R4 阶段与基础规则内核", () => {
     const 引擎 = 创建并开始();
     死亡(引擎, "seat-a", "command-kill-a-before-day");
     推进(引擎, "command-to-day-after-death");
+    选为处决候选(引擎, "seat-a", "execute-dead-a");
     const 事件数 = 引擎.getEvents().length;
 
     const 回执 = 处决(引擎, "seat-a", "command-execute-dead-a");
@@ -497,6 +567,7 @@ describe("M1-R4 阶段与基础规则内核", () => {
   test("处决致胜时结束对局而不进入夜晚", () => {
     const 引擎 = 创建并开始();
     推进(引擎, "command-to-day");
+    选为处决候选(引擎, "seat-demon", "execute-demon");
 
     处决(引擎, "seat-demon", "command-execute-demon");
 

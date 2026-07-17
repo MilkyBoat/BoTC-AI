@@ -1,10 +1,10 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://botc-ai.local/schema/domain-protocol-v0.2.0.json",
+  "$id": "https://botc-ai.local/schema/domain-protocol-v0.3.0.json",
   "$ref": "#/definitions/eventStream",
   "definitions": {
     "protocolVersion": {
-      "const": "0.2.0"
+      "const": "0.3.0"
     },
     "stableId": {
       "type": "string",
@@ -168,7 +168,13 @@
         "nightNumber",
         "seats",
         "executionToday",
-        "winner"
+        "winner",
+        "nominationsToday",
+        "activeNomination",
+        "highestNominationVotes",
+        "executionCandidate",
+        "exilesToday",
+        "activeExile"
       ],
       "properties": {
         "schemaVersion": {
@@ -216,6 +222,34 @@
         },
         "winner": {
           "anyOf": [{ "type": "null" }, { "$ref": "#/definitions/winnerState" }]
+        },
+        "nominationsToday": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/nominationRecord" }
+        },
+        "activeNomination": {
+          "anyOf": [
+            { "type": "null" },
+            { "$ref": "#/definitions/activeNomination" }
+          ]
+        },
+        "highestNominationVotes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "executionCandidate": {
+          "anyOf": [
+            { "type": "null" },
+            { "$ref": "#/definitions/executionCandidateState" }
+          ]
+        },
+        "exilesToday": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/exileRecord" }
+        },
+        "activeExile": {
+          "anyOf": [{ "type": "null" }, { "$ref": "#/definitions/activeExile" }]
         }
       }
     },
@@ -391,7 +425,13 @@
     "basicSeatState": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["seatId", "order", "characterType", "alive"],
+      "required": [
+        "seatId",
+        "order",
+        "characterType",
+        "alive",
+        "deadVoteAvailable"
+      ],
       "properties": {
         "seatId": { "$ref": "#/definitions/stableId" },
         "order": {
@@ -400,7 +440,8 @@
           "maximum": 9007199254740991
         },
         "characterType": { "$ref": "#/definitions/characterType" },
-        "alive": { "type": "boolean" }
+        "alive": { "type": "boolean" },
+        "deadVoteAvailable": { "type": "boolean" }
       }
     },
     "executionState": {
@@ -439,6 +480,195 @@
           "else": { "properties": { "reason": { "const": "two-alive" } } }
         }
       ]
+    },
+    "voteDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seatId", "support", "usedDeadVote"],
+      "properties": {
+        "seatId": { "$ref": "#/definitions/stableId" },
+        "support": { "type": "boolean" },
+        "usedDeadVote": { "type": "boolean" }
+      }
+    },
+    "activeNomination": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nominationId",
+        "dayNumber",
+        "nominatorSeatId",
+        "nomineeSeatId",
+        "stage",
+        "votingOrder",
+        "currentVoterIndex",
+        "threshold",
+        "decisions"
+      ],
+      "properties": {
+        "nominationId": { "$ref": "#/definitions/stableId" },
+        "dayNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "nominatorSeatId": { "$ref": "#/definitions/stableId" },
+        "nomineeSeatId": { "$ref": "#/definitions/stableId" },
+        "stage": { "enum": ["defense", "voting", "ready-to-close"] },
+        "votingOrder": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/stableId" }
+        },
+        "currentVoterIndex": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "threshold": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "decisions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/voteDecision" }
+        }
+      }
+    },
+    "nominationResult": {
+      "enum": ["candidate", "tie", "not-enough", "lower"]
+    },
+    "nominationRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nominationId",
+        "dayNumber",
+        "nominatorSeatId",
+        "nomineeSeatId",
+        "total",
+        "threshold",
+        "voterSeatIds",
+        "result",
+        "executionCandidateSeatId"
+      ],
+      "properties": {
+        "nominationId": { "$ref": "#/definitions/stableId" },
+        "dayNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "nominatorSeatId": { "$ref": "#/definitions/stableId" },
+        "nomineeSeatId": { "$ref": "#/definitions/stableId" },
+        "total": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "threshold": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "voterSeatIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/stableId" }
+        },
+        "result": { "$ref": "#/definitions/nominationResult" },
+        "executionCandidateSeatId": {
+          "anyOf": [{ "type": "null" }, { "$ref": "#/definitions/stableId" }]
+        }
+      }
+    },
+    "executionCandidateState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seatId", "votes"],
+      "properties": {
+        "seatId": { "$ref": "#/definitions/stableId" },
+        "votes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        }
+      }
+    },
+    "exileDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seatId", "support"],
+      "properties": {
+        "seatId": { "$ref": "#/definitions/stableId" },
+        "support": { "type": "boolean" }
+      }
+    },
+    "activeExile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "exileId",
+        "dayNumber",
+        "proposerSeatId",
+        "travelerSeatId",
+        "decisions"
+      ],
+      "properties": {
+        "exileId": { "$ref": "#/definitions/stableId" },
+        "dayNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "proposerSeatId": { "$ref": "#/definitions/stableId" },
+        "travelerSeatId": { "$ref": "#/definitions/stableId" },
+        "decisions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/exileDecision" }
+        }
+      }
+    },
+    "exileRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "exileId",
+        "dayNumber",
+        "proposerSeatId",
+        "travelerSeatId",
+        "supporterSeatIds",
+        "total",
+        "threshold",
+        "succeeded"
+      ],
+      "properties": {
+        "exileId": { "$ref": "#/definitions/stableId" },
+        "dayNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "proposerSeatId": { "$ref": "#/definitions/stableId" },
+        "travelerSeatId": { "$ref": "#/definitions/stableId" },
+        "supporterSeatIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/stableId" }
+        },
+        "total": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "threshold": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "succeeded": { "type": "boolean" }
+      }
     },
     "ruleSourceId": { "$ref": "#/definitions/stableId" },
     "gameStartPayload": {
@@ -526,6 +756,243 @@
       "required": ["seatId"],
       "properties": {
         "seatId": { "$ref": "#/definitions/stableId" }
+      }
+    },
+    "nominationOpenPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nominationId", "nominatorSeatId", "nomineeSeatId"],
+      "properties": {
+        "nominationId": { "$ref": "#/definitions/stableId" },
+        "nominatorSeatId": { "$ref": "#/definitions/stableId" },
+        "nomineeSeatId": { "$ref": "#/definitions/stableId" }
+      }
+    },
+    "nominationOpenedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nominationId",
+        "nominatorSeatId",
+        "nomineeSeatId",
+        "dayNumber",
+        "ruleSourceId"
+      ],
+      "properties": {
+        "nominationId": { "$ref": "#/definitions/stableId" },
+        "nominatorSeatId": { "$ref": "#/definitions/stableId" },
+        "nomineeSeatId": { "$ref": "#/definitions/stableId" },
+        "dayNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
+      }
+    },
+    "voteOpenPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nominationId"],
+      "properties": {
+        "nominationId": { "$ref": "#/definitions/stableId" }
+      }
+    },
+    "voteOpenedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nominationId",
+        "nomineeSeatId",
+        "votingOrder",
+        "threshold",
+        "ruleSourceId"
+      ],
+      "properties": {
+        "nominationId": { "$ref": "#/definitions/stableId" },
+        "nomineeSeatId": { "$ref": "#/definitions/stableId" },
+        "votingOrder": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/stableId" }
+        },
+        "threshold": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
+      }
+    },
+    "voteRecordPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nominationId", "voterSeatId", "support"],
+      "properties": {
+        "nominationId": { "$ref": "#/definitions/stableId" },
+        "voterSeatId": { "$ref": "#/definitions/stableId" },
+        "support": { "type": "boolean" }
+      }
+    },
+    "voteRecordedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nominationId",
+        "voterSeatId",
+        "support",
+        "usedDeadVote",
+        "ruleSourceId"
+      ],
+      "properties": {
+        "nominationId": { "$ref": "#/definitions/stableId" },
+        "voterSeatId": { "$ref": "#/definitions/stableId" },
+        "support": { "type": "boolean" },
+        "usedDeadVote": { "type": "boolean" },
+        "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
+      }
+    },
+    "voteClosePayload": {
+      "$ref": "#/definitions/voteOpenPayload"
+    },
+    "voteClosedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nominationId",
+        "nomineeSeatId",
+        "total",
+        "threshold",
+        "voterSeatIds",
+        "result",
+        "highestVotes",
+        "executionCandidateSeatId",
+        "ruleSourceId"
+      ],
+      "properties": {
+        "nominationId": { "$ref": "#/definitions/stableId" },
+        "nomineeSeatId": { "$ref": "#/definitions/stableId" },
+        "total": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "threshold": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "voterSeatIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/stableId" }
+        },
+        "result": { "$ref": "#/definitions/nominationResult" },
+        "highestVotes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "executionCandidateSeatId": {
+          "anyOf": [{ "type": "null" }, { "$ref": "#/definitions/stableId" }]
+        },
+        "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
+      }
+    },
+    "exileOpenPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exileId", "proposerSeatId", "travelerSeatId"],
+      "properties": {
+        "exileId": { "$ref": "#/definitions/stableId" },
+        "proposerSeatId": { "$ref": "#/definitions/stableId" },
+        "travelerSeatId": { "$ref": "#/definitions/stableId" }
+      }
+    },
+    "exileOpenedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "exileId",
+        "proposerSeatId",
+        "travelerSeatId",
+        "dayNumber",
+        "ruleSourceId"
+      ],
+      "properties": {
+        "exileId": { "$ref": "#/definitions/stableId" },
+        "proposerSeatId": { "$ref": "#/definitions/stableId" },
+        "travelerSeatId": { "$ref": "#/definitions/stableId" },
+        "dayNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
+      }
+    },
+    "exileSupportSetPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exileId", "supporterSeatId", "support"],
+      "properties": {
+        "exileId": { "$ref": "#/definitions/stableId" },
+        "supporterSeatId": { "$ref": "#/definitions/stableId" },
+        "support": { "type": "boolean" }
+      }
+    },
+    "exileSupportSetEventPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exileId", "supporterSeatId", "support", "ruleSourceId"],
+      "properties": {
+        "exileId": { "$ref": "#/definitions/stableId" },
+        "supporterSeatId": { "$ref": "#/definitions/stableId" },
+        "support": { "type": "boolean" },
+        "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
+      }
+    },
+    "exileClosePayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exileId"],
+      "properties": {
+        "exileId": { "$ref": "#/definitions/stableId" }
+      }
+    },
+    "exileClosedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "exileId",
+        "travelerSeatId",
+        "total",
+        "threshold",
+        "supporterSeatIds",
+        "succeeded",
+        "ruleSourceId"
+      ],
+      "properties": {
+        "exileId": { "$ref": "#/definitions/stableId" },
+        "travelerSeatId": { "$ref": "#/definitions/stableId" },
+        "total": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "threshold": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "supporterSeatIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/stableId" }
+        },
+        "succeeded": { "type": "boolean" },
+        "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
       }
     },
     "playerExecutedPayload": {
