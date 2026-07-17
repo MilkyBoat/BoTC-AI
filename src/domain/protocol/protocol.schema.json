@@ -1,10 +1,10 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://botc-ai.local/schema/domain-protocol-v0.6.0.json",
+  "$id": "https://botc-ai.local/schema/domain-protocol-v0.7.0.json",
   "$ref": "#/definitions/eventStream",
   "definitions": {
     "protocolVersion": {
-      "const": "0.6.0"
+      "const": "0.7.0"
     },
     "stableId": {
       "type": "string",
@@ -310,6 +310,9 @@
         },
         "badMoonRising": {
           "$ref": "#/definitions/badMoonRisingState"
+        },
+        "sectsAndViolets": {
+          "$ref": "#/definitions/sectsAndVioletsState"
         }
       }
     },
@@ -724,6 +727,102 @@
         }
       }
     },
+    "sectsAndVioletsState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packageId",
+        "version",
+        "setup",
+        "information",
+        "markers",
+        "abilityAbnormalities",
+        "characterChanges",
+        "deathHistory",
+        "publicActions",
+        "madnessRulings",
+        "fangGuJumpUsed"
+      ],
+      "properties": {
+        "packageId": { "$ref": "#/definitions/stableId" },
+        "version": { "$ref": "#/definitions/semanticVersion" },
+        "setup": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "fangGuDelta",
+            "vigormortisDelta",
+            "evilTwinSeatId",
+            "goodTwinSeatId",
+            "demonBluffs",
+            "evilTeamSeatIds"
+          ],
+          "properties": {
+            "fangGuDelta": { "enum": [0, 1] },
+            "vigormortisDelta": { "enum": [-1, 0] },
+            "evilTwinSeatId": {
+              "anyOf": [
+                { "type": "null" },
+                { "$ref": "#/definitions/stableId" }
+              ]
+            },
+            "goodTwinSeatId": {
+              "anyOf": [
+                { "type": "null" },
+                { "$ref": "#/definitions/stableId" }
+              ]
+            },
+            "demonBluffs": {
+              "type": "array",
+              "maxItems": 3,
+              "uniqueItems": true,
+              "items": { "$ref": "#/definitions/stableId" }
+            },
+            "evilTeamSeatIds": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "$ref": "#/definitions/stableId" }
+            }
+          }
+        },
+        "information": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "markers": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "abilityAbnormalities": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "characterChanges": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "deathHistory": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "publicActions": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "madnessRulings": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "fangGuJumpUsed": { "type": "boolean" }
+      }
+    },
     "abilityInstanceInput": {
       "type": "object",
       "additionalProperties": false,
@@ -1114,7 +1213,10 @@
             "saint-executed",
             "mayor-three-alive-no-execution",
             "mastermind-good-executed",
-            "mastermind-no-good-executed"
+            "mastermind-no-good-executed",
+            "evil-twin-good-twin-executed",
+            "klutz-evil-chosen",
+            "vortox-no-execution"
           ]
         },
         "decidedAtRevision": {
@@ -1158,6 +1260,24 @@
           "properties": {
             "alignment": { "const": "good" },
             "reason": { "const": "mastermind-no-good-executed" }
+          }
+        },
+        {
+          "properties": {
+            "alignment": { "const": "evil" },
+            "reason": { "const": "evil-twin-good-twin-executed" }
+          }
+        },
+        {
+          "properties": {
+            "alignment": { "const": "evil" },
+            "reason": { "const": "klutz-evil-chosen" }
+          }
+        },
+        {
+          "properties": {
+            "alignment": { "const": "evil" },
+            "reason": { "const": "vortox-no-execution" }
           }
         }
       ]
@@ -1372,6 +1492,9 @@
         },
         "badMoonRising": {
           "$ref": "#/definitions/badMoonRisingState"
+        },
+        "sectsAndViolets": {
+          "$ref": "#/definitions/sectsAndVioletsState"
         }
       }
     },
@@ -1395,6 +1518,9 @@
         },
         "badMoonRising": {
           "$ref": "#/definitions/badMoonRisingState"
+        },
+        "sectsAndViolets": {
+          "$ref": "#/definitions/sectsAndVioletsState"
         },
         "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
       }

@@ -240,6 +240,7 @@ export const createStartGameCommand = ({
   abilityInstances = [],
   troubleBrewing,
   badMoonRising,
+  sectsAndViolets,
 }) =>
   createCommand({
     commandId,
@@ -252,6 +253,7 @@ export const createStartGameCommand = ({
       abilityInstances,
       ...(troubleBrewing === undefined ? {} : { troubleBrewing }),
       ...(badMoonRising === undefined ? {} : { badMoonRising }),
+      ...(sectsAndViolets === undefined ? {} : { sectsAndViolets }),
     },
   });
 
@@ -372,6 +374,9 @@ export const BASIC_COMMAND_DEFINITIONS = Object.freeze([
               ...(command.payload.badMoonRising === undefined
                 ? {}
                 : { badMoonRising: command.payload.badMoonRising }),
+              ...(command.payload.sectsAndViolets === undefined
+                ? {}
+                : { sectsAndViolets: command.payload.sectsAndViolets }),
               ruleSourceId: BASIC_RULE_SOURCES.PHASE,
             },
           },
@@ -647,6 +652,9 @@ export const BASIC_EVENT_DEFINITIONS = Object.freeze([
         ...(event.payload.badMoonRising === undefined
           ? {}
           : { badMoonRising: event.payload.badMoonRising }),
+        ...(event.payload.sectsAndViolets === undefined
+          ? {}
+          : { sectsAndViolets: event.payload.sectsAndViolets }),
       };
     },
   }),
@@ -857,7 +865,17 @@ export const assertBasicStateInvariants = (state) => {
       invariantError("昼夜阶段与编号不一致");
     }
     const pendingWinner = determineBasicWinner(state.seats);
-    if (pendingWinner) {
+    const evilTwin = state.seats.find(
+      ({ seatId }) => seatId === state.sectsAndViolets?.setup?.evilTwinSeatId,
+    );
+    const goodTwin = state.seats.find(
+      ({ seatId }) => seatId === state.sectsAndViolets?.setup?.goodTwinSeatId,
+    );
+    const goodWinBlockedByTwin =
+      pendingWinner?.alignment === "good" &&
+      evilTwin?.alive === true &&
+      goodTwin?.alive === true;
+    if (pendingWinner && !goodWinBlockedByTwin) {
       invariantError("运行状态遗漏了已经满足的常规胜负", pendingWinner);
     }
     return;
@@ -871,10 +889,13 @@ export const assertBasicStateInvariants = (state) => {
     "mayor-three-alive-no-execution": "good",
     "mastermind-good-executed": "evil",
     "mastermind-no-good-executed": "good",
+    "evil-twin-good-twin-executed": "evil",
+    "klutz-evil-chosen": "evil",
+    "vortox-no-execution": "evil",
   };
   const specialAlignment = specialWinnerAlignments[state.winner.reason];
   const winnerRevisionMatches =
-    state.troubleBrewing || state.badMoonRising
+    state.troubleBrewing || state.badMoonRising || state.sectsAndViolets
       ? state.winner.decidedAtRevision <= state.revision
       : state.winner.decidedAtRevision === state.revision;
   if (specialAlignment !== undefined) {

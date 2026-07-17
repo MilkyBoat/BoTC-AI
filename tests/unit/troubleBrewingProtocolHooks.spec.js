@@ -113,9 +113,9 @@ const 用钩子创建角色包 = (ruleHooks) =>
     ruleHooks,
   });
 
-describe("M1-R7 在领域协议 0.6.0 下的角色包结算钩子回归", () => {
-  test("协议升级为 0.6.0，普通空框架对局仍可不带剧本字段", () => {
-    expect(PROTOCOL_VERSION).toBe("0.6.0");
+describe("M1-R7 在领域协议 0.7.0 下的角色包结算钩子回归", () => {
+  test("协议升级为 0.7.0，普通空框架对局仍可不带剧本字段", () => {
+    expect(PROTOCOL_VERSION).toBe("0.7.0");
     const 引擎 = 创建引擎();
     初始化(引擎);
 
@@ -137,12 +137,12 @@ describe("M1-R7 在领域协议 0.6.0 下的角色包结算钩子回归", () => 
     expect(引擎.getState()).not.toHaveProperty("troubleBrewing");
   });
 
-  test("0.5.0 旧事件流不会被 0.6.0 静默迁移", () => {
+  test("0.6.0 旧事件流不会被 0.7.0 静默迁移", () => {
     const 引擎 = 创建引擎();
     初始化(引擎);
     const 旧流 = JSON.parse(JSON.stringify(引擎.exportEventStream()));
-    旧流.formatVersion = "0.5.0";
-    旧流.protocolVersion = "0.5.0";
+    旧流.formatVersion = "0.6.0";
+    旧流.protocolVersion = "0.6.0";
 
     expect(() =>
       restoreDomainProtocol(旧流, {

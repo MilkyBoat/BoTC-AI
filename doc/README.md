@@ -19,6 +19,7 @@
 - [M1-R6 角色能力执行框架](modify/2026-07-17-role-ability-execution-framework.md)：实现版本化角色规则包、能力实例、确定性触发队列、持续/延迟效果生命周期和结构化说书人裁量任务。
 - [M1-R7《暗流涌动》规则包](modify/2026-07-17-trouble-brewing-rules-package.md)：实现固定 22 角色来源、5 至 15 人开局、两套夜间队列、角色能力、保护/继任/特殊胜负、权限投影和事件重放。
 - [M1-R8《黯月初升》规则包](modify/2026-07-17-bad-moon-rising-rules-package.md)：实现固定 25 角色来源、教父设置与疯子认知、两套夜间队列、死亡/免死/复活、僵怖和主谋特殊流程、权限投影和事件重放。
+- [M1-R9《梦殒春宵》规则包](modify/2026-07-17-sects-and-violets-rules-package.md)：实现固定 25 角色来源、人数调整与镜像双子设置、两套夜序、严格错误信息、结构化疯狂裁量、角色变化、死亡触发、权限投影和事件重放。
 - [M2-R2 Wiki 同步与清洗工具](modify/2026-07-17-wiki-sync-cleaning.md)：定义固定修订同步、DOM 清洗、Markdown/元数据输出、失败恢复与抓取报告。
 
 ## 维护规则

@@ -48,9 +48,9 @@ const createStartedGame = () => {
   return { engine, setup };
 };
 
-describe("M1-R8 领域协议 0.6.0 与《黯月初升》绑定", () => {
+describe("M1-R8 领域协议 0.7.0 与《黯月初升》绑定", () => {
   test("协议升级并固定规则包身份和严格 BMR 子状态", () => {
-    expect(PROTOCOL_VERSION).toBe("0.6.0");
+    expect(PROTOCOL_VERSION).toBe("0.7.0");
     const { engine, setup } = createStartedGame();
     expect(engine.getState()).toMatchObject({
       lifecycle: "running",

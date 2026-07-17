@@ -868,12 +868,18 @@ export const assertNominationStateInvariants = (state) => {
   }
   const active = state.activeNomination;
   if (active !== null) {
+    const witchDeath = state.sectsAndViolets?.deathHistory?.at(-1)?.content;
+    const witchKilledNominator =
+      witchDeath?.actuallyDied === true &&
+      witchDeath.causeId === "snv.witch" &&
+      witchDeath.targetSeatId === active.nominatorSeatId;
     if (
       active.dayNumber !== state.dayNumber ||
       ids.includes(active.nominationId) ||
       nominators.includes(active.nominatorSeatId) ||
       nominees.includes(active.nomineeSeatId) ||
-      !findSeat(state, active.nominatorSeatId)?.alive ||
+      (!findSeat(state, active.nominatorSeatId)?.alive &&
+        !witchKilledNominator) ||
       findSeat(state, active.nomineeSeatId)?.characterType === "traveler"
     ) {
       invariantError("活动提名资格或引用无效");

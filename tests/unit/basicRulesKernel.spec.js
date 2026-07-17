@@ -30,6 +30,27 @@ const 基础席位 = Object.freeze([
   { seatId: "seat-d", order: 5, characterType: "townsfolk" },
 ]);
 
+const 梦殒春宵状态 = Object.freeze({
+  packageId: "botc-ai.sects-and-violets",
+  version: "0.1.0",
+  setup: {
+    fangGuDelta: 0,
+    vigormortisDelta: 0,
+    evilTwinSeatId: null,
+    goodTwinSeatId: null,
+    demonBluffs: [],
+    evilTeamSeatIds: ["seat-demon", "seat-c"],
+  },
+  information: [],
+  markers: [],
+  abilityAbnormalities: [],
+  characterChanges: [],
+  deathHistory: [],
+  publicActions: [],
+  madnessRulings: [],
+  fangGuJumpUsed: false,
+});
+
 const 创建依赖 = () => {
   let 序号 = 0;
   return {
@@ -184,7 +205,7 @@ describe("M1-R4 阶段与基础规则内核", () => {
     const 引擎 = 创建引擎();
     初始化(引擎);
 
-    expect(PROTOCOL_VERSION).toBe("0.6.0");
+    expect(PROTOCOL_VERSION).toBe("0.7.0");
     expect(引擎.getState()).toEqual({
       schemaVersion: PROTOCOL_VERSION,
       gameId: GAME_ID,
@@ -248,6 +269,39 @@ describe("M1-R4 阶段与基础规则内核", () => {
       type: EVENT_TYPES.GAME_STARTED,
       payload: { ruleSourceId: BASIC_RULE_SOURCES.PHASE },
     });
+  });
+
+  test("0.7.0 开局原子透传严格可选《梦殒春宵》子状态", () => {
+    const 引擎 = 创建引擎();
+    初始化(引擎);
+
+    expect(开始(引擎, 基础席位, { sectsAndViolets: 梦殒春宵状态 }).status).toBe(
+      "accepted",
+    );
+    expect(引擎.getEvents().at(-1).payload.sectsAndViolets).toEqual(
+      梦殒春宵状态,
+    );
+    expect(引擎.getState().sectsAndViolets).toEqual(梦殒春宵状态);
+
+    const 非法引擎 = 创建引擎();
+    初始化(非法引擎);
+    const 非法命令 = JSON.parse(
+      JSON.stringify(
+        createStartGameCommand({
+          commandId: "command-start-invalid-snv-state",
+          gameId: GAME_ID,
+          expectedRevision: 非法引擎.getState().revision,
+          actor: HOST,
+          seats: 基础席位,
+          sectsAndViolets: 梦殒春宵状态,
+        }),
+      ),
+    );
+    非法命令.payload.sectsAndViolets.patch = {};
+
+    expect(() => 非法引擎.dispatch(非法命令)).toThrow(
+      expect.objectContaining({ code: "INVALID_COMMAND_PAYLOAD" }),
+    );
   });
 
   test.each([
