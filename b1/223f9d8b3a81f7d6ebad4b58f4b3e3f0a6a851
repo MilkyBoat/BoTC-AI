@@ -1,0 +1,41 @@
+src/domain/views/README.md
+  s_e85f3d0c8cc215::t_ff2cabeecb1864 1-14
+src/domain/views/builtins.js
+  s_e85f3d0c8cc215::t_2059c03f5f23dd 1-241
+src/domain/views/constants.js
+  s_e85f3d0c8cc215::t_af9477ffa6ab93 1-11
+src/domain/views/errors.js
+  s_e85f3d0c8cc215::t_bb7ccc60fc3c85 1-13
+src/domain/views/index.js
+  s_e85f3d0c8cc215::t_e0355ca5eab33d 1-3
+src/domain/views/participant-views.schema.json
+  s_e85f3d0c8cc215::t_a54712e9d77c1e 1-687
+src/domain/views/service.js
+  s_e85f3d0c8cc215::t_378fbf6e54f962 1-466
+src/domain/views/validators.js
+  s_e85f3d0c8cc215::t_9f27feea95777f 1-125
+tests/fixtures/participantViewSource.js
+  s_e85f3d0c8cc215::t_56d443f177c787 1-274
+tests/scenario/participantViewLeakage.spec.js
+  s_e85f3d0c8cc215::t_ec8485d2a6cd72 1-163
+tests/unit/participantViews.spec.js
+  s_e85f3d0c8cc215::t_644ed9adb24bc8 1-460
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "b1223f9d8b3a81f7d6ebad4b58f4b3e3f0a6a851",
+  "prompts": {},
+  "sessions": {
+    "s_e85f3d0c8cc215": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f6df1-230a-73b0-ada7-a9507061cf49",
+        "model": "unknown"
+      },
+      "human_author": "MilkyBoat <1214208054@qq.com>"
+    }
+  },
+  "attestation_metadata": {},
+  "remote_transcripts": {}
+}
