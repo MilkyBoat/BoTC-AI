@@ -1,0 +1,67 @@
+doc/README.md
+  s_9a07617acdd348::t_b049566511e5ee 18
+doc/architecture/architecture.md
+  s_9a07617acdd348::t_214c86bac064ad 64,89,94-97,99,101,105,118,124
+doc/milestone/roadmap.md
+  s_9a07617acdd348::t_274181e332deba 32
+doc/product/product.md
+  s_9a07617acdd348::t_c837e48a3c091a 7,89-91,118,124-126,128,130,132,136,145,147,276-277
+src/domain/protocol/README.md
+  s_9a07617acdd348::t_057c5299553fd5 3,52-57,59-61,69-70
+src/domain/protocol/builtins.js
+  s_9a07617acdd348::t_c32f9c44e5bf05 13-16,76,99-104,109
+src/domain/protocol/constants.js
+  s_9a07617acdd348::t_b9c8912af90d2b 1,3,12-18,29-35
+src/domain/protocol/engine.js
+  s_9a07617acdd348::t_01d90a9560f603 19,452,695,706
+src/domain/protocol/index.js
+  s_9a07617acdd348::t_fdc582cb545c9c 16-22
+src/domain/protocol/protocol.schema.json
+  s_9a07617acdd348::t_3b70c089109aeb 3,7,171-177,225-252,428-434,443-444,484-672,761-997
+src/domain/rules/index.js
+  s_9a07617acdd348::t_bcbc393cf10424 13-26
+src/domain/rules/nomination.js
+  s_9a07617acdd348::t_29018b02811d1d 1-944
+src/domain/views/README.md
+  s_9a07617acdd348::t_3aea901ddeece8 3,13-15
+src/domain/views/builtins.js
+  s_9a07617acdd348::t_1ce8493070d3dc 54-253,363-522
+src/domain/views/constants.js
+  s_9a07617acdd348::t_0c31cf191428a9 1,4
+src/domain/views/participant-views.schema.json
+  s_9a07617acdd348::t_07e395454adbae 3,5,73,78-79
+src/domain/views/service.js
+  s_9a07617acdd348::t_d5e4147354c6f7 305-331
+tests/fixtures/participantViewSource.js
+  s_9a07617acdd348::t_e4571636233043 2,52,72-76,131-135,175-179
+tests/scenario/basicRulesReplay.spec.js
+  s_9a07617acdd348::t_839efd8733a00f 3,5-7,71-118,137,154-155,165-169,173-176
+tests/unit/basicRulesKernel.spec.js
+  s_9a07617acdd348::t_2ca955c2e19a6d 4,6-8,125-181,183,187,189,200-205,512-513,518-519,548,570
+tests/unit/domainProtocol.spec.js
+  s_9a07617acdd348::t_e3436c2f10525d 175-180
+tests/unit/nominationVotingRules.spec.js
+  s_9a07617acdd348::t_b06c971bee9e3b 1-872
+tests/unit/nominationVotingViews.spec.js
+  s_9a07617acdd348::t_8e83099ef4593d 1-218
+tests/unit/participantViews.spec.js
+  s_9a07617acdd348::t_948ce3de01d69f 80-84
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "c768f8954a7dd6eade75bc843a5239ca99e369cf",
+  "prompts": {},
+  "sessions": {
+    "s_9a07617acdd348": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f6e3d-1e6e-7963-bef8-5fa32d431684",
+        "model": "unknown"
+      },
+      "human_author": "MilkyBoat <1214208054@qq.com>"
+    }
+  },
+  "attestation_metadata": {},
+  "remote_transcripts": {}
+}
