@@ -1,0 +1,53 @@
+knowledge/rulesets/m1-role-ability-framework-package.json
+  s_9a07617acdd348::t_f0b9b98a690fb1 1-21
+knowledge/rulesets/role-ability-package.schema.json
+  s_f9a797592da830::t_ab9a834abd89e1 1-195
+src/domain/abilities/constants.js
+  s_9a07617acdd348::t_973d10dbd23756 1-26
+src/domain/abilities/index.js
+  s_9a07617acdd348::t_68a5cf54d13af0 1-25
+src/domain/protocol/builtins.js
+  s_9a07617acdd348::t_0d9dff717b6d28 9,30,39,46-52,70-76,83,106,122-127
+src/domain/protocol/constants.js
+  s_9a07617acdd348::t_c0cd0cdf16ea6c 1,3
+src/domain/protocol/index.js
+  s_9a07617acdd348::t_7dd8f98efc33dc 10-14
+src/domain/protocol/protocol.schema.json
+  s_f9a797592da830::t_32141872f382ec 3,7,67-77,129,163-165,192-198,210-212,277-306,411,431-436,454,459-461,511-876,1107,1113-1117,1124,1131-1135
+src/domain/rules/basic.js
+  s_9a07617acdd348::t_ed1a99dcaa71dc 197,205,272,283-303,310,326-336,545-551
+tests/fixtures/participantViewSource.js
+  s_9a07617acdd348::t_ffa4fe3e730bd3 1-5,290
+tests/scenario/domainProtocolReplay.spec.js
+  s_9a07617acdd348::t_9c0e676ed9f229 3,159
+tests/unit/basicRulesKernel.spec.js
+  s_9a07617acdd348::t_4013392b112c67 187,192,207-212
+tests/unit/nominationVotingRules.spec.js
+  s_9a07617acdd348::t_3233eb75009aa9 202,205
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "25a0d6bcd27d700bf2096adff74f0ad7c1a58a71",
+  "prompts": {},
+  "sessions": {
+    "s_9a07617acdd348": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f6e3d-1e6e-7963-bef8-5fa32d431684",
+        "model": "unknown"
+      },
+      "human_author": "MilkyBoat <1214208054@qq.com>"
+    },
+    "s_f9a797592da830": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f6eb3-be21-7c20-8cc0-2efd70a221c5",
+        "model": "unknown"
+      },
+      "human_author": "MilkyBoat <1214208054@qq.com>"
+    }
+  },
+  "attestation_metadata": {},
+  "remote_transcripts": {}
+}
