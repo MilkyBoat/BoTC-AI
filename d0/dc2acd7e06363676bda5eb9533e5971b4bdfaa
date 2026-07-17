@@ -1,0 +1,111 @@
+doc/README.md
+  s_f9a797592da830::t_10b95edd579121 20
+doc/architecture/architecture.md
+  s_f9a797592da830::t_2e9ae023dd0aa8 60,64,89,93,98,101-102,104,108,137
+doc/product/product.md
+  s_b69e62db652937::t_50203be26027a3 7,118,124,128,130,132-140,155,276-291
+knowledge/rulesets/role-ability-package.schema.json
+  s_2e0dcd9f437885::t_779b67f09ee9f1 24-29,87-126
+knowledge/rulesets/trouble-brewing-sources.json
+  s_2e0dcd9f437885::t_31489cd949a484 1-248
+src/domain/abilities/framework.js
+  s_f9a797592da830::t_24ce367386d11b 203-230,613-631,655-662,828-847,1546-1549
+src/domain/abilities/package.js
+  s_3670b2ba1c25fb::t_7a7c287595bca1 11-17,34-45,82-94,112,187-204,235,247,260-266,271
+src/domain/protocol/README.md
+  s_b69e62db652937::t_e4ae2f80634fc9 3,65-67,75-76,87-94,101
+src/domain/protocol/constants.js
+  s_3670b2ba1c25fb::t_228cbf568d812b 1,3
+src/domain/protocol/protocol.schema.json
+  s_f9a797592da830::t_005371735e9db4 3,7,307-309,489-493,515-602,690,988-995,1002,1004-1025,1233-1235,1254-1256,1580-1587,1590,1592-1613
+src/domain/rules/basic.js
+  s_f9a797592da830::t_46254b0f557cf9 140-173,232,240-244,320-327,358-360,371,376-382,422,427-433,495,500-506,623-625,845-858,864
+src/domain/rulesets/trouble-brewing/catalog.js
+  s_f9a797592da830::t_c3f09f5ec1b383 1-82
+src/domain/rulesets/trouble-brewing/events.js
+  s_f9a797592da830::t_f609e9c6d780e2 1-477
+src/domain/rulesets/trouble-brewing/handlers.js
+  s_f9a797592da830::t_7f4aa85152d8fe 1-683
+src/domain/rulesets/trouble-brewing/hooks.js
+  s_f9a797592da830::t_2e7df2ce132b4c 1-186
+src/domain/rulesets/trouble-brewing/index.js
+  s_f9a797592da830::t_3d4ce6de19dbea 1-51
+src/domain/rulesets/trouble-brewing/invariants.js
+  s_f9a797592da830::t_35f332c1718931 1-92
+src/domain/rulesets/trouble-brewing/reactions.js
+  s_f9a797592da830::t_139772f0700737 1-213
+src/domain/rulesets/trouble-brewing/registration.js
+  s_f9a797592da830::t_c5b844f9113654 1-34
+src/domain/rulesets/trouble-brewing/resolution.js
+  s_f9a797592da830::t_efd2c070ba5309 1-157
+src/domain/rulesets/trouble-brewing/role-package.js
+  s_f9a797592da830::t_d67050eafb2a0b 1-226
+src/domain/rulesets/trouble-brewing/rules.js
+  s_f9a797592da830::t_4e202bb964c6f7 1-454
+src/domain/rulesets/trouble-brewing/runtime.js
+  s_f9a797592da830::t_3cf532ef90d502 1-155
+src/domain/rulesets/trouble-brewing/setup.js
+  s_f9a797592da830::t_6615d17bb3a980 1-382
+src/domain/rulesets/trouble-brewing/views.js
+  s_f9a797592da830::t_c2cc5cd76f7fdc 1-60
+tests/scenario/troubleBrewingReplay.spec.js
+  s_f9a797592da830::t_5cd217e0ea02d3 1-159
+tests/unit/basicRulesKernel.spec.js
+  s_3670b2ba1c25fb::t_900b87ed021e36 187
+tests/unit/nominationVotingRules.spec.js
+  s_3670b2ba1c25fb::t_b3c3d6eca2620b 202,205
+tests/unit/roleAbilityPackage.spec.js
+  s_2e0dcd9f437885::t_63234a74bc2eb7 9,13-26,145-268
+tests/unit/troubleBrewingEngine.spec.js
+  s_f9a797592da830::t_52777fe27e8933 1-485
+tests/unit/troubleBrewingProtocolHooks.spec.js
+  s_3670b2ba1c25fb::t_78b4dca7358dd0 1-410
+tests/unit/troubleBrewingRoleBehaviors.spec.js
+  s_f9a797592da830::t_7cb84bf0940999 1-517
+tests/unit/troubleBrewingRules.spec.js
+  s_f9a797592da830::t_5cb9ba9dec3002 1-333
+tests/unit/troubleBrewingViews.spec.js
+  s_f9a797592da830::t_cd44b2aa63a581 1-119
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "d0dc2acd7e06363676bda5eb9533e5971b4bdfaa",
+  "prompts": {},
+  "sessions": {
+    "s_2e0dcd9f437885": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f6eda-268e-7bd3-bd6c-d779be3413d1",
+        "model": "unknown"
+      },
+      "human_author": "MilkyBoat <1214208054@qq.com>"
+    },
+    "s_3670b2ba1c25fb": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f6ede-a5f7-78f3-b67d-b8ffd73a5cbc",
+        "model": "unknown"
+      },
+      "human_author": "MilkyBoat <1214208054@qq.com>"
+    },
+    "s_b69e62db652937": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f6e3b-35cc-74a1-a90c-6b8cd8a3116f",
+        "model": "unknown"
+      },
+      "human_author": "MilkyBoat <1214208054@qq.com>"
+    },
+    "s_f9a797592da830": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f6eb3-be21-7c20-8cc0-2efd70a221c5",
+        "model": "unknown"
+      },
+      "human_author": "MilkyBoat <1214208054@qq.com>"
+    }
+  },
+  "attestation_metadata": {},
+  "remote_transcripts": {}
+}
