@@ -1,0 +1,687 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://botc-ai.local/schema/participant-views-v0.1.0.json",
+  "definitions": {
+    "version": { "const": "0.1.0" },
+    "stableId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "text": { "type": "string", "minLength": 1, "maxLength": 4096 },
+    "order": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+    "ruleset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "version",
+        "canonicalLanguage",
+        "sourceManifestVersion",
+        "integrity"
+      ],
+      "properties": {
+        "id": { "$ref": "#/definitions/stableId" },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "canonicalLanguage": {
+          "type": "string",
+          "pattern": "^[A-Za-z]{2,3}(?:-[A-Za-z0-9]{2,8})*$"
+        },
+        "sourceManifestVersion": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "integrity": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" }
+      }
+    },
+    "specialRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ruleId", "order", "text"],
+      "properties": {
+        "ruleId": { "$ref": "#/definitions/stableId" },
+        "order": { "$ref": "#/definitions/order" },
+        "text": { "$ref": "#/definitions/text" }
+      }
+    },
+    "game": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gameId",
+        "ruleset",
+        "status",
+        "phase",
+        "publicSpecialRules"
+      ],
+      "properties": {
+        "gameId": { "$ref": "#/definitions/stableId" },
+        "ruleset": { "$ref": "#/definitions/ruleset" },
+        "status": { "enum": ["preparing", "running", "paused", "ended"] },
+        "phase": { "enum": ["setup", "first-night", "day", "night", "ended"] },
+        "publicSpecialRules": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/specialRule" }
+        }
+      }
+    },
+    "publicState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["alive", "publicRoleId"],
+      "properties": {
+        "alive": { "type": "boolean" },
+        "publicRoleId": {
+          "anyOf": [{ "$ref": "#/definitions/stableId" }, { "type": "null" }]
+        }
+      }
+    },
+    "publicSeat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seatId",
+        "order",
+        "displayName",
+        "controllerKind",
+        "publicState"
+      ],
+      "properties": {
+        "seatId": { "$ref": "#/definitions/stableId" },
+        "order": { "$ref": "#/definitions/order" },
+        "displayName": { "$ref": "#/definitions/text" },
+        "controllerKind": { "enum": ["human", "ai", "unassigned"] },
+        "publicState": { "$ref": "#/definitions/publicState" }
+      }
+    },
+    "truthStatus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["statusId", "type", "active"],
+      "properties": {
+        "statusId": { "$ref": "#/definitions/stableId" },
+        "type": {
+          "enum": ["drunk", "poisoned", "protected", "ability-disabled"]
+        },
+        "active": { "type": "boolean" },
+        "sourceId": { "$ref": "#/definitions/stableId" }
+      }
+    },
+    "storytellerNote": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["noteId", "order", "text"],
+      "properties": {
+        "noteId": { "$ref": "#/definitions/stableId" },
+        "order": { "$ref": "#/definitions/order" },
+        "text": { "$ref": "#/definitions/text" }
+      }
+    },
+    "truth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["roleId", "alignment", "statuses", "storytellerNotes"],
+      "properties": {
+        "roleId": { "$ref": "#/definitions/stableId" },
+        "alignment": { "enum": ["good", "evil"] },
+        "statuses": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/truthStatus" }
+        },
+        "storytellerNotes": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/storytellerNote" }
+        }
+      }
+    },
+    "knownStatus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["knowledgeId", "order", "type", "text"],
+      "properties": {
+        "knowledgeId": { "$ref": "#/definitions/stableId" },
+        "order": { "$ref": "#/definitions/order" },
+        "type": {
+          "enum": [
+            "drunk",
+            "poisoned",
+            "protected",
+            "ability-disabled",
+            "role-change",
+            "other"
+          ]
+        },
+        "text": { "$ref": "#/definitions/text" }
+      }
+    },
+    "perception": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["roleId", "alignment", "knownStatuses"],
+      "properties": {
+        "roleId": { "$ref": "#/definitions/stableId" },
+        "alignment": { "enum": ["good", "evil"] },
+        "knownStatuses": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/knownStatus" }
+        }
+      }
+    },
+    "legalAction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["actionId", "order", "type", "label"],
+      "properties": {
+        "actionId": { "$ref": "#/definitions/stableId" },
+        "order": { "$ref": "#/definitions/order" },
+        "type": { "$ref": "#/definitions/stableId" },
+        "label": { "$ref": "#/definitions/text" }
+      }
+    },
+    "actionHistory": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["actionId", "order", "type", "summary", "status"],
+      "properties": {
+        "actionId": { "$ref": "#/definitions/stableId" },
+        "order": { "$ref": "#/definitions/order" },
+        "type": { "$ref": "#/definitions/stableId" },
+        "summary": { "$ref": "#/definitions/text" },
+        "status": { "enum": ["pending", "completed", "rejected", "cancelled"] }
+      }
+    },
+    "sourceSeat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seatId",
+        "order",
+        "displayName",
+        "controllerKind",
+        "publicState",
+        "truth",
+        "perception",
+        "legalActions",
+        "actionHistory"
+      ],
+      "properties": {
+        "seatId": { "$ref": "#/definitions/stableId" },
+        "order": { "$ref": "#/definitions/order" },
+        "displayName": { "$ref": "#/definitions/text" },
+        "controllerKind": { "enum": ["human", "ai", "unassigned"] },
+        "publicState": { "$ref": "#/definitions/publicState" },
+        "truth": { "$ref": "#/definitions/truth" },
+        "perception": { "$ref": "#/definitions/perception" },
+        "legalActions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/legalAction" }
+        },
+        "actionHistory": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/actionHistory" }
+        }
+      }
+    },
+    "announcementRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["recordId", "order", "type", "text", "historical"],
+      "properties": {
+        "recordId": { "$ref": "#/definitions/stableId" },
+        "order": { "$ref": "#/definitions/order" },
+        "type": { "const": "announcement" },
+        "text": { "$ref": "#/definitions/text" },
+        "historical": { "type": "boolean" }
+      }
+    },
+    "publicMessageRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recordId",
+        "order",
+        "type",
+        "senderSeatId",
+        "text",
+        "historical"
+      ],
+      "properties": {
+        "recordId": { "$ref": "#/definitions/stableId" },
+        "order": { "$ref": "#/definitions/order" },
+        "type": { "const": "public-message" },
+        "senderSeatId": { "$ref": "#/definitions/stableId" },
+        "text": { "$ref": "#/definitions/text" },
+        "historical": { "type": "boolean" }
+      }
+    },
+    "nominationRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recordId",
+        "order",
+        "type",
+        "nominatorSeatId",
+        "nomineeSeatId",
+        "status",
+        "historical"
+      ],
+      "properties": {
+        "recordId": { "$ref": "#/definitions/stableId" },
+        "order": { "$ref": "#/definitions/order" },
+        "type": { "const": "nomination" },
+        "nominatorSeatId": { "$ref": "#/definitions/stableId" },
+        "nomineeSeatId": { "$ref": "#/definitions/stableId" },
+        "status": { "enum": ["open", "resolved", "cancelled"] },
+        "historical": { "type": "boolean" }
+      }
+    },
+    "voteResultRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recordId",
+        "order",
+        "type",
+        "nomineeSeatId",
+        "total",
+        "threshold",
+        "voterSeatIds",
+        "historical"
+      ],
+      "properties": {
+        "recordId": { "$ref": "#/definitions/stableId" },
+        "order": { "$ref": "#/definitions/order" },
+        "type": { "const": "vote-result" },
+        "nomineeSeatId": { "$ref": "#/definitions/stableId" },
+        "total": { "type": "integer", "minimum": 0 },
+        "threshold": { "type": "integer", "minimum": 0 },
+        "voterSeatIds": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/stableId" },
+          "uniqueItems": true
+        },
+        "historical": { "type": "boolean" }
+      }
+    },
+    "observerVoteResultRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recordId",
+        "order",
+        "type",
+        "nomineeSeatId",
+        "total",
+        "threshold",
+        "historical"
+      ],
+      "properties": {
+        "recordId": { "$ref": "#/definitions/stableId" },
+        "order": { "$ref": "#/definitions/order" },
+        "type": { "const": "vote-result" },
+        "nomineeSeatId": { "$ref": "#/definitions/stableId" },
+        "total": { "type": "integer", "minimum": 0 },
+        "threshold": { "type": "integer", "minimum": 0 },
+        "voterSeatIds": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/stableId" },
+          "uniqueItems": true
+        },
+        "historical": { "type": "boolean" }
+      }
+    },
+    "publicRecord": {
+      "oneOf": [
+        { "$ref": "#/definitions/announcementRecord" },
+        { "$ref": "#/definitions/publicMessageRecord" },
+        { "$ref": "#/definitions/nominationRecord" },
+        { "$ref": "#/definitions/voteResultRecord" }
+      ]
+    },
+    "observerPublicRecord": {
+      "oneOf": [
+        { "$ref": "#/definitions/announcementRecord" },
+        { "$ref": "#/definitions/publicMessageRecord" },
+        { "$ref": "#/definitions/nominationRecord" },
+        { "$ref": "#/definitions/observerVoteResultRecord" }
+      ]
+    },
+    "seatInformation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["informationId", "order", "seatId", "kind", "text"],
+      "properties": {
+        "informationId": { "$ref": "#/definitions/stableId" },
+        "order": { "$ref": "#/definitions/order" },
+        "seatId": { "$ref": "#/definitions/stableId" },
+        "kind": {
+          "enum": ["role-information", "storyteller-message", "action-result"]
+        },
+        "text": { "$ref": "#/definitions/text" }
+      }
+    },
+    "adjudicationTask": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "taskId",
+        "order",
+        "kind",
+        "status",
+        "summary",
+        "candidateSeatIds"
+      ],
+      "properties": {
+        "taskId": { "$ref": "#/definitions/stableId" },
+        "order": { "$ref": "#/definitions/order" },
+        "kind": { "$ref": "#/definitions/stableId" },
+        "status": { "enum": ["pending", "resolved", "cancelled"] },
+        "summary": { "$ref": "#/definitions/text" },
+        "candidateSeatIds": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/stableId" },
+          "uniqueItems": true
+        }
+      }
+    },
+    "auditEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["auditId", "order", "kind", "summary"],
+      "properties": {
+        "auditId": { "$ref": "#/definitions/stableId" },
+        "order": { "$ref": "#/definitions/order" },
+        "kind": { "enum": ["command", "event", "rejection"] },
+        "summary": { "$ref": "#/definitions/text" }
+      }
+    },
+    "observerPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "includePublicMessages",
+        "includeVoteDetails",
+        "includeHistory"
+      ],
+      "properties": {
+        "includePublicMessages": { "type": "boolean" },
+        "includeVoteDetails": { "type": "boolean" },
+        "includeHistory": { "type": "boolean" }
+      }
+    },
+    "participantViewSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "game",
+        "seats",
+        "publicRecords",
+        "seatInformation",
+        "adjudicationTasks",
+        "auditEntries",
+        "observerPolicy"
+      ],
+      "properties": {
+        "schemaVersion": { "$ref": "#/definitions/version" },
+        "game": { "$ref": "#/definitions/game" },
+        "seats": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/sourceSeat" }
+        },
+        "publicRecords": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/publicRecord" }
+        },
+        "seatInformation": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/seatInformation" }
+        },
+        "adjudicationTasks": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/adjudicationTask" }
+        },
+        "auditEntries": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/auditEntry" }
+        },
+        "observerPolicy": { "$ref": "#/definitions/observerPolicy" }
+      }
+    },
+    "publicSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "viewType",
+        "game",
+        "seats",
+        "publicRecords"
+      ],
+      "properties": {
+        "schemaVersion": { "$ref": "#/definitions/version" },
+        "viewType": { "const": "public" },
+        "game": { "$ref": "#/definitions/game" },
+        "seats": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/publicSeat" }
+        },
+        "publicRecords": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/publicRecord" }
+        }
+      }
+    },
+    "observerSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "viewType",
+        "game",
+        "seats",
+        "publicRecords"
+      ],
+      "properties": {
+        "schemaVersion": { "$ref": "#/definitions/version" },
+        "viewType": { "const": "observer" },
+        "game": { "$ref": "#/definitions/game" },
+        "seats": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/publicSeat" }
+        },
+        "publicRecords": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/observerPublicRecord" }
+        }
+      }
+    },
+    "seatSelf": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seatId",
+        "perceivedRoleId",
+        "perceivedAlignment",
+        "knownStatuses",
+        "legalActions",
+        "actionHistory",
+        "information"
+      ],
+      "properties": {
+        "seatId": { "$ref": "#/definitions/stableId" },
+        "perceivedRoleId": { "$ref": "#/definitions/stableId" },
+        "perceivedAlignment": { "enum": ["good", "evil"] },
+        "knownStatuses": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/knownStatus" }
+        },
+        "legalActions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/legalAction" }
+        },
+        "actionHistory": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/actionHistory" }
+        },
+        "information": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/seatInformation" }
+        }
+      }
+    },
+    "seatSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "viewType",
+        "game",
+        "seats",
+        "publicRecords",
+        "self"
+      ],
+      "properties": {
+        "schemaVersion": { "$ref": "#/definitions/version" },
+        "viewType": { "const": "seat" },
+        "game": { "$ref": "#/definitions/game" },
+        "seats": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/publicSeat" }
+        },
+        "publicRecords": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/publicRecord" }
+        },
+        "self": { "$ref": "#/definitions/seatSelf" }
+      }
+    },
+    "storytellerSeat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seatId",
+        "order",
+        "displayName",
+        "controllerKind",
+        "publicState",
+        "truth",
+        "perception",
+        "legalActions",
+        "actionHistory",
+        "information"
+      ],
+      "properties": {
+        "seatId": { "$ref": "#/definitions/stableId" },
+        "order": { "$ref": "#/definitions/order" },
+        "displayName": { "$ref": "#/definitions/text" },
+        "controllerKind": { "enum": ["human", "ai", "unassigned"] },
+        "publicState": { "$ref": "#/definitions/publicState" },
+        "truth": { "$ref": "#/definitions/truth" },
+        "perception": { "$ref": "#/definitions/perception" },
+        "legalActions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/legalAction" }
+        },
+        "actionHistory": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/actionHistory" }
+        },
+        "information": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/seatInformation" }
+        }
+      }
+    },
+    "storytellerSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "viewType",
+        "game",
+        "seats",
+        "publicRecords",
+        "adjudicationTasks",
+        "auditEntries"
+      ],
+      "properties": {
+        "schemaVersion": { "$ref": "#/definitions/version" },
+        "viewType": { "const": "storyteller" },
+        "game": { "$ref": "#/definitions/game" },
+        "seats": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/storytellerSeat" }
+        },
+        "publicRecords": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/publicRecord" }
+        },
+        "adjudicationTasks": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/adjudicationTask" }
+        },
+        "auditEntries": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/auditEntry" }
+        }
+      }
+    },
+    "storytellerPrincipal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "principalId"],
+      "properties": {
+        "kind": { "const": "storyteller" },
+        "principalId": { "$ref": "#/definitions/stableId" }
+      }
+    },
+    "seatPrincipal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "principalId", "seatId"],
+      "properties": {
+        "kind": { "const": "seat" },
+        "principalId": { "$ref": "#/definitions/stableId" },
+        "seatId": { "$ref": "#/definitions/stableId" }
+      }
+    },
+    "publicPrincipal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": { "kind": { "const": "public" } }
+    },
+    "observerPrincipal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "principalId"],
+      "properties": {
+        "kind": { "const": "observer" },
+        "principalId": { "$ref": "#/definitions/stableId" }
+      }
+    },
+    "principal": {
+      "oneOf": [
+        { "$ref": "#/definitions/storytellerPrincipal" },
+        { "$ref": "#/definitions/seatPrincipal" },
+        { "$ref": "#/definitions/publicPrincipal" },
+        { "$ref": "#/definitions/observerPrincipal" }
+      ]
+    },
+    "viewEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "viewType", "type", "payload"],
+      "properties": {
+        "schemaVersion": { "$ref": "#/definitions/version" },
+        "viewType": { "enum": ["storyteller", "seat", "public", "observer"] },
+        "type": { "$ref": "#/definitions/stableId" },
+        "payload": { "type": "object" }
+      }
+    }
+  }
+}

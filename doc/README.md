@@ -13,6 +13,7 @@
 - [安全开发会话环境](modify/2026-07-16-safe-development-session.md)：记录 M0-R4 的安全配置、本地中继和验收边界。
 - [M1-R1 规则范围与版本策略](modify/2026-07-16-rules-scope-version-policy.md)：冻结三个基础官方中文剧本、旅行者/传奇角色/奇遇角色范围、80 个术语、31 个能力类别、7 个重要规则主题、中文官方来源与不可变版本策略。
 - [M1-R2 领域状态与事件协议](modify/2026-07-17-domain-state-event-protocol.md)：定义严格版本化状态、命令、事件、幂等回执、原子提交和事件流重放边界。
+- [M1-R3 参与者权限视图](modify/2026-07-17-participant-permission-views.md)：定义四类参与者快照、可信主体绑定、旁观者只减裁剪、事件投影和信息泄漏门禁。
 - [M2-R2 Wiki 同步与清洗工具](modify/2026-07-17-wiki-sync-cleaning.md)：定义固定修订同步、DOM 清洗、Markdown/元数据输出、失败恢复与抓取报告。
 
 ## 维护规则
