@@ -3,6 +3,7 @@ import {
   DomainProtocolError,
   EVENT_TYPES,
   M1_RULESET_IDENTITY,
+  M1_ROLE_ABILITY_FRAMEWORK_PACKAGE,
   PROTOCOL_VERSION,
   createDomainProtocol,
   createGameCommand,
@@ -123,6 +124,16 @@ const 测试扩展 = {
         throw new Error("固定归约失败");
       },
     },
+    {
+      type: "test.reacted",
+      payloadSchema: {
+        type: "object",
+        additionalProperties: false,
+        required: ["label"],
+        properties: { label: { type: "string", minLength: 1 } },
+      },
+      reduce: (state) => state,
+    },
   ],
 };
 
@@ -164,9 +175,28 @@ describe("M1-R2 领域状态与事件协议", () => {
       schemaVersion: PROTOCOL_VERSION,
       gameId: GAME_ID,
       ruleset: M1_RULESET_IDENTITY,
+      rulePackage: M1_ROLE_ABILITY_FRAMEWORK_PACKAGE.identity,
       seed: "seed-fixed-001",
       revision: 1,
-      lifecycle: "initialized",
+      lifecycle: "preparing",
+      phase: "setup",
+      dayNumber: 0,
+      nightNumber: 0,
+      seats: [],
+      executionToday: null,
+      nominationsToday: [],
+      activeNomination: null,
+      highestNominationVotes: 0,
+      executionCandidate: null,
+      exilesToday: [],
+      activeExile: null,
+      abilityInstances: [],
+      abilityConditions: [],
+      abilityTriggers: [],
+      ongoingAbilityEffects: [],
+      delayedAbilityEffects: [],
+      adjudicationTasks: [],
+      winner: null,
     });
     expect(引擎.getEvents()).toEqual([
       {
@@ -179,9 +209,11 @@ describe("M1-R2 领域状态与事件协议", () => {
         actor: HOST,
         recordedAt: "2026-07-17T08:00:00.000Z",
         ruleset: M1_RULESET_IDENTITY,
+        rulePackage: M1_ROLE_ABILITY_FRAMEWORK_PACKAGE.identity,
         payload: {
           seed: "seed-fixed-001",
           ruleset: M1_RULESET_IDENTITY,
+          rulePackage: M1_ROLE_ABILITY_FRAMEWORK_PACKAGE.identity,
         },
       },
     ]);
@@ -197,6 +229,7 @@ describe("M1-R2 领域状态与事件协议", () => {
       type: COMMAND_TYPES.GAME_CREATE,
       payload: {
         ruleset: M1_RULESET_IDENTITY,
+        rulePackage: M1_ROLE_ABILITY_FRAMEWORK_PACKAGE.identity,
         seed: "seed-fixed-001",
       },
     });
@@ -239,7 +272,11 @@ describe("M1-R2 领域状态与事件协议", () => {
 
     const 首次 = 引擎.dispatch(命令);
     const 重试 = 引擎.dispatch({
-      payload: { seed: "seed-fixed-001", ruleset: 命令.payload.ruleset },
+      payload: {
+        seed: "seed-fixed-001",
+        ruleset: 命令.payload.ruleset,
+        rulePackage: M1_ROLE_ABILITY_FRAMEWORK_PACKAGE.identity,
+      },
       type: COMMAND_TYPES.GAME_CREATE,
       actor: { id: "host-001", kind: "host" },
       expectedRevision: 0,
@@ -304,6 +341,12 @@ describe("M1-R2 领域状态与事件协议", () => {
           canonicalLanguage: 原命令.payload.ruleset.canonicalLanguage,
           version: 原命令.payload.ruleset.version,
           id: 原命令.payload.ruleset.id,
+        },
+        rulePackage: {
+          integrity: 原命令.payload.rulePackage.integrity,
+          frameworkVersion: 原命令.payload.rulePackage.frameworkVersion,
+          version: 原命令.payload.rulePackage.version,
+          id: 原命令.payload.rulePackage.id,
         },
       },
       actor: { id: HOST.id, kind: HOST.kind },
@@ -485,7 +528,122 @@ describe("M1-R2 领域状态与事件协议", () => {
         }),
       "HANDLER_FAILURE",
     );
-    expect(引擎.getState().lifecycle).toBe("initialized");
+    expect(引擎.getState().lifecycle).toBe("preparing");
+  });
+
+  test("事件反应器按优先级与稳定 ID 展开同一原子事件批次", () => {
+    const 调用顺序 = [];
+    const 引擎 = 创建引擎({
+      ...测试扩展,
+      eventReactions: [
+        {
+          id: "reaction-z",
+          priority: 20,
+          eventTypes: ["test.touched"],
+          react: ({ event }) => {
+            调用顺序.push("z");
+            expect(Object.isFrozen(event)).toBe(true);
+            return [{ type: "test.reacted", payload: { label: "z" } }];
+          },
+        },
+        {
+          id: "reaction-a",
+          priority: 10,
+          eventTypes: ["test.touched"],
+          react: ({ stateAfter }) => {
+            调用顺序.push("a");
+            expect(Object.isFrozen(stateAfter)).toBe(true);
+            return [{ type: "test.reacted", payload: { label: "a" } }];
+          },
+        },
+      ],
+    });
+    引擎.dispatch(创建命令());
+
+    const 回执 = 引擎.dispatch({
+      protocolVersion: PROTOCOL_VERSION,
+      commandId: "command-reaction-touch",
+      gameId: GAME_ID,
+      expectedRevision: 1,
+      actor: HOST,
+      type: "test.touch",
+      payload: { label: "source" },
+    });
+
+    expect(调用顺序).toEqual(["a", "z"]);
+    expect(回执.eventIds).toHaveLength(3);
+    expect(
+      引擎
+        .getEvents()
+        .slice(-3)
+        .map(({ type, payload }) => [type, payload]),
+    ).toEqual([
+      ["test.touched", { label: "source" }],
+      ["test.reacted", { label: "a" }],
+      ["test.reacted", { label: "z" }],
+    ]);
+  });
+
+  test("事件反应连锁超过硬上限时整批失败", () => {
+    const 引擎 = 创建引擎({
+      ...测试扩展,
+      eventReactions: [
+        {
+          id: "reaction-loop",
+          priority: 1,
+          eventTypes: ["test.touched", "test.reacted"],
+          react: () => [{ type: "test.reacted", payload: { label: "loop" } }],
+        },
+      ],
+    });
+    引擎.dispatch(创建命令());
+
+    断言协议错误(
+      () =>
+        引擎.dispatch({
+          protocolVersion: PROTOCOL_VERSION,
+          commandId: "command-reaction-loop",
+          gameId: GAME_ID,
+          expectedRevision: 1,
+          actor: HOST,
+          type: "test.touch",
+          payload: { label: "source" },
+        }),
+      "EVENT_REACTION_LIMIT",
+    );
+    expect(引擎.getState().revision).toBe(1);
+    expect(引擎.getEvents()).toHaveLength(1);
+  });
+
+  test("扩展状态不变量失败时不提交候选事件", () => {
+    const 引擎 = 创建引擎({
+      ...测试扩展,
+      stateInvariants: [
+        {
+          id: "invariant-no-touch",
+          assert: (state) => {
+            if (state?.revision > 1) throw new Error("测试不允许后续事件");
+          },
+        },
+      ],
+    });
+    引擎.dispatch(创建命令());
+
+    断言协议错误(
+      () =>
+        引擎.dispatch({
+          protocolVersion: PROTOCOL_VERSION,
+          commandId: "command-invariant-touch",
+          gameId: GAME_ID,
+          expectedRevision: 1,
+          actor: HOST,
+          type: "test.touch",
+          payload: { label: "source" },
+        }),
+      "INVARIANT_VIOLATION",
+    );
+    expect(引擎.getState().revision).toBe(1);
+    expect(引擎.getEvents()).toHaveLength(1);
   });
 
   test("输入、查询结果和导出结果都不能反向修改内部状态", () => {

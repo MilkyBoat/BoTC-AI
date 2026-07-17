@@ -1,10 +1,10 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://botc-ai.local/schema/domain-protocol-v0.1.0.json",
+  "$id": "https://botc-ai.local/schema/domain-protocol-v0.7.0.json",
   "$ref": "#/definitions/eventStream",
   "definitions": {
     "protocolVersion": {
-      "const": "0.1.0"
+      "const": "0.7.0"
     },
     "stableId": {
       "type": "string",
@@ -64,6 +64,17 @@
         }
       }
     },
+    "rolePackageIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "frameworkVersion", "integrity"],
+      "properties": {
+        "id": { "$ref": "#/definitions/stableId" },
+        "version": { "$ref": "#/definitions/semanticVersion" },
+        "frameworkVersion": { "$ref": "#/definitions/semanticVersion" },
+        "integrity": { "$ref": "#/definitions/sha256" }
+      }
+    },
     "commandEnvelope": {
       "type": "object",
       "additionalProperties": false,
@@ -115,6 +126,7 @@
         "actor",
         "recordedAt",
         "ruleset",
+        "rulePackage",
         "payload"
       ],
       "properties": {
@@ -148,6 +160,9 @@
         "ruleset": {
           "$ref": "#/definitions/rulesetIdentity"
         },
+        "rulePackage": {
+          "$ref": "#/definitions/rolePackageIdentity"
+        },
         "payload": {
           "type": "object"
         }
@@ -162,7 +177,25 @@
         "ruleset",
         "seed",
         "revision",
-        "lifecycle"
+        "lifecycle",
+        "phase",
+        "dayNumber",
+        "nightNumber",
+        "seats",
+        "executionToday",
+        "winner",
+        "nominationsToday",
+        "activeNomination",
+        "highestNominationVotes",
+        "executionCandidate",
+        "exilesToday",
+        "activeExile",
+        "abilityInstances",
+        "abilityConditions",
+        "abilityTriggers",
+        "ongoingAbilityEffects",
+        "delayedAbilityEffects",
+        "adjudicationTasks"
       ],
       "properties": {
         "schemaVersion": {
@@ -174,6 +207,9 @@
         "ruleset": {
           "$ref": "#/definitions/rulesetIdentity"
         },
+        "rulePackage": {
+          "$ref": "#/definitions/rolePackageIdentity"
+        },
         "seed": {
           "type": "string",
           "minLength": 1,
@@ -184,8 +220,99 @@
           "minimum": 1,
           "maximum": 9007199254740991
         },
-        "lifecycle": {
-          "const": "initialized"
+        "lifecycle": { "enum": ["preparing", "running", "ended"] },
+        "phase": {
+          "enum": ["setup", "first-night", "day", "night", "ended"]
+        },
+        "dayNumber": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "nightNumber": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "seats": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/basicSeatState" }
+        },
+        "executionToday": {
+          "anyOf": [
+            { "type": "null" },
+            { "$ref": "#/definitions/executionState" }
+          ]
+        },
+        "winner": {
+          "anyOf": [{ "type": "null" }, { "$ref": "#/definitions/winnerState" }]
+        },
+        "nominationsToday": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/nominationRecord" }
+        },
+        "activeNomination": {
+          "anyOf": [
+            { "type": "null" },
+            { "$ref": "#/definitions/activeNomination" }
+          ]
+        },
+        "highestNominationVotes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "executionCandidate": {
+          "anyOf": [
+            { "type": "null" },
+            { "$ref": "#/definitions/executionCandidateState" }
+          ]
+        },
+        "exilesToday": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/exileRecord" }
+        },
+        "activeExile": {
+          "anyOf": [{ "type": "null" }, { "$ref": "#/definitions/activeExile" }]
+        },
+        "abilityInstances": {
+          "type": "array",
+          "maxItems": 256,
+          "items": { "$ref": "#/definitions/abilityInstanceState" }
+        },
+        "abilityConditions": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/abilityConditionState" }
+        },
+        "abilityTriggers": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/abilityTriggerState" }
+        },
+        "ongoingAbilityEffects": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/ongoingAbilityEffectState" }
+        },
+        "delayedAbilityEffects": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/delayedAbilityEffectState" }
+        },
+        "adjudicationTasks": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/adjudicationTaskState" }
+        },
+        "troubleBrewing": {
+          "$ref": "#/definitions/troubleBrewingState"
+        },
+        "badMoonRising": {
+          "$ref": "#/definitions/badMoonRisingState"
+        },
+        "sectsAndViolets": {
+          "$ref": "#/definitions/sectsAndVioletsState"
         }
       }
     },
@@ -290,6 +417,7 @@
         "protocolVersion",
         "gameId",
         "ruleset",
+        "rulePackage",
         "events",
         "receipts"
       ],
@@ -309,6 +437,12 @@
             { "$ref": "#/definitions/rulesetIdentity" }
           ]
         },
+        "rulePackage": {
+          "anyOf": [
+            { "type": "null" },
+            { "$ref": "#/definitions/rolePackageIdentity" }
+          ]
+        },
         "events": {
           "type": "array",
           "items": {
@@ -326,10 +460,13 @@
     "gameCreatePayload": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["ruleset", "seed"],
+      "required": ["ruleset", "rulePackage", "seed"],
       "properties": {
         "ruleset": {
           "$ref": "#/definitions/rulesetIdentity"
+        },
+        "rulePackage": {
+          "$ref": "#/definitions/rolePackageIdentity"
         },
         "seed": {
           "type": "string",
@@ -340,6 +477,1424 @@
     },
     "gameCreatedPayload": {
       "$ref": "#/definitions/gameCreatePayload"
+    },
+    "characterType": {
+      "enum": ["townsfolk", "outsider", "minion", "demon", "traveler"]
+    },
+    "basicSeatInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seatId", "order", "characterType"],
+      "properties": {
+        "seatId": { "$ref": "#/definitions/stableId" },
+        "order": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "characterType": { "$ref": "#/definitions/characterType" },
+        "actualRoleId": { "$ref": "#/definitions/stableId" },
+        "perceivedRoleId": { "$ref": "#/definitions/stableId" },
+        "alignment": { "enum": ["good", "evil"] },
+        "roleInstanceId": { "$ref": "#/definitions/stableId" }
+      }
+    },
+    "basicSeatState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seatId",
+        "order",
+        "characterType",
+        "alive",
+        "deadVoteAvailable"
+      ],
+      "properties": {
+        "seatId": { "$ref": "#/definitions/stableId" },
+        "order": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "characterType": { "$ref": "#/definitions/characterType" },
+        "alive": { "type": "boolean" },
+        "deadVoteAvailable": { "type": "boolean" },
+        "secretlyAlive": { "type": "boolean" },
+        "actualRoleId": { "$ref": "#/definitions/stableId" },
+        "perceivedRoleId": { "$ref": "#/definitions/stableId" },
+        "alignment": { "enum": ["good", "evil"] },
+        "roleInstanceId": { "$ref": "#/definitions/stableId" }
+      }
+    },
+    "troubleBrewingRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["recordId", "type", "content"],
+      "properties": {
+        "recordId": { "$ref": "#/definitions/stableId" },
+        "type": { "$ref": "#/definitions/messageType" },
+        "content": { "type": "object" }
+      }
+    },
+    "troubleBrewingState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packageId",
+        "version",
+        "setup",
+        "information",
+        "markers",
+        "deathHistory",
+        "registrationHistory",
+        "publicActions",
+        "butlerViolations"
+      ],
+      "properties": {
+        "packageId": { "$ref": "#/definitions/stableId" },
+        "version": { "$ref": "#/definitions/semanticVersion" },
+        "setup": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["redHerringSeatId", "demonBluffs", "evilTeamSeatIds"],
+          "properties": {
+            "redHerringSeatId": {
+              "anyOf": [
+                { "type": "null" },
+                { "$ref": "#/definitions/stableId" }
+              ]
+            },
+            "demonBluffs": {
+              "type": "array",
+              "maxItems": 3,
+              "uniqueItems": true,
+              "items": { "$ref": "#/definitions/stableId" }
+            },
+            "evilTeamSeatIds": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "$ref": "#/definitions/stableId" }
+            }
+          }
+        },
+        "information": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "markers": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "deathHistory": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "registrationHistory": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "publicActions": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "butlerViolations": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        }
+      }
+    },
+    "badMoonRisingState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packageId",
+        "version",
+        "setup",
+        "information",
+        "markers",
+        "deathHistory",
+        "resurrectionHistory",
+        "publicActions",
+        "mastermindContinuation"
+      ],
+      "properties": {
+        "packageId": { "$ref": "#/definitions/stableId" },
+        "version": { "$ref": "#/definitions/semanticVersion" },
+        "setup": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "godfatherDelta",
+            "grandchildSeatId",
+            "demonBluffs",
+            "evilTeamSeatIds",
+            "lunaticSeatId",
+            "lunaticMinionSeatIds",
+            "lunaticBluffs"
+          ],
+          "properties": {
+            "godfatherDelta": { "enum": [-1, 0, 1] },
+            "grandchildSeatId": {
+              "anyOf": [
+                { "type": "null" },
+                { "$ref": "#/definitions/stableId" }
+              ]
+            },
+            "demonBluffs": {
+              "type": "array",
+              "maxItems": 3,
+              "uniqueItems": true,
+              "items": { "$ref": "#/definitions/stableId" }
+            },
+            "evilTeamSeatIds": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "$ref": "#/definitions/stableId" }
+            },
+            "lunaticSeatId": {
+              "anyOf": [
+                { "type": "null" },
+                { "$ref": "#/definitions/stableId" }
+              ]
+            },
+            "lunaticMinionSeatIds": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "$ref": "#/definitions/stableId" }
+            },
+            "lunaticBluffs": {
+              "type": "array",
+              "maxItems": 3,
+              "uniqueItems": true,
+              "items": { "$ref": "#/definitions/stableId" }
+            }
+          }
+        },
+        "information": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "markers": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "deathHistory": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "resurrectionHistory": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "publicActions": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "mastermindContinuation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["active", "demonSeatId", "startedDayNumber"],
+          "properties": {
+            "active": { "type": "boolean" },
+            "demonSeatId": {
+              "anyOf": [
+                { "type": "null" },
+                { "$ref": "#/definitions/stableId" }
+              ]
+            },
+            "startedDayNumber": {
+              "anyOf": [
+                { "type": "null" },
+                {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "sectsAndVioletsState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packageId",
+        "version",
+        "setup",
+        "information",
+        "markers",
+        "abilityAbnormalities",
+        "characterChanges",
+        "deathHistory",
+        "publicActions",
+        "madnessRulings",
+        "fangGuJumpUsed"
+      ],
+      "properties": {
+        "packageId": { "$ref": "#/definitions/stableId" },
+        "version": { "$ref": "#/definitions/semanticVersion" },
+        "setup": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "fangGuDelta",
+            "vigormortisDelta",
+            "evilTwinSeatId",
+            "goodTwinSeatId",
+            "demonBluffs",
+            "evilTeamSeatIds"
+          ],
+          "properties": {
+            "fangGuDelta": { "enum": [0, 1] },
+            "vigormortisDelta": { "enum": [-1, 0] },
+            "evilTwinSeatId": {
+              "anyOf": [
+                { "type": "null" },
+                { "$ref": "#/definitions/stableId" }
+              ]
+            },
+            "goodTwinSeatId": {
+              "anyOf": [
+                { "type": "null" },
+                { "$ref": "#/definitions/stableId" }
+              ]
+            },
+            "demonBluffs": {
+              "type": "array",
+              "maxItems": 3,
+              "uniqueItems": true,
+              "items": { "$ref": "#/definitions/stableId" }
+            },
+            "evilTeamSeatIds": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "$ref": "#/definitions/stableId" }
+            }
+          }
+        },
+        "information": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "markers": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "abilityAbnormalities": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "characterChanges": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "deathHistory": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "publicActions": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "madnessRulings": {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/definitions/troubleBrewingRecord" }
+        },
+        "fangGuJumpUsed": { "type": "boolean" }
+      }
+    },
+    "abilityInstanceInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "instanceId",
+        "definitionId",
+        "ownerSeatId",
+        "sourceRoleId",
+        "sourceRoleInstanceId"
+      ],
+      "properties": {
+        "instanceId": { "$ref": "#/definitions/stableId" },
+        "definitionId": { "$ref": "#/definitions/stableId" },
+        "ownerSeatId": { "$ref": "#/definitions/stableId" },
+        "sourceRoleId": { "$ref": "#/definitions/stableId" },
+        "sourceRoleInstanceId": { "$ref": "#/definitions/stableId" }
+      }
+    },
+    "revisionOrNull": {
+      "anyOf": [
+        { "type": "null" },
+        {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        }
+      ]
+    },
+    "abilityInstanceState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "instanceId",
+        "definitionId",
+        "ownerSeatId",
+        "sourceRoleId",
+        "sourceRoleInstanceId",
+        "status",
+        "usesConsumed",
+        "createdAtRevision",
+        "endedAtRevision"
+      ],
+      "properties": {
+        "instanceId": { "$ref": "#/definitions/stableId" },
+        "definitionId": { "$ref": "#/definitions/stableId" },
+        "ownerSeatId": { "$ref": "#/definitions/stableId" },
+        "sourceRoleId": { "$ref": "#/definitions/stableId" },
+        "sourceRoleInstanceId": { "$ref": "#/definitions/stableId" },
+        "status": { "enum": ["active", "replaced"] },
+        "usesConsumed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "createdAtRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "endedAtRevision": { "$ref": "#/definitions/revisionOrNull" }
+      }
+    },
+    "abilityConditionState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "conditionId",
+        "seatId",
+        "conditionType",
+        "sourceId",
+        "status",
+        "completionReason",
+        "createdAtRevision",
+        "completedAtRevision"
+      ],
+      "properties": {
+        "conditionId": { "$ref": "#/definitions/stableId" },
+        "seatId": { "$ref": "#/definitions/stableId" },
+        "conditionType": {
+          "enum": ["drunk", "poisoned", "ability-disabled"]
+        },
+        "sourceId": { "$ref": "#/definitions/stableId" },
+        "sourceAbilityInstanceId": { "$ref": "#/definitions/stableId" },
+        "status": { "enum": ["active", "cleared"] },
+        "completionReason": {
+          "anyOf": [{ "type": "null" }, { "enum": ["cleared", "role-changed"] }]
+        },
+        "createdAtRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "completedAtRevision": { "$ref": "#/definitions/revisionOrNull" }
+      }
+    },
+    "abilityTriggerState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "triggerId",
+        "definitionTriggerId",
+        "abilityInstanceId",
+        "sourceEventId",
+        "kind",
+        "priority",
+        "ownerSeatOrder",
+        "phase",
+        "dayNumber",
+        "nightNumber",
+        "status",
+        "outcome",
+        "cancellationReason",
+        "createdAtRevision",
+        "completedAtRevision"
+      ],
+      "properties": {
+        "triggerId": { "$ref": "#/definitions/stableId" },
+        "definitionTriggerId": { "$ref": "#/definitions/stableId" },
+        "abilityInstanceId": { "$ref": "#/definitions/stableId" },
+        "sourceEventId": { "$ref": "#/definitions/stableId" },
+        "delayedEffectId": { "$ref": "#/definitions/stableId" },
+        "kind": {
+          "enum": [
+            "first-night",
+            "other-night",
+            "entry",
+            "domain-event",
+            "delayed"
+          ]
+        },
+        "priority": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "ownerSeatOrder": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "phase": { "enum": ["first-night", "day", "night"] },
+        "dayNumber": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "nightNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "status": {
+          "enum": ["pending", "waiting-adjudication", "resolved", "cancelled"]
+        },
+        "outcome": {
+          "anyOf": [
+            { "type": "null" },
+            { "enum": ["applied", "suppressed", "adjudicated"] }
+          ]
+        },
+        "cancellationReason": {
+          "anyOf": [
+            { "type": "null" },
+            {
+              "enum": [
+                "skipped",
+                "source-invalid",
+                "role-changed",
+                "phase-ended",
+                "host-error"
+              ]
+            }
+          ]
+        },
+        "createdAtRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "completedAtRevision": { "$ref": "#/definitions/revisionOrNull" }
+      }
+    },
+    "ongoingAbilityEffectState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "effectId",
+        "effectType",
+        "targetIds",
+        "endEventTypes",
+        "abilityInstanceId",
+        "triggerId",
+        "ruleSourceIds",
+        "status",
+        "completionReason",
+        "createdAtRevision",
+        "completedAtRevision"
+      ],
+      "properties": {
+        "effectId": { "$ref": "#/definitions/stableId" },
+        "effectType": { "$ref": "#/definitions/stableId" },
+        "targetIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/stableId" }
+        },
+        "endEventTypes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/messageType" }
+        },
+        "abilityInstanceId": { "$ref": "#/definitions/stableId" },
+        "triggerId": { "$ref": "#/definitions/stableId" },
+        "ruleSourceIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/stableId" }
+        },
+        "status": { "enum": ["active", "ended"] },
+        "completionReason": {
+          "anyOf": [
+            { "type": "null" },
+            {
+              "enum": [
+                "manual",
+                "end-trigger",
+                "source-invalid",
+                "source-ineffective",
+                "role-changed"
+              ]
+            }
+          ]
+        },
+        "createdAtRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "completedAtRevision": { "$ref": "#/definitions/revisionOrNull" }
+      }
+    },
+    "delayedAbilityEffectState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "effectId",
+        "effectType",
+        "triggerDefinitionId",
+        "targetIds",
+        "eventTypes",
+        "abilityInstanceId",
+        "triggerId",
+        "ruleSourceIds",
+        "status",
+        "completionReason",
+        "createdAtRevision",
+        "completedAtRevision"
+      ],
+      "properties": {
+        "effectId": { "$ref": "#/definitions/stableId" },
+        "effectType": { "$ref": "#/definitions/stableId" },
+        "triggerDefinitionId": { "$ref": "#/definitions/stableId" },
+        "targetIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/stableId" }
+        },
+        "eventTypes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/messageType" }
+        },
+        "abilityInstanceId": { "$ref": "#/definitions/stableId" },
+        "triggerId": { "$ref": "#/definitions/stableId" },
+        "ruleSourceIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/stableId" }
+        },
+        "status": { "enum": ["pending", "triggered", "cancelled"] },
+        "completionReason": {
+          "anyOf": [
+            { "type": "null" },
+            {
+              "enum": [
+                "manual",
+                "end-trigger",
+                "source-invalid",
+                "source-ineffective",
+                "role-changed",
+                "triggered"
+              ]
+            }
+          ]
+        },
+        "createdAtRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "completedAtRevision": { "$ref": "#/definitions/revisionOrNull" }
+      }
+    },
+    "adjudicationTaskState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "taskId",
+        "kind",
+        "summary",
+        "candidateSeatIds",
+        "triggerId",
+        "abilityInstanceId",
+        "resultSchema",
+        "ruleSourceIds",
+        "visibility",
+        "status",
+        "result",
+        "cancellationReason",
+        "createdAtRevision",
+        "completedAtRevision"
+      ],
+      "properties": {
+        "taskId": { "$ref": "#/definitions/stableId" },
+        "kind": { "$ref": "#/definitions/stableId" },
+        "summary": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "candidateSeatIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/stableId" }
+        },
+        "triggerId": { "$ref": "#/definitions/stableId" },
+        "abilityInstanceId": { "$ref": "#/definitions/stableId" },
+        "resultSchema": { "type": "object" },
+        "ruleSourceIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/stableId" }
+        },
+        "visibility": { "const": "storyteller-only" },
+        "status": { "enum": ["pending", "resolved", "cancelled"] },
+        "result": { "anyOf": [{ "type": "null" }, { "type": "object" }] },
+        "cancellationReason": {
+          "anyOf": [
+            { "type": "null" },
+            {
+              "enum": [
+                "source-invalid",
+                "role-changed",
+                "phase-ended",
+                "host-error"
+              ]
+            }
+          ]
+        },
+        "createdAtRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "completedAtRevision": { "$ref": "#/definitions/revisionOrNull" }
+      }
+    },
+    "executionState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dayNumber", "seatId", "died"],
+      "properties": {
+        "dayNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "seatId": { "$ref": "#/definitions/stableId" },
+        "died": { "type": "boolean" }
+      }
+    },
+    "winnerState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["alignment", "reason", "decidedAtRevision"],
+      "properties": {
+        "alignment": { "enum": ["good", "evil"] },
+        "reason": {
+          "enum": [
+            "all-demons-dead",
+            "two-alive",
+            "saint-executed",
+            "mayor-three-alive-no-execution",
+            "mastermind-good-executed",
+            "mastermind-no-good-executed",
+            "evil-twin-good-twin-executed",
+            "klutz-evil-chosen",
+            "vortox-no-execution"
+          ]
+        },
+        "decidedAtRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "alignment": { "const": "good" },
+            "reason": { "const": "all-demons-dead" }
+          }
+        },
+        {
+          "properties": {
+            "alignment": { "const": "evil" },
+            "reason": { "const": "two-alive" }
+          }
+        },
+        {
+          "properties": {
+            "alignment": { "const": "evil" },
+            "reason": { "const": "saint-executed" }
+          }
+        },
+        {
+          "properties": {
+            "alignment": { "const": "good" },
+            "reason": { "const": "mayor-three-alive-no-execution" }
+          }
+        },
+        {
+          "properties": {
+            "alignment": { "const": "evil" },
+            "reason": { "const": "mastermind-good-executed" }
+          }
+        },
+        {
+          "properties": {
+            "alignment": { "const": "good" },
+            "reason": { "const": "mastermind-no-good-executed" }
+          }
+        },
+        {
+          "properties": {
+            "alignment": { "const": "evil" },
+            "reason": { "const": "evil-twin-good-twin-executed" }
+          }
+        },
+        {
+          "properties": {
+            "alignment": { "const": "evil" },
+            "reason": { "const": "klutz-evil-chosen" }
+          }
+        },
+        {
+          "properties": {
+            "alignment": { "const": "evil" },
+            "reason": { "const": "vortox-no-execution" }
+          }
+        }
+      ]
+    },
+    "voteDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seatId", "support", "usedDeadVote"],
+      "properties": {
+        "seatId": { "$ref": "#/definitions/stableId" },
+        "support": { "type": "boolean" },
+        "usedDeadVote": { "type": "boolean" }
+      }
+    },
+    "activeNomination": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nominationId",
+        "dayNumber",
+        "nominatorSeatId",
+        "nomineeSeatId",
+        "stage",
+        "votingOrder",
+        "currentVoterIndex",
+        "threshold",
+        "decisions"
+      ],
+      "properties": {
+        "nominationId": { "$ref": "#/definitions/stableId" },
+        "dayNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "nominatorSeatId": { "$ref": "#/definitions/stableId" },
+        "nomineeSeatId": { "$ref": "#/definitions/stableId" },
+        "stage": { "enum": ["defense", "voting", "ready-to-close"] },
+        "votingOrder": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/stableId" }
+        },
+        "currentVoterIndex": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "threshold": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "decisions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/voteDecision" }
+        }
+      }
+    },
+    "nominationResult": {
+      "enum": ["candidate", "tie", "not-enough", "lower"]
+    },
+    "nominationRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nominationId",
+        "dayNumber",
+        "nominatorSeatId",
+        "nomineeSeatId",
+        "total",
+        "threshold",
+        "voterSeatIds",
+        "result",
+        "executionCandidateSeatId"
+      ],
+      "properties": {
+        "nominationId": { "$ref": "#/definitions/stableId" },
+        "dayNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "nominatorSeatId": { "$ref": "#/definitions/stableId" },
+        "nomineeSeatId": { "$ref": "#/definitions/stableId" },
+        "total": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "threshold": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "voterSeatIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/stableId" }
+        },
+        "result": { "$ref": "#/definitions/nominationResult" },
+        "executionCandidateSeatId": {
+          "anyOf": [{ "type": "null" }, { "$ref": "#/definitions/stableId" }]
+        }
+      }
+    },
+    "executionCandidateState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seatId", "votes"],
+      "properties": {
+        "seatId": { "$ref": "#/definitions/stableId" },
+        "votes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        }
+      }
+    },
+    "exileDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seatId", "support"],
+      "properties": {
+        "seatId": { "$ref": "#/definitions/stableId" },
+        "support": { "type": "boolean" }
+      }
+    },
+    "activeExile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "exileId",
+        "dayNumber",
+        "proposerSeatId",
+        "travelerSeatId",
+        "decisions"
+      ],
+      "properties": {
+        "exileId": { "$ref": "#/definitions/stableId" },
+        "dayNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "proposerSeatId": { "$ref": "#/definitions/stableId" },
+        "travelerSeatId": { "$ref": "#/definitions/stableId" },
+        "decisions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/exileDecision" }
+        }
+      }
+    },
+    "exileRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "exileId",
+        "dayNumber",
+        "proposerSeatId",
+        "travelerSeatId",
+        "supporterSeatIds",
+        "total",
+        "threshold",
+        "succeeded"
+      ],
+      "properties": {
+        "exileId": { "$ref": "#/definitions/stableId" },
+        "dayNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "proposerSeatId": { "$ref": "#/definitions/stableId" },
+        "travelerSeatId": { "$ref": "#/definitions/stableId" },
+        "supporterSeatIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/stableId" }
+        },
+        "total": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "threshold": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "succeeded": { "type": "boolean" }
+      }
+    },
+    "ruleSourceId": { "$ref": "#/definitions/stableId" },
+    "gameStartPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seats", "abilityInstances"],
+      "properties": {
+        "seats": {
+          "type": "array",
+          "minItems": 3,
+          "items": { "$ref": "#/definitions/basicSeatInput" }
+        },
+        "abilityInstances": {
+          "type": "array",
+          "maxItems": 256,
+          "items": { "$ref": "#/definitions/abilityInstanceInput" }
+        },
+        "troubleBrewing": {
+          "$ref": "#/definitions/troubleBrewingState"
+        },
+        "badMoonRising": {
+          "$ref": "#/definitions/badMoonRisingState"
+        },
+        "sectsAndViolets": {
+          "$ref": "#/definitions/sectsAndVioletsState"
+        }
+      }
+    },
+    "gameStartedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seats", "abilityInstances", "ruleSourceId"],
+      "properties": {
+        "seats": {
+          "type": "array",
+          "minItems": 3,
+          "items": { "$ref": "#/definitions/basicSeatInput" }
+        },
+        "abilityInstances": {
+          "type": "array",
+          "maxItems": 256,
+          "items": { "$ref": "#/definitions/abilityInstanceInput" }
+        },
+        "troubleBrewing": {
+          "$ref": "#/definitions/troubleBrewingState"
+        },
+        "badMoonRising": {
+          "$ref": "#/definitions/badMoonRisingState"
+        },
+        "sectsAndViolets": {
+          "$ref": "#/definitions/sectsAndVioletsState"
+        },
+        "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
+      }
+    },
+    "emptyPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {}
+    },
+    "phaseAdvancedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from",
+        "to",
+        "dayNumber",
+        "nightNumber",
+        "reason",
+        "ruleSourceId"
+      ],
+      "properties": {
+        "from": { "enum": ["first-night", "day", "night"] },
+        "to": { "enum": ["day", "night"] },
+        "dayNumber": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "nightNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "reason": { "enum": ["manual", "execution"] },
+        "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
+      }
+    },
+    "lifeCommandPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seatId", "causeId"],
+      "properties": {
+        "seatId": { "$ref": "#/definitions/stableId" },
+        "causeId": { "$ref": "#/definitions/stableId" },
+        "sourceId": { "$ref": "#/definitions/stableId" }
+      }
+    },
+    "lifeEventPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seatId", "causeId", "ruleSourceId"],
+      "properties": {
+        "seatId": { "$ref": "#/definitions/stableId" },
+        "causeId": { "$ref": "#/definitions/stableId" },
+        "sourceId": { "$ref": "#/definitions/stableId" },
+        "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
+      }
+    },
+    "executionResolvePayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seatId"],
+      "properties": {
+        "seatId": { "$ref": "#/definitions/stableId" }
+      }
+    },
+    "nominationOpenPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nominationId", "nominatorSeatId", "nomineeSeatId"],
+      "properties": {
+        "nominationId": { "$ref": "#/definitions/stableId" },
+        "nominatorSeatId": { "$ref": "#/definitions/stableId" },
+        "nomineeSeatId": { "$ref": "#/definitions/stableId" }
+      }
+    },
+    "nominationOpenedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nominationId",
+        "nominatorSeatId",
+        "nomineeSeatId",
+        "dayNumber",
+        "ruleSourceId"
+      ],
+      "properties": {
+        "nominationId": { "$ref": "#/definitions/stableId" },
+        "nominatorSeatId": { "$ref": "#/definitions/stableId" },
+        "nomineeSeatId": { "$ref": "#/definitions/stableId" },
+        "dayNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
+      }
+    },
+    "voteOpenPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nominationId"],
+      "properties": {
+        "nominationId": { "$ref": "#/definitions/stableId" }
+      }
+    },
+    "voteOpenedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nominationId",
+        "nomineeSeatId",
+        "votingOrder",
+        "threshold",
+        "ruleSourceId"
+      ],
+      "properties": {
+        "nominationId": { "$ref": "#/definitions/stableId" },
+        "nomineeSeatId": { "$ref": "#/definitions/stableId" },
+        "votingOrder": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/stableId" }
+        },
+        "threshold": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
+      }
+    },
+    "voteRecordPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nominationId", "voterSeatId", "support"],
+      "properties": {
+        "nominationId": { "$ref": "#/definitions/stableId" },
+        "voterSeatId": { "$ref": "#/definitions/stableId" },
+        "support": { "type": "boolean" }
+      }
+    },
+    "voteRecordedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nominationId",
+        "voterSeatId",
+        "support",
+        "usedDeadVote",
+        "ruleSourceId"
+      ],
+      "properties": {
+        "nominationId": { "$ref": "#/definitions/stableId" },
+        "voterSeatId": { "$ref": "#/definitions/stableId" },
+        "support": { "type": "boolean" },
+        "usedDeadVote": { "type": "boolean" },
+        "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
+      }
+    },
+    "voteClosePayload": {
+      "$ref": "#/definitions/voteOpenPayload"
+    },
+    "voteClosedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nominationId",
+        "nomineeSeatId",
+        "total",
+        "threshold",
+        "voterSeatIds",
+        "result",
+        "highestVotes",
+        "executionCandidateSeatId",
+        "ruleSourceId"
+      ],
+      "properties": {
+        "nominationId": { "$ref": "#/definitions/stableId" },
+        "nomineeSeatId": { "$ref": "#/definitions/stableId" },
+        "total": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "threshold": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "voterSeatIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/stableId" }
+        },
+        "result": { "$ref": "#/definitions/nominationResult" },
+        "highestVotes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "executionCandidateSeatId": {
+          "anyOf": [{ "type": "null" }, { "$ref": "#/definitions/stableId" }]
+        },
+        "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
+      }
+    },
+    "exileOpenPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exileId", "proposerSeatId", "travelerSeatId"],
+      "properties": {
+        "exileId": { "$ref": "#/definitions/stableId" },
+        "proposerSeatId": { "$ref": "#/definitions/stableId" },
+        "travelerSeatId": { "$ref": "#/definitions/stableId" }
+      }
+    },
+    "exileOpenedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "exileId",
+        "proposerSeatId",
+        "travelerSeatId",
+        "dayNumber",
+        "ruleSourceId"
+      ],
+      "properties": {
+        "exileId": { "$ref": "#/definitions/stableId" },
+        "proposerSeatId": { "$ref": "#/definitions/stableId" },
+        "travelerSeatId": { "$ref": "#/definitions/stableId" },
+        "dayNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
+      }
+    },
+    "exileSupportSetPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exileId", "supporterSeatId", "support"],
+      "properties": {
+        "exileId": { "$ref": "#/definitions/stableId" },
+        "supporterSeatId": { "$ref": "#/definitions/stableId" },
+        "support": { "type": "boolean" }
+      }
+    },
+    "exileSupportSetEventPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exileId", "supporterSeatId", "support", "ruleSourceId"],
+      "properties": {
+        "exileId": { "$ref": "#/definitions/stableId" },
+        "supporterSeatId": { "$ref": "#/definitions/stableId" },
+        "support": { "type": "boolean" },
+        "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
+      }
+    },
+    "exileClosePayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exileId"],
+      "properties": {
+        "exileId": { "$ref": "#/definitions/stableId" }
+      }
+    },
+    "exileClosedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "exileId",
+        "travelerSeatId",
+        "total",
+        "threshold",
+        "supporterSeatIds",
+        "succeeded",
+        "ruleSourceId"
+      ],
+      "properties": {
+        "exileId": { "$ref": "#/definitions/stableId" },
+        "travelerSeatId": { "$ref": "#/definitions/stableId" },
+        "total": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "threshold": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "supporterSeatIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/stableId" }
+        },
+        "succeeded": { "type": "boolean" },
+        "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
+      }
+    },
+    "playerExecutedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seatId", "dayNumber", "died", "ruleSourceId"],
+      "properties": {
+        "seatId": { "$ref": "#/definitions/stableId" },
+        "dayNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "died": { "type": "boolean" },
+        "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
+      }
+    },
+    "gameEndedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["alignment", "reason", "ruleSourceId"],
+      "properties": {
+        "alignment": { "enum": ["good", "evil"] },
+        "reason": {
+          "enum": [
+            "all-demons-dead",
+            "two-alive",
+            "saint-executed",
+            "mayor-three-alive-no-execution",
+            "mastermind-good-executed",
+            "mastermind-no-good-executed"
+          ]
+        },
+        "ruleSourceId": { "$ref": "#/definitions/ruleSourceId" }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "alignment": { "const": "good" },
+            "reason": { "const": "all-demons-dead" }
+          }
+        },
+        {
+          "properties": {
+            "alignment": { "const": "evil" },
+            "reason": { "const": "two-alive" }
+          }
+        },
+        {
+          "properties": {
+            "alignment": { "const": "evil" },
+            "reason": { "const": "saint-executed" }
+          }
+        },
+        {
+          "properties": {
+            "alignment": { "const": "good" },
+            "reason": { "const": "mayor-three-alive-no-execution" }
+          }
+        },
+        {
+          "properties": {
+            "alignment": { "const": "evil" },
+            "reason": { "const": "mastermind-good-executed" }
+          }
+        },
+        {
+          "properties": {
+            "alignment": { "const": "good" },
+            "reason": { "const": "mastermind-no-good-executed" }
+          }
+        }
+      ]
     }
   }
 }

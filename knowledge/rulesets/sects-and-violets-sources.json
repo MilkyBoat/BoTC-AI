@@ -1,0 +1,281 @@
+{
+  "canonicalLanguage": "zh-CN",
+  "sourceManifestVersion": "0.1.0",
+  "sources": [
+    {
+      "id": "zh-wiki-role-artist",
+      "title": "艺术家",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=艺术家&oldid=5126",
+      "revision": 5126,
+      "revisedAt": "2025-03-27T11:34:49Z",
+      "contentHash": "sha256:08362a9e7459db7e12d5fef860b7442cdd404a39e52e5e0a1c12337260aaee46",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-barber",
+      "title": "理发师",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=理发师&oldid=5874",
+      "revision": 5874,
+      "revisedAt": "2026-02-10T03:08:24Z",
+      "contentHash": "sha256:39805e2f19646e9e8260e3f2258e0e93d7688b07f563d754a42dc7b40424d269",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-cerenovus",
+      "title": "洗脑师",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=洗脑师&oldid=4198",
+      "revision": 4198,
+      "revisedAt": "2024-04-09T06:48:56Z",
+      "contentHash": "sha256:2d4bd29cb1dd876a413f885d7c4f0df5f1f53f172608355c0584f50eb7f58eba",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-clockmaker",
+      "title": "钟表匠",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=钟表匠&oldid=6181",
+      "revision": 6181,
+      "revisedAt": "2026-06-13T03:10:58Z",
+      "contentHash": "sha256:51a4393246c618ccee2a7b5ee2076f289d7f19fdad07a6a729d3a786a86bdf0f",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-dreamer",
+      "title": "筑梦师",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=筑梦师&oldid=3046",
+      "revision": 3046,
+      "revisedAt": "2023-04-18T04:58:54Z",
+      "contentHash": "sha256:53ca18c52267b871c0041d1b4101f486f83bace0005aa7261493b3aa4cacfdf7",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-eviltwin",
+      "title": "镜像双子",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=镜像双子&oldid=6145",
+      "revision": 6145,
+      "revisedAt": "2026-06-13T02:43:19Z",
+      "contentHash": "sha256:588c8f7a46658ce3aeefc5f90c0acb75421ea857b3a6afa2f7bdd37b7a0cc1de",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-fanggu",
+      "title": "方古",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=方古&oldid=6172",
+      "revision": 6172,
+      "revisedAt": "2026-06-13T02:59:02Z",
+      "contentHash": "sha256:3dd577f966c9dc283e0dfe7b39e685e643b1c00f33d293709bed29c6f60b20d9",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-flowergirl",
+      "title": "卖花女孩",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=卖花女孩&oldid=4890",
+      "revision": 4890,
+      "revisedAt": "2024-12-05T10:39:16Z",
+      "contentHash": "sha256:6c250f4f45fd465f3e3793e79150a9307bae7092bda3210806f06530b772d9f0",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-juggler",
+      "title": "杂耍艺人",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=杂耍艺人&oldid=5407",
+      "revision": 5407,
+      "revisedAt": "2025-08-14T12:01:54Z",
+      "contentHash": "sha256:07955ed2b7c1f8c914a314b157bf90c784c112c7b3710b880afc1b7abab5aa72",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-klutz",
+      "title": "呆瓜",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=呆瓜&oldid=5106",
+      "revision": 5106,
+      "revisedAt": "2025-02-26T03:01:05Z",
+      "contentHash": "sha256:7be6fe419c82d00dec6b472c496738e6a20feae3dffa51feb9c00c042a0f99e0",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-mathematician",
+      "title": "数学家",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=数学家&oldid=6214",
+      "revision": 6214,
+      "revisedAt": "2026-06-13T12:07:40Z",
+      "contentHash": "sha256:171fe4a63517059c4a918cdb1d8f172cc2f5bcbd67910ed568b721548c8feb6e",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-mutant",
+      "title": "畸形秀演员",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=畸形秀演员&oldid=4970",
+      "revision": 4970,
+      "revisedAt": "2024-12-25T07:46:00Z",
+      "contentHash": "sha256:1026a4fcba19e7807d7037e19dca524932157b54a9d54d4f5706978a2ed7dd09",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-nodashii",
+      "title": "诺-达鲺",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=诺-达鲺&oldid=5652",
+      "revision": 5652,
+      "revisedAt": "2025-12-01T07:44:11Z",
+      "contentHash": "sha256:8c6fc3fb2db3d59efd33e9180b8af28871ec7f025023cb80a2ec7cd0f6c5c6d7",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-oracle",
+      "title": "神谕者",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=神谕者&oldid=3768",
+      "revision": 3768,
+      "revisedAt": "2024-01-09T09:09:21Z",
+      "contentHash": "sha256:78e04260b807d901ee7b22005ec3e24a4c68ce53d08c5b6db889223b70de865d",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-philosopher",
+      "title": "哲学家",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=哲学家&oldid=5125",
+      "revision": 5125,
+      "revisedAt": "2025-03-27T11:33:40Z",
+      "contentHash": "sha256:9b1c00ed6cef563836b1a7b1eeae9d531ed19674fce690138dff7e29436601be",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-pithag",
+      "title": "麻脸巫婆",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=麻脸巫婆&oldid=6212",
+      "revision": 6212,
+      "revisedAt": "2026-06-13T12:06:30Z",
+      "contentHash": "sha256:8850ed24c939a0f369c3f2b382fa5767511fe0b4f9dde574536e2677daee1332",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-sage",
+      "title": "贤者",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=贤者&oldid=6157",
+      "revision": 6157,
+      "revisedAt": "2026-06-13T02:48:35Z",
+      "contentHash": "sha256:13f7c264eb0ef60b00e306ad4a60f14e60d2d1d1d0bd1aff6a1f6d20115a945a",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-savant",
+      "title": "博学者",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=博学者&oldid=5128",
+      "revision": 5128,
+      "revisedAt": "2025-03-28T05:30:46Z",
+      "contentHash": "sha256:f65940a46c892de58583ab6a1679f6325a309382127670f5ff07ef361492287e",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-seamstress",
+      "title": "女裁缝",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=女裁缝&oldid=5160",
+      "revision": 5160,
+      "revisedAt": "2025-04-30T12:39:42Z",
+      "contentHash": "sha256:ba0feacd19f649c8680fd5c84ab013f3e65d363c4eaeec2c3ee3c6b35e19d3e2",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-snakecharmer",
+      "title": "舞蛇人",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=舞蛇人&oldid=6410",
+      "revision": 6410,
+      "revisedAt": "2026-07-16T15:18:32Z",
+      "contentHash": "sha256:5b736b1c5b8465e7ab9b2e2beefb09f59d36366a2b5aace63d4145c608c13cfc",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-sweetheart",
+      "title": "心上人",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=心上人&oldid=3059",
+      "revision": 3059,
+      "revisedAt": "2023-04-18T05:22:03Z",
+      "contentHash": "sha256:1a2dcf22187ba5a0281d41841c32b5d02bb84de6dc0244b8a740eaee78fcccae",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-towncrier",
+      "title": "城镇公告员",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=城镇公告员&oldid=4969",
+      "revision": 4969,
+      "revisedAt": "2024-12-25T07:44:12Z",
+      "contentHash": "sha256:2861bba3cb8e6daf6d73c52e06c2f279126445227ec5c1314c568c9c3663e70d",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-vigormortis",
+      "title": "亡骨魔",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=亡骨魔&oldid=6134",
+      "revision": 6134,
+      "revisedAt": "2026-06-13T02:37:52Z",
+      "contentHash": "sha256:9520bd0c20fc21a274ac6450e7bb2490ce6ee34bb53e8880e035185ac836d275",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-vortox",
+      "title": "涡流",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=涡流&oldid=6198",
+      "revision": 6198,
+      "revisedAt": "2026-06-13T03:21:32Z",
+      "contentHash": "sha256:36716eb890bd93b2fed5d27f67ccdc6c7a13fa67900a4a11a685580c0c3608ff",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-witch",
+      "title": "女巫",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=女巫&oldid=4971",
+      "revision": 4971,
+      "revisedAt": "2024-12-25T07:48:56Z",
+      "contentHash": "sha256:3c1a75e2f88d7098e5816508d469b5ecc316fd0a721a9c3bf712799839cac0b2",
+      "contentHashScope": "mediawiki-wikitext"
+    }
+  ]
+}

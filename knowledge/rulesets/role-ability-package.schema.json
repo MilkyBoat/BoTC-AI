@@ -1,0 +1,241 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://botc-ai.local/schema/role-ability-package-v0.1.0.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "packageId",
+    "version",
+    "frameworkVersion",
+    "canonicalLanguage",
+    "ruleset",
+    "eventTypes",
+    "abilities",
+    "integrity"
+  ],
+  "properties": {
+    "$schema": { "const": "./role-ability-package.schema.json" },
+    "packageId": { "$ref": "#/definitions/stableId" },
+    "version": { "$ref": "#/definitions/semanticVersion" },
+    "frameworkVersion": { "const": "0.1.0" },
+    "canonicalLanguage": { "const": "zh-CN" },
+    "ruleset": { "$ref": "#/definitions/rulesetIdentity" },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 256,
+      "items": { "$ref": "#/definitions/packageSource" }
+    },
+    "eventTypes": {
+      "type": "array",
+      "uniqueItems": true,
+      "maxItems": 512,
+      "items": { "$ref": "#/definitions/messageType" }
+    },
+    "abilities": {
+      "type": "array",
+      "maxItems": 256,
+      "items": { "$ref": "#/definitions/abilityDefinition" }
+    },
+    "integrity": { "$ref": "#/definitions/integrity" }
+  },
+  "definitions": {
+    "stableId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "messageType": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)*$",
+      "maxLength": 128
+    },
+    "semanticVersion": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "rulesetIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "version",
+        "canonicalLanguage",
+        "sourceManifestVersion",
+        "integrity"
+      ],
+      "properties": {
+        "id": { "$ref": "#/definitions/stableId" },
+        "version": { "$ref": "#/definitions/semanticVersion" },
+        "canonicalLanguage": { "const": "zh-CN" },
+        "sourceManifestVersion": { "$ref": "#/definitions/semanticVersion" },
+        "integrity": { "$ref": "#/definitions/sha256" }
+      }
+    },
+    "sourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceId"],
+      "properties": {
+        "sourceId": { "$ref": "#/definitions/stableId" }
+      }
+    },
+    "packageSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "language",
+        "authority",
+        "url",
+        "revision",
+        "revisedAt",
+        "contentHash",
+        "contentHashScope"
+      ],
+      "properties": {
+        "id": { "$ref": "#/definitions/stableId" },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "language": { "const": "zh-CN" },
+        "authority": { "const": "official-zh" },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://clocktower-wiki\\.gstonegames\\.com/index\\.php\\?title=.+&oldid=[1-9][0-9]*$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "revisedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "contentHash": { "$ref": "#/definitions/sha256" },
+        "contentHashScope": { "const": "mediawiki-wikitext" }
+      }
+    },
+    "triggerDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["triggerId", "kind", "priority", "actor", "skippable"],
+      "properties": {
+        "triggerId": { "$ref": "#/definitions/stableId" },
+        "kind": {
+          "enum": [
+            "first-night",
+            "other-night",
+            "entry",
+            "domain-event",
+            "delayed"
+          ]
+        },
+        "priority": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "actor": { "enum": ["seat", "storyteller", "system"] },
+        "skippable": { "type": "boolean" },
+        "waitWhenSourceIneffective": { "type": "boolean" },
+        "eventTypes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/messageType" }
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "kind": { "const": "domain-event" } } },
+          "then": { "required": ["eventTypes"] },
+          "else": { "not": { "required": ["eventTypes"] } }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "delayed" } } },
+          "then": { "required": ["waitWhenSourceIneffective"] },
+          "else": {
+            "not": { "required": ["waitWhenSourceIneffective"] }
+          }
+        }
+      ]
+    },
+    "abilityDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "abilityId",
+        "roleId",
+        "handlerId",
+        "sourceRefs",
+        "triggers",
+        "actionInputSchema",
+        "allowedEventTypes",
+        "usageLimit",
+        "retainsAfterDeath",
+        "intoxicationPolicy"
+      ],
+      "properties": {
+        "abilityId": { "$ref": "#/definitions/stableId" },
+        "roleId": { "$ref": "#/definitions/stableId" },
+        "handlerId": { "$ref": "#/definitions/stableId" },
+        "sourceRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/sourceRef" }
+        },
+        "triggers": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "items": { "$ref": "#/definitions/triggerDefinition" }
+        },
+        "actionInputSchema": { "type": "object" },
+        "adjudicationResultSchema": { "type": "object" },
+        "allowedEventTypes": {
+          "type": "array",
+          "uniqueItems": true,
+          "maxItems": 64,
+          "items": { "$ref": "#/definitions/messageType" }
+        },
+        "usageLimit": {
+          "anyOf": [
+            { "type": "null" },
+            { "type": "integer", "minimum": 1, "maximum": 1000000 }
+          ]
+        },
+        "retainsAfterDeath": { "type": "boolean" },
+        "intoxicationPolicy": {
+          "enum": ["suppress", "storyteller-information"]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "intoxicationPolicy": { "const": "storyteller-information" }
+            }
+          },
+          "then": { "required": ["adjudicationResultSchema"] }
+        }
+      ]
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "scope", "value"],
+      "properties": {
+        "algorithm": { "const": "sha256" },
+        "scope": { "const": "manifest-without-integrity" },
+        "value": { "$ref": "#/definitions/sha256" }
+      }
+    }
+  }
+}

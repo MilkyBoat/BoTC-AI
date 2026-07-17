@@ -77,7 +77,11 @@ describe("M1-R3 参与者权限视图", () => {
           seatId: "seat-a",
           order: 1,
           controllerKind: "human",
-          publicState: { alive: true, publicRoleId: null },
+          publicState: {
+            alive: true,
+            publicRoleId: null,
+            deadVoteAvailable: false,
+          },
         }),
         expect.objectContaining({ seatId: "seat-b", controllerKind: "ai" }),
         expect.objectContaining({

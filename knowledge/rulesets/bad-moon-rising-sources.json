@@ -1,0 +1,281 @@
+{
+  "canonicalLanguage": "zh-CN",
+  "sourceManifestVersion": "0.1.0",
+  "sources": [
+    {
+      "id": "zh-wiki-role-assassin",
+      "title": "刺客",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=刺客&oldid=3006",
+      "revision": 3006,
+      "revisedAt": "2023-04-11T05:14:04Z",
+      "contentHash": "sha256:97f315d0172b359d88a5999195323d7aa50a7bea987525b1863e89bd471fb45f",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-chambermaid",
+      "title": "侍女",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=侍女&oldid=4776",
+      "revision": 4776,
+      "revisedAt": "2024-11-11T08:24:07Z",
+      "contentHash": "sha256:d7694c7357a5e39e3e55434db9099ffbb5052e1a55d4512048798fe4c30284b9",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-courtier",
+      "title": "侍臣",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=侍臣&oldid=6195",
+      "revision": 6195,
+      "revisedAt": "2026-06-13T03:20:00Z",
+      "contentHash": "sha256:480998023dd818412406a2fc7aa27ec1119a4bfcecf2daa57e67e4d87f355ba0",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-devilsadvocate",
+      "title": "魔鬼代言人",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=魔鬼代言人&oldid=4894",
+      "revision": 4894,
+      "revisedAt": "2024-12-05T10:46:35Z",
+      "contentHash": "sha256:7bdd02b6b9e5a2bb634b34f8cb78389f61d858f7a4e1b2378089e3278042980a",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-exorcist",
+      "title": "驱魔人",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=驱魔人&oldid=6223",
+      "revision": 6223,
+      "revisedAt": "2026-06-16T12:10:17Z",
+      "contentHash": "sha256:8531624734926b404a70bf5d00ff45d6339ca49355121b14c148b22ecb7ba70a",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-fool",
+      "title": "弄臣",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=弄臣&oldid=5306",
+      "revision": 5306,
+      "revisedAt": "2025-06-28T04:21:22Z",
+      "contentHash": "sha256:be5cfac4d1c89161ffcb85459506fbf479ad1c1e7f73e2d309b55ef26eca9bb9",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-gambler",
+      "title": "赌徒",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=赌徒&oldid=6359",
+      "revision": 6359,
+      "revisedAt": "2026-07-03T05:57:34Z",
+      "contentHash": "sha256:736bdb8260cb6f08032074fa66a974ae97e1d9036b06cc4d38c40823872710ca",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-godfather",
+      "title": "教父",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=教父&oldid=6176",
+      "revision": 6176,
+      "revisedAt": "2026-06-13T03:06:20Z",
+      "contentHash": "sha256:a9566d2e0454c169ed67dc070c58aebc0ccc22bc1359312ab679e455f8be0f07",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-goon",
+      "title": "莽夫",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=莽夫&oldid=6081",
+      "revision": 6081,
+      "revisedAt": "2026-06-13T02:00:56Z",
+      "contentHash": "sha256:74d994f4e5f926926cdea436a35a74190dde1e0080aec7a6a65c52a2bdd418aa",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-gossip",
+      "title": "造谣者",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=造谣者&oldid=3537",
+      "revision": 3537,
+      "revisedAt": "2023-11-23T02:18:24Z",
+      "contentHash": "sha256:abbe383bb18c6970f4d3acc2cd3ebc3fd3064252e47f622665893e74fa5e49fe",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-grandmother",
+      "title": "祖母",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=祖母&oldid=6162",
+      "revision": 6162,
+      "revisedAt": "2026-06-13T02:53:02Z",
+      "contentHash": "sha256:a3ed56ac5130d306339454d3b57c12dffdf14e32590899c5ea28e0c86d62b719",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-innkeeper",
+      "title": "旅店老板",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=旅店老板&oldid=6163",
+      "revision": 6163,
+      "revisedAt": "2026-06-13T02:53:10Z",
+      "contentHash": "sha256:d115cc5b9265a8eebca69ce90a2199a880e6e4051823a1e35171cbeae89725ff",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-lunatic",
+      "title": "疯子",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=疯子&oldid=6140",
+      "revision": 6140,
+      "revisedAt": "2026-06-13T02:39:39Z",
+      "contentHash": "sha256:fc5bd7cfbf6cd118edc004aada18f31cad6e9384e33cdd67ce22c911567c1537",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-mastermind",
+      "title": "主谋",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=主谋&oldid=6133",
+      "revision": 6133,
+      "revisedAt": "2026-06-13T02:37:13Z",
+      "contentHash": "sha256:4d18d31c447f4ef1ea62577597244ba3dfa54f2ce44e449264dd54e9f103f372",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-minstrel",
+      "title": "吟游诗人",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=吟游诗人&oldid=5429",
+      "revision": 5429,
+      "revisedAt": "2025-08-22T00:16:32Z",
+      "contentHash": "sha256:447b30ee36e5f0b89a1bdb95ba913029b2d3f60974f43a57159fe674659c0410",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-moonchild",
+      "title": "月之子",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=月之子&oldid=3144",
+      "revision": 3144,
+      "revisedAt": "2023-04-23T14:25:11Z",
+      "contentHash": "sha256:97bcf41261d6075c6dae47333228e0f4d7757ec2167e5750595585cbfa41f3e1",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-pacifist",
+      "title": "和平主义者",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=和平主义者&oldid=4893",
+      "revision": 4893,
+      "revisedAt": "2024-12-05T10:46:07Z",
+      "contentHash": "sha256:d611c9d1bf284c3cdcfa38f4988a05a2e7a5328944f644288cd1b307fcc3fa89",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-po",
+      "title": "珀",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=珀&oldid=5414",
+      "revision": 5414,
+      "revisedAt": "2025-08-15T08:42:28Z",
+      "contentHash": "sha256:5ea5ab6568d702dc4e9604d45f485210b36f4e59652f2bcaa2b70c19e0dd502e",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-professor",
+      "title": "教授",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=教授&oldid=5030",
+      "revision": 5030,
+      "revisedAt": "2025-01-10T07:21:17Z",
+      "contentHash": "sha256:090082eb174367e92758a54c21ca75bac7f72a82d4e34f270ac4fd5e453e1c85",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-pukka",
+      "title": "普卡",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=普卡&oldid=6192",
+      "revision": 6192,
+      "revisedAt": "2026-06-13T03:14:16Z",
+      "contentHash": "sha256:deedb62554db6b712507b95340c1ead51fd7d351f762fbb5c7494dd4b2f2eab5",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-sailor",
+      "title": "水手",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=水手&oldid=3148",
+      "revision": 3148,
+      "revisedAt": "2023-04-23T14:26:03Z",
+      "contentHash": "sha256:5ed3dd6184685256e331021700f7d8ae707aed802928082d97d3a65ba8b23728",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-shabaloth",
+      "title": "沙巴洛斯",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=沙巴洛斯&oldid=5027",
+      "revision": 5027,
+      "revisedAt": "2025-01-05T03:26:46Z",
+      "contentHash": "sha256:d240f7e195527553f38379ed9e3ba872365187e58ab8683595703cbd1d870b36",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-tealady",
+      "title": "茶艺师",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=茶艺师&oldid=2997",
+      "revision": 2997,
+      "revisedAt": "2023-04-11T03:23:19Z",
+      "contentHash": "sha256:0c56b331acf4f022e06071667575bc74902f305d892a461f3032eb5d10462888",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-tinker",
+      "title": "修补匠",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=修补匠&oldid=3000",
+      "revision": 3000,
+      "revisedAt": "2023-04-11T05:00:16Z",
+      "contentHash": "sha256:b6367131e068da2dd3a40484d8a4a406e1cc5ec09ec65dede3770edeac9471e0",
+      "contentHashScope": "mediawiki-wikitext"
+    },
+    {
+      "id": "zh-wiki-role-zombuul",
+      "title": "僵怖",
+      "language": "zh-CN",
+      "authority": "official-zh",
+      "url": "https://clocktower-wiki.gstonegames.com/index.php?title=僵怖&oldid=5599",
+      "revision": 5599,
+      "revisedAt": "2025-11-11T14:21:56Z",
+      "contentHash": "sha256:57f767afd538e670ce56bac7a2bbd9295d67b64dd4070e28cb5eb1280fe06ae6",
+      "contentHashScope": "mediawiki-wikitext"
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 import {
   M1_RULESET_IDENTITY,
+  M1_ROLE_ABILITY_FRAMEWORK_PACKAGE,
   PROTOCOL_VERSION,
   DomainProtocolError,
   createDomainProtocol,
@@ -155,6 +156,7 @@ describe("M1-R2 事件流导出与确定性重放场景", () => {
       protocolVersion: PROTOCOL_VERSION,
       gameId: GAME_ID,
       ruleset: M1_RULESET_IDENTITY,
+      rulePackage: M1_ROLE_ABILITY_FRAMEWORK_PACKAGE.identity,
       events: [expect.any(Object)],
       receipts: [expect.any(Object)],
     });

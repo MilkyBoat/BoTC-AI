@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://botc-ai.local/schema/participant-views-v0.1.0.json",
+  "$id": "https://botc-ai.local/schema/participant-views-v0.2.0.json",
   "definitions": {
-    "version": { "const": "0.1.0" },
+    "version": { "const": "0.2.0" },
     "stableId": {
       "type": "string",
       "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
@@ -70,12 +70,13 @@
     "publicState": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["alive", "publicRoleId"],
+      "required": ["alive", "publicRoleId", "deadVoteAvailable"],
       "properties": {
         "alive": { "type": "boolean" },
         "publicRoleId": {
           "anyOf": [{ "$ref": "#/definitions/stableId" }, { "type": "null" }]
-        }
+        },
+        "deadVoteAvailable": { "type": "boolean" }
       }
     },
     "publicSeat": {

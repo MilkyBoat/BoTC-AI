@@ -15,11 +15,17 @@ import {
 import { M1_RULESET_IDENTITY } from "./ruleset";
 import { sha256Hex } from "./sha256";
 import { assertValid, createProtocolValidators } from "./validators";
+import { assertBasicStateInvariants } from "../rules/basic";
+import { assertNominationStateInvariants } from "../rules/nomination";
+import { M1_ROLE_ABILITY_FRAMEWORK_PACKAGE } from "../abilities";
+import { MAX_REACTION_EVENTS } from "../abilities/constants";
+import { createRoleAbilityFramework } from "../abilities/framework";
 
 const STABLE_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$/;
 const ENGINE_INTERNALS = new WeakMap();
 const RESTORE_STREAM = Symbol("domain-protocol-restore-stream");
 const IS_SUPPORTED_RULESET = Symbol("is-supported-ruleset");
+const IS_SUPPORTED_ROLE_PACKAGE = Symbol("is-supported-role-package");
 const CURRENT_REVISION = Symbol("current-revision");
 const VALIDATE_COMMAND = Symbol("validate-command");
 const PERSIST_RECEIPT = Symbol("persist-receipt");
@@ -114,6 +120,81 @@ const assertDefinitionFunctions = (commandDefinitions, eventDefinitions) => {
   });
 };
 
+const assertEventReactions = (reactions, eventDefinitions) => {
+  if (!Array.isArray(reactions)) {
+    throw protocolError("INVALID_DEFINITION", "事件反应器定义必须是数组");
+  }
+  const eventTypes = new Set(eventDefinitions.map(({ type }) => type));
+  const ids = new Set();
+  reactions.forEach((reaction) => {
+    if (
+      !reaction ||
+      !STABLE_ID_PATTERN.test(reaction.id ?? "") ||
+      !Number.isInteger(reaction.priority) ||
+      reaction.priority < 0 ||
+      !Array.isArray(reaction.eventTypes) ||
+      reaction.eventTypes.length === 0 ||
+      new Set(reaction.eventTypes).size !== reaction.eventTypes.length ||
+      reaction.eventTypes.some((type) => !eventTypes.has(type)) ||
+      typeof reaction.react !== "function" ||
+      ids.has(reaction.id)
+    ) {
+      throw protocolError("INVALID_DEFINITION", "事件反应器定义无效", {
+        id: reaction?.id,
+      });
+    }
+    ids.add(reaction.id);
+  });
+  return Object.freeze(
+    reactions
+      .slice()
+      .sort(
+        (left, right) =>
+          left.priority - right.priority || left.id.localeCompare(right.id),
+      ),
+  );
+};
+
+const assertStateInvariantDefinitions = (definitions) => {
+  if (!Array.isArray(definitions)) {
+    throw protocolError("INVALID_DEFINITION", "状态不变量定义必须是数组");
+  }
+  const ids = new Set();
+  definitions.forEach((definition) => {
+    if (
+      !definition ||
+      !STABLE_ID_PATTERN.test(definition.id ?? "") ||
+      typeof definition.assert !== "function" ||
+      ids.has(definition.id)
+    ) {
+      throw protocolError("INVALID_DEFINITION", "状态不变量定义无效", {
+        id: definition?.id,
+      });
+    }
+    ids.add(definition.id);
+  });
+  return Object.freeze(
+    definitions.slice().sort((a, b) => a.id.localeCompare(b.id)),
+  );
+};
+
+const assertStateInvariants = (state, extensionDefinitions) => {
+  assertBasicStateInvariants(state);
+  assertNominationStateInvariants(state);
+  extensionDefinitions.forEach((definition) => {
+    try {
+      definition.assert(state);
+    } catch (error) {
+      if (error instanceof DomainProtocolError) throw error;
+      throw protocolError(
+        "INVARIANT_VIOLATION",
+        `扩展状态不变量 ${definition.id} 校验失败`,
+        { reason: error.message },
+      );
+    }
+  });
+};
+
 const createReceipt = ({
   command,
   fingerprint,
@@ -189,6 +270,9 @@ class DomainProtocolEngine {
       commandDefinitions,
       eventDefinitions,
       supportedRulesets = [M1_RULESET_IDENTITY],
+      rolePackage = M1_ROLE_ABILITY_FRAMEWORK_PACKAGE,
+      eventReactions = [],
+      stateInvariants = [],
     } = options ?? {};
     const restoreStream = options?.[RESTORE_STREAM];
     if (!STABLE_ID_PATTERN.test(gameId ?? "")) {
@@ -202,17 +286,36 @@ class DomainProtocolEngine {
         "clock 与 idFactory 必须是函数",
       );
     }
+    const roleAbilityFramework = createRoleAbilityFramework(
+      rolePackage,
+      BUILTIN_EVENT_DEFINITIONS.map(({ type }) => type),
+    );
     const mergedCommandDefinitions = mergeDefinitions(
       BUILTIN_COMMAND_DEFINITIONS,
-      commandDefinitions,
+      [
+        ...roleAbilityFramework.commandDefinitions,
+        ...(commandDefinitions ?? []),
+      ],
       "command",
     );
     const mergedEventDefinitions = mergeDefinitions(
       BUILTIN_EVENT_DEFINITIONS,
-      eventDefinitions,
+      [
+        ...roleAbilityFramework.eventDefinitions,
+        ...rolePackage.eventDefinitions,
+        ...(eventDefinitions ?? []),
+      ],
       "event",
     );
     assertDefinitionFunctions(mergedCommandDefinitions, mergedEventDefinitions);
+    const checkedEventReactions = assertEventReactions(
+      [...roleAbilityFramework.eventReactions, ...eventReactions],
+      mergedEventDefinitions,
+    );
+    const checkedStateInvariants = assertStateInvariantDefinitions([
+      ...roleAbilityFramework.stateInvariants,
+      ...stateInvariants,
+    ]);
     const validators = createProtocolValidators({
       commandDefinitions: mergedCommandDefinitions,
       eventDefinitions: mergedEventDefinitions,
@@ -222,6 +325,9 @@ class DomainProtocolEngine {
       clock,
       idFactory,
       supportedRulesets: cloneAndFreezeJson(supportedRulesets),
+      rolePackage,
+      eventReactions: checkedEventReactions,
+      stateInvariants: checkedStateInvariants,
       validators,
       commands: new Map(
         mergedCommandDefinitions.map((definition) => [
@@ -269,6 +375,10 @@ class DomainProtocolEngine {
     return getInternals(this).supportedRulesets.some((candidate) =>
       sameJson(candidate, ruleset),
     );
+  }
+
+  [IS_SUPPORTED_ROLE_PACKAGE](identity) {
+    return sameJson(getInternals(this).rolePackage.identity, identity);
   }
 
   [CURRENT_REVISION]() {
@@ -399,8 +509,12 @@ class DomainProtocolEngine {
         command: readonlyCommand,
         reject: rejection,
         isSupportedRuleset: (ruleset) => this[IS_SUPPORTED_RULESET](ruleset),
+        isSupportedRolePackage: (identity) =>
+          this[IS_SUPPORTED_ROLE_PACKAGE](identity),
+        rolePackage: internals.rolePackage,
       });
     } catch (error) {
+      if (error instanceof DomainProtocolError) throw error;
       throw protocolError("HANDLER_FAILURE", "命令处理器执行失败", {
         type: command.type,
         reason: error.message,
@@ -420,7 +534,18 @@ class DomainProtocolEngine {
     );
     let trialState = internals.state;
     const trialEvents = [];
-    for (const rawCandidate of result.events) {
+    const pendingCandidates = result.events.slice();
+    while (pendingCandidates.length > 0) {
+      if (
+        trialEvents.length >= MAX_REACTION_EVENTS ||
+        trialEvents.length + pendingCandidates.length > MAX_REACTION_EVENTS
+      ) {
+        throw protocolError(
+          "EVENT_REACTION_LIMIT",
+          `单个命令最多产生 ${MAX_REACTION_EVENTS} 个连锁事件`,
+        );
+      }
+      const rawCandidate = pendingCandidates.shift();
       const candidate = cloneProtocolInput(
         rawCandidate,
         "INVALID_EVENT_CANDIDATE",
@@ -443,9 +568,39 @@ class DomainProtocolEngine {
           { eventId: event.eventId },
         );
       }
+      const stateBefore = trialState;
       trialState = this[REDUCE_EVENT](trialState, event);
       trialEvents.push(event);
+      const reactionCandidatesForEvent = [];
+      for (const reaction of internals.eventReactions) {
+        if (!reaction.eventTypes.includes(event.type)) continue;
+        let reactionCandidates;
+        try {
+          reactionCandidates = reaction.react({
+            stateBefore,
+            stateAfter: trialState,
+            event,
+            rolePackage: internals.rolePackage,
+          });
+        } catch (error) {
+          if (error instanceof DomainProtocolError) throw error;
+          throw protocolError(
+            "EVENT_REACTION_FAILURE",
+            `事件反应器 ${reaction.id} 执行失败`,
+            { reason: error.message },
+          );
+        }
+        if (!Array.isArray(reactionCandidates)) {
+          throw protocolError(
+            "INVALID_REACTION_RESULT",
+            `事件反应器 ${reaction.id} 必须返回候选事件数组`,
+          );
+        }
+        reactionCandidatesForEvent.push(...reactionCandidates);
+      }
+      pendingCandidates.unshift(...reactionCandidatesForEvent);
     }
+    assertStateInvariants(trialState, internals.stateInvariants);
 
     const receipt = createReceipt({
       command,
@@ -508,6 +663,17 @@ class DomainProtocolEngine {
         "初始化前只能提交 game.created 事件",
       );
     }
+    const rulePackage =
+      state?.rulePackage ??
+      (candidate.type === EVENT_TYPES.GAME_CREATED
+        ? candidate.payload.rulePackage
+        : undefined);
+    if (!rulePackage) {
+      throw protocolError(
+        "GAME_NOT_INITIALIZED",
+        "初始化前只能提交包含规则包身份的 game.created 事件",
+      );
+    }
     const event = {
       protocolVersion: PROTOCOL_VERSION,
       eventId: callDependency(
@@ -523,6 +689,7 @@ class DomainProtocolEngine {
       actor: command.actor,
       recordedAt,
       ruleset,
+      rulePackage,
       payload: candidate.payload,
     };
     assertValid(
@@ -556,15 +723,34 @@ class DomainProtocolEngine {
       );
     }
     if (
-      previousState === null &&
-      (event.type !== EVENT_TYPES.GAME_CREATED ||
-        !sameJson(event.ruleset, event.payload.ruleset) ||
-        !this[IS_SUPPORTED_RULESET](event.ruleset))
+      previousState &&
+      !sameJson(previousState.rulePackage, event.rulePackage)
     ) {
       throw protocolError(
-        "RULESET_IDENTITY_MISMATCH",
-        "初始化事件没有固定受支持的规则集身份",
+        "ROLE_PACKAGE_IDENTITY_MISMATCH",
+        "事件角色能力规则包身份与权威状态不一致",
       );
+    }
+    if (previousState === null) {
+      if (
+        event.type !== EVENT_TYPES.GAME_CREATED ||
+        !sameJson(event.ruleset, event.payload.ruleset) ||
+        !this[IS_SUPPORTED_RULESET](event.ruleset)
+      ) {
+        throw protocolError(
+          "RULESET_IDENTITY_MISMATCH",
+          "初始化事件没有固定受支持的规则集身份",
+        );
+      }
+      if (
+        !sameJson(event.rulePackage, event.payload.rulePackage) ||
+        !this[IS_SUPPORTED_ROLE_PACKAGE](event.rulePackage)
+      ) {
+        throw protocolError(
+          "ROLE_PACKAGE_IDENTITY_MISMATCH",
+          "初始化事件没有固定受支持的角色能力规则包身份",
+        );
+      }
     }
     const definition = internals.events.get(event.type);
     if (!definition) {
@@ -611,6 +797,15 @@ class DomainProtocolEngine {
         "事件归约器修改了协议拥有的对局身份字段",
       );
     }
+    if (
+      previousState &&
+      !sameJson(nextState.rulePackage, previousState.rulePackage)
+    ) {
+      throw protocolError(
+        "INVARIANT_VIOLATION",
+        "事件归约器修改了协议拥有的角色能力规则包身份",
+      );
+    }
     assertValid(
       internals.validators.state,
       nextState,
@@ -627,6 +822,7 @@ class DomainProtocolEngine {
       protocolVersion: PROTOCOL_VERSION,
       gameId: internals.gameId,
       ruleset: internals.state?.ruleset ?? null,
+      rulePackage: internals.state?.rulePackage ?? null,
       events: internals.eventLog,
       receipts: internals.receiptLog,
     };
@@ -643,6 +839,14 @@ class DomainProtocolEngine {
     const internals = getInternals(this);
     let state = null;
     const events = [];
+    const receiptBoundaries = new Set(
+      stream.receipts
+        .filter(
+          ({ status, eventIds }) =>
+            status === "accepted" && eventIds.length > 0,
+        )
+        .map(({ eventIds }) => eventIds[eventIds.length - 1]),
+    );
     stream.events.forEach((event, index) => {
       if (event.protocolVersion !== PROTOCOL_VERSION) {
         throw protocolError(
@@ -678,6 +882,9 @@ class DomainProtocolEngine {
       );
       state = this[REDUCE_EVENT](state, cloneAndFreezeJson(event));
       events.push(cloneAndFreezeJson(event));
+      if (receiptBoundaries.has(event.eventId)) {
+        assertStateInvariants(state, internals.stateInvariants);
+      }
     });
 
     if (!sameJson(stream.ruleset, state?.ruleset ?? null)) {
@@ -686,6 +893,13 @@ class DomainProtocolEngine {
         "事件流规则集身份与重放状态不一致",
       );
     }
+    if (!sameJson(stream.rulePackage, state?.rulePackage ?? null)) {
+      throw protocolError(
+        "ROLE_PACKAGE_IDENTITY_MISMATCH",
+        "事件流角色能力规则包身份与重放状态不一致",
+      );
+    }
+    assertStateInvariants(state, internals.stateInvariants);
     this[VALIDATE_RECEIPT_HISTORY](
       stream.receipts,
       events,
