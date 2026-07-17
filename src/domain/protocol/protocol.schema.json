@@ -1,0 +1,345 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://botc-ai.local/schema/domain-protocol-v0.1.0.json",
+  "$ref": "#/definitions/eventStream",
+  "definitions": {
+    "protocolVersion": {
+      "const": "0.1.0"
+    },
+    "stableId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "messageType": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)*$",
+      "maxLength": 128
+    },
+    "semanticVersion": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "id"],
+      "properties": {
+        "kind": {
+          "enum": ["host", "system", "seat", "observer", "agent"]
+        },
+        "id": {
+          "$ref": "#/definitions/stableId"
+        }
+      }
+    },
+    "rulesetIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "version",
+        "canonicalLanguage",
+        "sourceManifestVersion",
+        "integrity"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/stableId"
+        },
+        "version": {
+          "$ref": "#/definitions/semanticVersion"
+        },
+        "canonicalLanguage": {
+          "const": "zh-CN"
+        },
+        "sourceManifestVersion": {
+          "$ref": "#/definitions/semanticVersion"
+        },
+        "integrity": {
+          "$ref": "#/definitions/sha256"
+        }
+      }
+    },
+    "commandEnvelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocolVersion",
+        "commandId",
+        "gameId",
+        "expectedRevision",
+        "actor",
+        "type",
+        "payload"
+      ],
+      "properties": {
+        "protocolVersion": {
+          "$ref": "#/definitions/protocolVersion"
+        },
+        "commandId": {
+          "$ref": "#/definitions/stableId"
+        },
+        "gameId": {
+          "$ref": "#/definitions/stableId"
+        },
+        "expectedRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "actor": {
+          "$ref": "#/definitions/actor"
+        },
+        "type": {
+          "$ref": "#/definitions/messageType"
+        },
+        "payload": {
+          "type": "object"
+        }
+      }
+    },
+    "eventEnvelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocolVersion",
+        "eventId",
+        "gameId",
+        "sequence",
+        "type",
+        "causationId",
+        "actor",
+        "recordedAt",
+        "ruleset",
+        "payload"
+      ],
+      "properties": {
+        "protocolVersion": {
+          "$ref": "#/definitions/protocolVersion"
+        },
+        "eventId": {
+          "$ref": "#/definitions/stableId"
+        },
+        "gameId": {
+          "$ref": "#/definitions/stableId"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "type": {
+          "$ref": "#/definitions/messageType"
+        },
+        "causationId": {
+          "$ref": "#/definitions/stableId"
+        },
+        "actor": {
+          "$ref": "#/definitions/actor"
+        },
+        "recordedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "ruleset": {
+          "$ref": "#/definitions/rulesetIdentity"
+        },
+        "payload": {
+          "type": "object"
+        }
+      }
+    },
+    "state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "gameId",
+        "ruleset",
+        "seed",
+        "revision",
+        "lifecycle"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "$ref": "#/definitions/protocolVersion"
+        },
+        "gameId": {
+          "$ref": "#/definitions/stableId"
+        },
+        "ruleset": {
+          "$ref": "#/definitions/rulesetIdentity"
+        },
+        "seed": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "lifecycle": {
+          "const": "initialized"
+        }
+      }
+    },
+    "receiptError": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "message"],
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]{1,63}$"
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "details": {
+          "type": "object"
+        }
+      }
+    },
+    "receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "commandId",
+        "commandFingerprint",
+        "gameId",
+        "status",
+        "revisionBefore",
+        "revisionAfter",
+        "eventIds",
+        "recordedAt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "$ref": "#/definitions/protocolVersion"
+        },
+        "commandId": {
+          "$ref": "#/definitions/stableId"
+        },
+        "commandFingerprint": {
+          "$ref": "#/definitions/sha256"
+        },
+        "gameId": {
+          "$ref": "#/definitions/stableId"
+        },
+        "status": {
+          "enum": ["accepted", "rejected"]
+        },
+        "revisionBefore": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "revisionAfter": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "eventIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/stableId"
+          }
+        },
+        "recordedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "error": {
+          "$ref": "#/definitions/receiptError"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": { "const": "accepted" }
+            }
+          },
+          "then": {
+            "not": { "required": ["error"] }
+          },
+          "else": {
+            "required": ["error"],
+            "properties": {
+              "eventIds": { "maxItems": 0 }
+            }
+          }
+        }
+      ]
+    },
+    "eventStream": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "formatVersion",
+        "protocolVersion",
+        "gameId",
+        "ruleset",
+        "events",
+        "receipts"
+      ],
+      "properties": {
+        "formatVersion": {
+          "$ref": "#/definitions/protocolVersion"
+        },
+        "protocolVersion": {
+          "$ref": "#/definitions/protocolVersion"
+        },
+        "gameId": {
+          "$ref": "#/definitions/stableId"
+        },
+        "ruleset": {
+          "anyOf": [
+            { "type": "null" },
+            { "$ref": "#/definitions/rulesetIdentity" }
+          ]
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/eventEnvelope"
+          }
+        },
+        "receipts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/receipt"
+          }
+        }
+      }
+    },
+    "gameCreatePayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ruleset", "seed"],
+      "properties": {
+        "ruleset": {
+          "$ref": "#/definitions/rulesetIdentity"
+        },
+        "seed": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      }
+    },
+    "gameCreatedPayload": {
+      "$ref": "#/definitions/gameCreatePayload"
+    }
+  }
+}
