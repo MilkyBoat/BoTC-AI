@@ -1,0 +1,99 @@
+doc/README.md
+  s_04f03fabeda773::t_cc2cf1d32b88ee 22
+doc/architecture/architecture.md
+  s_538091592791fe::t_00ee0da46474b8 60,64,89,108-109,112,141
+doc/milestone/roadmap.md
+  s_04f03fabeda773::t_0e3e3e9fd6bf49 36
+doc/product/product.md
+  s_538091592791fe::t_f7dd14df3f2bb8 7,118,124,128,130,132,140,150-159,173,294-309
+knowledge/README.md
+  s_04f03fabeda773::t_8656ed42e9fc56 55
+knowledge/rulesets/sects-and-violets-sources.json
+  s_04f03fabeda773::t_a60d0ec3c19798 1-281
+src/domain/protocol/README.md
+  s_538091592791fe::t_848b39f28dbe4f 3,67,75,101-108,115
+src/domain/protocol/constants.js
+  s_94c2b180ab7c30::t_684eec351f39a2 1,3
+src/domain/protocol/protocol.schema.json
+  s_04f03fabeda773::t_24dcea60d2c2ff 3,7,313-315,730-825,1216-1219,1264-1281,1495-1497,1522-1524
+src/domain/rules/basic.js
+  s_04f03fabeda773::t_c2842e252b6c82 243,256,377-379,655-657,868-878,892-894,898
+src/domain/rules/nomination.js
+  s_04f03fabeda773::t_3f9f008b8672b7 871-875,881-882
+src/domain/rulesets/sects-and-violets/catalog.js
+  s_04f03fabeda773::t_35949b41679315 1-92
+src/domain/rulesets/sects-and-violets/events.js
+  s_04f03fabeda773::t_4e77db3340b81a 1-912
+src/domain/rulesets/sects-and-violets/handlers.js
+  s_04f03fabeda773::t_108a02d834659e 1-1122
+src/domain/rulesets/sects-and-violets/hooks.js
+  s_04f03fabeda773::t_bd2421b5385473 1-271
+src/domain/rulesets/sects-and-violets/index.js
+  s_04f03fabeda773::t_18b2bb4033a4b7 1-50
+src/domain/rulesets/sects-and-violets/reactions.js
+  s_04f03fabeda773::t_26df15ecf68555 1-260
+src/domain/rulesets/sects-and-violets/role-package.js
+  s_04f03fabeda773::t_5aebdfd7db5f24 1-237
+src/domain/rulesets/sects-and-violets/rules.js
+  s_04f03fabeda773::t_f4566242974d44 1-429
+src/domain/rulesets/sects-and-violets/runtime.js
+  s_04f03fabeda773::t_85c114b33368b6 1-56
+src/domain/rulesets/sects-and-violets/setup.js
+  s_04f03fabeda773::t_a5a348ceccd439 1-327
+src/domain/rulesets/sects-and-violets/views.js
+  s_04f03fabeda773::t_0fe206bb0acc7e 1-86
+tests/unit/badMoonRisingProtocol.spec.js
+  s_94c2b180ab7c30::t_df85347717c061 51,53
+tests/unit/basicRulesKernel.spec.js
+  s_94c2b180ab7c30::t_405cab614e2a0e 33-53,208,274-306
+tests/unit/nominationVotingRules.spec.js
+  s_94c2b180ab7c30::t_f11e24e17b8438 202,205
+tests/unit/sectsAndVioletsEngine.spec.js
+  s_04f03fabeda773::t_bb4bca876326b1 1-631
+tests/unit/sectsAndVioletsHandlers.spec.js
+  s_04f03fabeda773::t_1537133a098a7d 1-467
+tests/unit/sectsAndVioletsProtocol.spec.js
+  s_04f03fabeda773::t_9e2a252b6668d4 1-143
+tests/unit/sectsAndVioletsRoleBehaviors.spec.js
+  s_04f03fabeda773::t_a3cf584c42a5a3 1-354
+tests/unit/sectsAndVioletsRules.spec.js
+  s_04f03fabeda773::t_4dbce4cfcf82e2 1-245
+tests/unit/sectsAndVioletsViews.spec.js
+  s_04f03fabeda773::t_12b9afa34616fb 1-111
+tests/unit/troubleBrewingProtocolHooks.spec.js
+  s_94c2b180ab7c30::t_bc339f2b4e9d2e 116-118,140,144-145
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "3e52e3633e52a60b25bd0b464a3fb4e763d29000",
+  "prompts": {},
+  "sessions": {
+    "s_04f03fabeda773": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f6f52-e2b2-77e2-9425-32a5ac332c65",
+        "model": "unknown"
+      },
+      "human_author": "MilkyBoat <1214208054@qq.com>"
+    },
+    "s_538091592791fe": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f6f7b-11ff-7312-8430-b56bc73da933",
+        "model": "unknown"
+      },
+      "human_author": "MilkyBoat <1214208054@qq.com>"
+    },
+    "s_94c2b180ab7c30": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f6f66-2c4c-7e82-b730-e28a3ffc8f63",
+        "model": "unknown"
+      },
+      "human_author": "MilkyBoat <1214208054@qq.com>"
+    }
+  },
+  "attestation_metadata": {},
+  "remote_transcripts": {}
+}
